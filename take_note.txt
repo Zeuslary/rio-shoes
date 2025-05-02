@@ -1,0 +1,189 @@
+
+--------------------------------
+ Website bán giày cho cửa hàng Rio.
+- Source: 
++ https://www.youtube.com/watch?v=Y5dZ2KQiFNQ
++ https://www.youtube.com/watch?v=y66RgYMAgSo
+- Công nghệ sử dụng: HTML, CSS, JS, MongoDb ( before SQL server) , React, Node
+ 
+
+-----------------------------
+1. Khảo sát hệ thống và đặc tả nghiệp vụ
+2. Phân tích, xác định tác nhân của hệ thống:
++ biểu đồ USE CASE tổng quát, cho từng phần #
++ biểu đồ trình tự
++ biểu đồ hoạt động
++ biểu đồ lớp chi tiết #
+3. Thiết kế CSDL #
+4. Thiết kế module chính #
+5. Thiết kế giao diện chương trình #
+ 
+
+------- Timeline -----------------
+28/4: Create layout with figma
+
+
+
+
+---------- Deadline -------------------- 
+30/4: design analyst
+
+
+
+-------------- Other ---------------------
+Status order:
+- Confirmed -> Pending -> Delivered -> Done / Cancel
+
+order -> code order -> check code
+order:
+- order summary
++ Item
++ Promotion code
++ Subtotal
++ Shipping fee
++ Total
+- Shipping infor
+ + Full Name
+ + Phone number
+ + Email 
+ + Address
+ + Message
+- shipping method:
+ + Standard
+ + Express 
+- Payment method:
++ Cash on delivery (COD)
+- Done:
++ Button: Complete order
+- Policy:
++ Return
++ Shipping
++ Privacy
++ Terms of Service
+
+Detailed order information display:
+   - Order Number
+   - Customer Name
+   - Order Status
+   - Order Date
+   - Expected Delivery
+   - Shipping Address
+   - Order Total
+
+Description: 
+- Style
+- Material
+- Color
+- Type
+- Size
+- Design
+- Feature
+- Release Year
+- Origin
+
+
+Cart
+- Img
+- Name
+- Size
+- Quantity
+- Close btn
+- Price
+
+Order summary:
+- Subtotal
+- Shipping
+- Total
+- Promotion
+
+
+
+--------- Database -------------------------
+
+admin:
++ id: ObjectId
++ password: string
++ role: string
++ firstName: string
++ lastName: string
++ email: string
++ phone: string
++ createdAt: datetime
++ updatedAt: datetime
++ status: string
+brand:
++ id: ObjectId
++ name: string
++ slug: string
++ description: string
++ country: string
++ foundedYear: int
++ logo: string
++ createdAt: datetime
++ status: string
+order:
++ id: ObjectId
++ userId: ObjectId
++ orderNumber: string
++ shippingId: ObjectId
++ paymentId: ObjectId
++ totalPrice: double
++ discount: double
++ finalPrice: double
++ status: string
++ createdAt: datetime
++ deliveredAt: datetime
+order_detail:
++ id: ObjectId
++ orderId: ObjectId
++ productId: ObjectId
++ price: double
++ quantity: int
++ size: string
++ color: string
+product:
++ id: ObjectId
++ name: string
++ description: string
++ image: string
++ galleryImages: array
++ originalPrice: double
++ newPrice: double
++ stock: int
++ sizes: array
++ color: array
++ type: array
++ style: array
++ material: array
++ feature: array
++ design: array
++ releaseYear: int
++ origin: string
++ brand_id: ObjectId
++ isSeller: boolean
++ createdAt: datetime
++ status: string
+customer:
++ id: ObjectId
++ username: string
++ password: string
++ role: string
++ firstName: string
++ lastName: string
++ phone: string
++ email: string
++ city: string
++ district: string
++ ward: string
++ houseNumber: string
++ updatedAt: datetime
++ createdAt: datetime
+shipping:
++ id: ObjectId
++ name: string
++price: double
+payment
++ id: ObjectId
++ name: string
+
+----------------------

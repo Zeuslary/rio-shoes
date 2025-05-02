@@ -1,0 +1,51 @@
+@import 'normalize.css';
+
+:root {
+    --primary-color: #00ce81;
+    --primary-color-hover: #eefcf1;
+    --text-color: #3b3937;
+    --white-color: #fff;
+    --flash-white-color: #f3f3f3;
+
+    --red-color: #ff4d4d;
+
+    --font-family: 'NunitoSans-Regular', sans-serif;
+
+    --header-height: 68px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+    color: var(--text-color);
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: 1.6rem;
+    line-height: 1.5;
+    text-rendering: optimizeSpeed;
+    color: var(--text-color);
+}
+
+// Embed font
+@font-face {
+    font-family: 'NunitoSans-Regular';
+    src: url('/src/assets/font/NunitoSans-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'NunitoSans-Italic';
+    src: url('/src/assets/font/NunitoSans-Italic.ttf');
+}
+
+input,
+button {
+    outline: none;
+    border: none;
+}

@@ -13,8 +13,10 @@
     "@tippyjs/react": "^4.2.6",
     "clsx": "^2.1.1",
     "normalize.css": "^8.0.1",
+    "prop-types": "^15.8.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-router": "^7.5.3",
     "rio-shoes": "file:"
   },
   "devDependencies": {
