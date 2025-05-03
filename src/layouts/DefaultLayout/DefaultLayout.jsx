@@ -6,7 +6,7 @@ function DefaultLayout({ children }) {
     return (
         <>
             <Header />
-            {children}
+            <div className={styles['body']}>{children}</div>
             <Footer />
         </>
     );

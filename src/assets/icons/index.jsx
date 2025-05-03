@@ -1,31 +1,16 @@
-import chevronLeft from './arrow-chevron-left.svg';
-import chevronRight from './arrow-chevron-right.svg';
-import chevronUp from './arrow-chevron-left.svg';
-import chevronDown from './arrow-chevron-down.svg';
-import cart from './cart.svg';
-import facebook from './facebook.svg';
-import instagram from './instagram.svg';
-import mail from './mail.svg';
-import phone from './phone.svg';
-import pin from './pin.svg';
-import search from './search.svg';
-import time from './time.svg';
-import user from './user.svg';
-
-const icons = {
-    chevronLeft,
-    chevronRight,
-    chevronUp,
-    chevronDown,
-    cart,
-    facebook,
-    instagram,
-    mail,
-    phone,
-    pin,
-    search,
-    time,
-    user,
-};
-
-export default icons;
+export { default as ChevronLeftIcon } from './arrow-chevron-left.svg?react';
+export { default as ChevronRightIcon } from './arrow-chevron-right.svg?react';
+export { default as ChevronUpIcon } from './arrow-chevron-left.svg?react';
+export { default as ChevronDownIcon } from './arrow-chevron-down.svg?react';
+export { default as CartIcon } from './cart.svg?react';
+export { default as FacebookIcon } from './facebook.svg?react';
+export { default as InstagramIcon } from './instagram.svg?react';
+export { default as MailIcon } from './mail.svg?react';
+export { default as PhoneIcon } from './phone.svg?react';
+export { default as PinIcon } from './pin.svg?react';
+export { default as SearchIcon } from './search.svg?react';
+export { default as TimeIcon } from './time.svg?react';
+export { default as UserIcon } from './user.svg?react';
+export { default as CloseIcon } from './close.svg?react';
+export { default as PlusIcon } from './plus.svg?react';
+export { default as MinusIcon } from './minus.svg?react';

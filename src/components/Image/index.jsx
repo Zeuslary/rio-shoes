@@ -1,19 +1,16 @@
-import { forwardRef, useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import images from '~/assets/images';
 
-const Image = (
-    {
-        src,
-        alt = 'This is a image',
-        width = 100,
-        height = 100,
-        fallback = images.noImage,
-        ...props
-    },
-    ref,
-) => {
+function Image({
+    src,
+    alt = 'This is a image',
+    width = 100,
+    height = 100,
+    fallback = images.noImage,
+    ...props
+}) {
     const [altImg, setAltImg] = useState('');
 
     return (
@@ -24,10 +21,9 @@ const Image = (
             height={height}
             {...props}
             onError={() => setAltImg(fallback)}
-            ref={ref}
         />
     );
-};
+}
 
 Image.propTypes = {
     src: PropTypes.string.isRequired,
@@ -35,4 +31,4 @@ Image.propTypes = {
     fallback: PropTypes.string,
 };
 
-export default forwardRef(Image);
+export default Image;

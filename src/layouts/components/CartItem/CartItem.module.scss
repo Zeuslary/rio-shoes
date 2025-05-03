@@ -1,0 +1,73 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.wrapper + .wrapper {
+    margin-top: 12px;
+}
+
+.img {
+    --edge: 80px;
+    height: var(--edge);
+    width: var(--edge);
+}
+
+.body {
+    flex: 1;
+    margin-left: 8px;
+}
+
+.title {
+    font-size: 1.4rem;
+}
+
+.price {
+    margin: 4px 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.quantity {
+    display: inline-flex;
+}
+
+.number {
+    padding: 8px 12px;
+    font-size: 1.2rem;
+}
+
+.decrease-btn,
+.increase-btn {
+    font-size: 1.4rem;
+    padding: 8px 12px;
+    background-color: var(--white-color);
+    cursor: pointer;
+
+    svg {
+        width: 12px;
+    }
+
+    &:hover {
+        background-color: var(--flash-white-color);
+    }
+}
+
+.close-btn {
+    padding: 4px 6px;
+    align-self: flex-start;
+    display: flex;
+    color: var(--text-color);
+    background-color: var(--white-color);
+    cursor: pointer;
+
+    &:hover {
+        color: var(--red-color);
+    }
+
+    svg {
+        --edge: 20px;
+        height: var(--edge);
+        width: var(--edge);
+    }
+}

@@ -6,6 +6,7 @@ import styles from './Button.module.scss';
 
 function Button({
     children,
+    customStyle,
     to,
     href,
     primary = false,
@@ -27,6 +28,7 @@ function Button({
     const props = {
         onClick,
     };
+
     const classNames = clsx(
         styles['wrapper'],
         primary && styles['primary'],
@@ -40,10 +42,11 @@ function Button({
         bold && styles['bold'],
         canHover && styles['can-hover'],
         disabled && styles['disabled'],
+        customStyle && customStyle,
     );
 
     if (to) {
-        Comp = <Link />;
+        Comp = Link;
         props.to = to;
     } else if (href) {
         Comp = 'a';
@@ -52,9 +55,9 @@ function Button({
 
     return (
         <Comp className={classNames} {...props}>
-            {leftIcon && leftIcon()}
-            {children}
-            {rightIcon && rightIcon()}
+            {leftIcon && leftIcon}
+            <span>{children}</span>
+            {rightIcon && rightIcon}
         </Comp>
     );
 }
@@ -74,8 +77,8 @@ Button.propTypes = {
     bold: PropTypes.bool,
     canHover: PropTypes.bool,
     disabled: PropTypes.bool,
-    leftIcon: PropTypes.node,
-    rightIcon: PropTypes.node,
+    leftIcon: PropTypes.string,
+    rightIcon: PropTypes.string,
     onClick: PropTypes.func,
 };
 
