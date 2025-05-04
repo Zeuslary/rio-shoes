@@ -11,12 +11,9 @@
 }
 
 .header {
-    max-width: 1024px;
-    height: 100%;
-    margin: 0 auto;
-
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .logo {
@@ -42,6 +39,10 @@
     &:hover {
         color: var(--primary-color);
     }
+}
+
+.active {
+    font-weight: bolder;
 }
 
 // Nav right

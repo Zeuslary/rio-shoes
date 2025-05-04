@@ -1,0 +1,48 @@
+.wrapper {
+    margin: 28px 0;
+}
+
+.title {
+    text-transform: capitalize;
+    font-size: 2rem;
+    color: var(--text-color);
+}
+
+.description {
+    margin-top: 2px;
+    color: #666;
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+}
+
+// New Products
+.filters {
+}
+
+.filters .filter-item {
+    color: var(--text-color);
+    background-color: #f5f5f5;
+    font-weight: bold;
+
+    &:hover {
+        color: var(--primary-color);
+    }
+}
+
+// List products
+.list-products {
+    margin: 24px 0 48px;
+}
+
+.product-item {
+    margin: 8px 0;
+}
+
+.more-btn-wrap {
+    text-align: center;
+    margin: 32px 0 48px;
+}
+
+.more-btn {
+    min-width: 120px;
+}

@@ -1,0 +1,50 @@
+.wrapper {
+    position: relative;
+}
+
+// Products and navigation
+.navigation {
+    position: absolute;
+    top: -46px;
+    right: 6px;
+    z-index: 1;
+}
+
+.prev-btn,
+.next-btn {
+    --edge: 28px;
+    width: var(--edge);
+    height: var(--edge);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+    margin-left: 12px;
+    color: var(--text-color);
+    background-color: var(--flash-white-color);
+    cursor: pointer;
+
+    & svg {
+        width: 20px;
+    }
+
+    &:hover {
+        color: var(--primary-color);
+    }
+}
+
+.products-wrap {
+    padding: 8px 10px;
+    border-radius: 10px;
+    background-color: rgba(255, 77, 77, 0.9);
+}
+
+.product-list {
+    margin-left: -4px;
+    margin-right: -4px;
+}
+
+.product-item {
+    padding: 4px;
+}

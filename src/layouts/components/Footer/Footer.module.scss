@@ -1,0 +1,62 @@
+.wrapper {
+}
+
+// Footer
+.footer {
+    background-color: var(--text-color);
+    padding-bottom: 24px;
+}
+
+.title {
+    font-size: 1.6rem;
+    color: var(--white-color);
+    margin: 24px 0;
+}
+
+.description {
+    color: #ccc;
+    font-size: 1.4rem;
+    margin-right: 16px;
+}
+
+.lists {
+    display: flex;
+    flex-direction: column;
+}
+
+.item {
+    color: #ccc;
+    line-height: 1.8;
+    font-size: 1.4rem;
+    text-decoration: none;
+    text-transform: capitalize;
+
+    &:hover {
+        color: var(--primary-color-hover);
+    }
+}
+
+// Copyright
+.copyright-wrapper {
+    padding: 6px 0;
+    background-color: #222;
+}
+
+.copyright {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    color: #ccc;
+    font-size: 1.2rem;
+}
+
+a.copyright-item {
+    font-size: 1.2rem;
+    color: #ccc;
+    background-color: #222;
+
+    &:hover {
+        color: var(--primary-color-hover);
+    }
+}
