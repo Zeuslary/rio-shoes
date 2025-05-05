@@ -1,0 +1,79 @@
+.wrapper {
+    background-color: #f8f9fa;
+    padding: 48px 0;
+}
+
+.content,
+.not-found,
+.found-success {
+    width: 760px;
+    max-width: 100%;
+    padding: 32px;
+    border-radius: 12px;
+    color: var(--text-color);
+    background-color: var(--white-color);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+}
+
+.find-wrap {
+    display: flex;
+    align-items: center;
+    margin: 24px 0;
+}
+
+.input {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 4px;
+    font-size: 1.6rem;
+    outline: none;
+    border: none;
+    background-color: var(--flash-white-color);
+}
+
+.find-btn {
+    min-width: 150px;
+    margin-left: 12px;
+}
+
+// Find and not-found order
+.not-found {
+    width: 460px;
+    margin-top: 24px;
+    text-align: center;
+    padding: 32px;
+
+    & svg {
+        --edge: 48px;
+        width: var(--edge);
+        height: var(--edge);
+        color: var(--red-color);
+    }
+
+    & h3 {
+        font-size: 1.8rem;
+        margin-top: 8px;
+    }
+
+    & p {
+        font-size: 1.6rem;
+    }
+}
+
+.found-success {
+    margin-top: 24px;
+    text-align: center;
+
+    & svg {
+        --edge: 48px;
+        width: var(--edge);
+        height: var(--edge);
+        color: var(--primary-color);
+    }
+
+    & h3 {
+        font-size: 1.8rem;
+        margin-top: 8px;
+    }
+}

@@ -1,13 +1,17 @@
+import { useState } from 'react';
+
 import styles from './Home.module.scss';
 import Banner from '~/components/Banner';
 import FlashSale from './components/FlashSale';
 import Button from '~/components/Button';
 import dataProducts from '~/data/fakeApiProducts';
-import { useState } from 'react';
 import ProductCart from '~/components/ProductCart';
-import clsx from 'clsx';
+import CategoryFilters from '~/components/CategoryFilters';
+
+const filters = ['All Products', 'New Arrivals', 'Adidas', 'Nike', 'Puma'];
 
 function Home() {
+    const [currentFilter, setCurrentFilter] = useState(filters[0]);
     const [quantityProducts, setQuantityProducts] = useState(8);
 
     // Handle load more product
@@ -33,37 +37,23 @@ function Home() {
                     <h3 className={styles['title']}>New products</h3>
                     <p className={styles['description']}>Discover our latest arrivals</p>
 
-                    <div className={styles['filters']}>
-                        <Button small customStyle={styles['filter-item']}>
-                            All Products
-                        </Button>
-                        <Button small customStyle={styles['filter-item']}>
-                            New Arrivals
-                        </Button>
-                        <Button small customStyle={styles['filter-item']}>
-                            Adidas
-                        </Button>
-                        <Button small customStyle={styles['filter-item']}>
-                            Nike
-                        </Button>
-                        <Button small customStyle={styles['filter-item']}>
-                            Puma
-                        </Button>
-                    </div>
+                    <CategoryFilters
+                        filters={filters}
+                        currentFilter={currentFilter}
+                        setCurrentFilter={setCurrentFilter}
+                    />
 
-                    {/* List new products */}
                     <div className={styles['list-products']}>
+                        {/* List products */}
                         <div className="row">
                             {dataProducts.slice(0, quantityProducts).map((item, index) => (
-                                <div
-                                    key={item.id || index}
-                                    className={clsx('col-3', styles['product-item'])}
-                                >
+                                <div key={item.id || index} className="col-3">
                                     <ProductCart item={item} />
                                 </div>
                             ))}
                         </div>
 
+                        {/* Button see more */}
                         {quantityProducts < dataProducts.length && (
                             <div className={styles['more-btn-wrap']}>
                                 <Button

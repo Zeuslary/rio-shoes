@@ -26,13 +26,14 @@
 html {
     font-size: 62.5%;
     color: var(--text-color);
+    scroll-behavior: smooth;
 }
 
 body {
-    font-family: var(--font-family);
-    font-size: 1.6rem;
     line-height: 1.5;
+    font-size: 1.6rem;
     color: var(--text-color);
+    font-family: var(--font-family);
 }
 
 // Embed font
@@ -104,6 +105,7 @@ button {
 .col-2-4,
 .col-3,
 .col-4,
+.col-6,
 .col-9,
 .col-12 {
     padding-left: 8px;
@@ -128,6 +130,11 @@ button {
 .col-4 {
     flex: 0 0 33.33333%;
     max-width: 33.33333%;
+}
+
+.col-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
 }
 
 .col-9 {

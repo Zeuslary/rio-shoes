@@ -14,3 +14,7 @@ export { default as UserIcon } from './user.svg?react';
 export { default as CloseIcon } from './close.svg?react';
 export { default as PlusIcon } from './plus.svg?react';
 export { default as MinusIcon } from './minus.svg?react';
+export { default as LoadingDotsIcon } from './loading-dots.svg?react';
+export { default as ShopeeIcon } from './shopee.svg?react';
+export { default as CloseCircleIcon } from './close-circle.svg?react';
+export { default as CheckCircleIcon } from './check-circle.svg?react';
