@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
-import { Home, Products, Contact, OrderTracking } from '~/pages';
+import { Home, Products, Contact, OrderTracking, Search, Cart, ProductDetail } from '~/pages';
 import DefaultLayout from './layouts/DefaultLayout';
 import routes from './config/routes';
 import ScrollToTop from './components/ScrollToTop';
@@ -35,6 +35,21 @@ const publicRouters = [
         id: 6,
         path: routes.orderTracking,
         component: <OrderTracking />,
+    },
+    {
+        id: 7,
+        path: routes.search,
+        component: <Search />,
+    },
+    {
+        id: 8,
+        path: routes.cart,
+        component: <Cart />,
+    },
+    {
+        id: 9,
+        path: routes.productDetail,
+        component: <ProductDetail />,
     },
 ];
 

@@ -1,13 +1,14 @@
 import clsx from 'clsx';
-import { NavLink } from 'react-router';
+import { Link, NavLink } from 'react-router';
+import Tippy from '@tippyjs/react/headless';
 
 import styles from './Header.module.scss';
 import Image from '~/components/Image';
 import images from '~/assets/images';
-import { CartIcon, SearchIcon, UserIcon } from '~/assets/icons';
+import { CartIcon, SearchIcon } from '~/assets/icons';
 import Button from '~/components/Button';
-import Tippy from '@tippyjs/react/headless';
-import CartItem from '../CartItem';
+import CartItem from './CartItem';
+import routes from '~/config/routes';
 
 const cartList = [
     {
@@ -37,7 +38,7 @@ function Header() {
                             className={({ isActive }) =>
                                 clsx([styles['nav-item'], isActive && styles['active']])
                             }
-                            to="/"
+                            to={routes.home}
                         >
                             Home
                         </NavLink>
@@ -45,7 +46,7 @@ function Header() {
                             className={({ isActive }) =>
                                 clsx([styles['nav-item'], isActive && styles['active']])
                             }
-                            to="/adidas"
+                            to={routes.adidas}
                         >
                             Adidas
                         </NavLink>
@@ -53,7 +54,7 @@ function Header() {
                             className={({ isActive }) =>
                                 clsx([styles['nav-item'], isActive && styles['active']])
                             }
-                            to="/nike"
+                            to={routes.nike}
                         >
                             Nike
                         </NavLink>
@@ -61,7 +62,7 @@ function Header() {
                             className={({ isActive }) =>
                                 clsx([styles['nav-item'], isActive && styles['active']])
                             }
-                            to="/puma"
+                            to={routes.puma}
                         >
                             Puma
                         </NavLink>
@@ -69,7 +70,7 @@ function Header() {
                             className={({ isActive }) =>
                                 clsx([styles['nav-item'], isActive && styles['active']])
                             }
-                            to="/order-tracking"
+                            to={routes.orderTracking}
                         >
                             Order Tracking
                         </NavLink>
@@ -77,7 +78,7 @@ function Header() {
                             className={({ isActive }) =>
                                 clsx([styles['nav-item'], isActive && styles['active']])
                             }
-                            to="/contact"
+                            to={routes.contact}
                         >
                             Contact
                         </NavLink>
@@ -91,9 +92,9 @@ function Header() {
                                 type="text"
                                 placeholder="Search products..."
                             />
-                            <span className={styles['search-icon']}>
+                            <Link to={routes.search} className={styles['search-icon']}>
                                 <SearchIcon />
-                            </span>
+                            </Link>
                         </div>
 
                         {/* Cart */}
@@ -150,10 +151,10 @@ function Header() {
                                     </div>
                                 )}
                             >
-                                <span className={styles['cart-icon']}>
+                                <Link to={routes.cart} className={styles['cart-icon']}>
                                     <CartIcon />
                                     <span className={styles['cart-count']}>2</span>
-                                </span>
+                                </Link>
                             </Tippy>
                         </div>
 

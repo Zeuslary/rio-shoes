@@ -1,4 +1,3 @@
-import Button from '~/components/Button';
 import styles from './CartItem.module.scss';
 import { CloseIcon, MinusIcon, PlusIcon } from '~/assets/icons';
 import Image from '~/components/Image';

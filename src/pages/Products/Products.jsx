@@ -2,13 +2,13 @@ import { useState } from 'react';
 
 import styles from './Products.module.scss';
 import Banner from '~/components/Banner';
-import dataProducts from '~/data/fakeApiProducts';
 import ProductCart from '~/components/ProductCart';
 import Pagination from '~/components/Pagination';
 import CategoryFilters from '~/components/CategoryFilters';
+import SortBy from '~/components/SortBy';
+import dataProducts from '~/data/fakeApiProducts';
 
 const filters = ['All Products', 'New Arrivals', 'Adidas', 'Nike', 'Puma'];
-const sortBy = ['Newest', 'Best Seller', 'Price decreasing', 'Price increases', 'A - Z', 'Z - A'];
 
 function Products() {
     const [currentFilter, setCurrentFilter] = useState(filters[0]);
@@ -21,26 +21,13 @@ function Products() {
                 <div className="grid wide">
                     {/* Navigation to display list product */}
                     <div className={styles['navigation']}>
-                        {/* Filter */}
                         <CategoryFilters
                             filters={filters}
                             currentFilter={currentFilter}
                             setCurrentFilter={setCurrentFilter}
                         />
 
-                        {/* Sort by */}
-                        <div className={styles['sort-by']}>
-                            <select defaultValue="default-value" className={styles['sort-group']}>
-                                <option value="default-value" disabled>
-                                    Sort by
-                                </option>
-                                {sortBy.map((sortName, index) => (
-                                    <option key={index} value={sortName}>
-                                        {sortName}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                        <SortBy />
                     </div>
 
                     {/* Display list product base on navigation */}

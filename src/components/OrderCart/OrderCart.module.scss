@@ -1,0 +1,71 @@
+.wrapper {
+    position: relative;
+    width: 760px;
+    max-width: 100%;
+    padding: 32px;
+    border-radius: 12px;
+    color: var(--text-color);
+    background-color: var(--white-color);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    margin: 24px auto;
+}
+
+.id {
+    font-size: 1.8rem;
+}
+
+.date {
+    font-size: 1.6rem;
+    color: #666;
+}
+
+.status {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    padding: 5px 16px;
+    border-radius: 4px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.delivered {
+    color: var(--green-color);
+    background-color: #e8f5e9;
+}
+
+.in-transit {
+    color: var(--orange-color);
+    background-color: #fff3e0;
+}
+
+.processing {
+    color: var(--yellow-color);
+    background-color: #fef3c7;
+}
+
+.completed {
+    color: var(--blue-color);
+    background-color: #e3f2fd;
+}
+
+.subtotal {
+}
+
+.summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 18px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.detail-btn {
+    font-weight: 500;
+    background-color: var(--flash-white-color);
+
+    &:hover {
+        color: var(--primary-color);
+        background-color: var(--primary-color-hover);
+    }
+}

@@ -1,0 +1,32 @@
+.wrapper {
+    padding: 32px 0;
+    background-color: #f8f9fa;
+}
+
+.content {
+    display: flex;
+    align-items: flex-start;
+}
+
+.body {
+    margin-left: 32px;
+}
+
+.top-search {
+    padding: 16px;
+    border-radius: 8px;
+    background-color: var(--white-color);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+// Top search
+.top-search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+// List product
+.list-products {
+    margin-top: 24px;
+}

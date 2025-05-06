@@ -68,6 +68,7 @@
     display: flex;
     padding: 8px 12px;
     background-color: transparent;
+    color: var(--text-color);
     cursor: pointer;
 
     svg {
@@ -85,6 +86,7 @@
     justify-content: center;
     padding: 8px 12px;
     margin-left: 12px;
+    color: var(--text-color);
     cursor: pointer;
     position: relative;
 
@@ -114,7 +116,7 @@ button.login-btn {
 
 // Cart tippy
 .cart-wrapper {
-    width: 300px;
+    width: 400px;
     padding: 8px 12px;
     border-radius: 4px;
     background-color: var(--white-color);

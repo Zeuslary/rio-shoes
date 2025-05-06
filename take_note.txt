@@ -187,3 +187,14 @@ payment
 + name: string
 
 ----------------------
+Pagination
+page: 
+- 1-6: short -> display all
+- > 7: long 
+ + current < 6 -> display 0 -> current and display break
+ + current > 6 -> display break and from current - 2 to curent + 5 and
+
+---------------------
+red: #FF4D4D
+green: #4CAF50
+

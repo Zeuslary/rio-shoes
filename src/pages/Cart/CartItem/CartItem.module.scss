@@ -1,0 +1,117 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    padding: 22px;
+    border-radius: 8px;
+    background-color: var(--white-color);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.wrapper + .wrapper {
+    margin-top: 18px;
+}
+
+.img {
+    --edge: 120px;
+    height: var(--edge);
+    width: var(--edge);
+    border-radius: 6px;
+}
+
+.body {
+    flex: 1;
+    margin-left: 20px;
+}
+
+.name {
+    font-size: 1.6rem;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: var(--text-color);
+
+    &:hover {
+        color: var(--primary-color);
+    }
+}
+
+// Common
+.style,
+.pricing {
+    margin: 2px 0;
+    font-size: 1.4rem;
+}
+
+// Style item
+.style {
+}
+
+.size {
+}
+
+.color {
+    margin-left: 24px;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: -12px;
+        transform: translateY(-50%);
+        width: 1px;
+        height: 80%;
+        background-color: #e5e5e5;
+    }
+}
+
+.price {
+    font-size: 1.4rem;
+}
+
+// Quantity
+.quantity {
+    font-size: 1.4rem;
+    margin-top: 10px;
+
+    & span {
+        margin: 0 18px;
+    }
+}
+
+.decrease-btn,
+.increase-btn {
+    display: inline-flex;
+    padding: 8px 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: var(--white-color);
+    cursor: pointer;
+
+    svg {
+        width: 12px;
+    }
+
+    &:hover {
+        background-color: var(--flash-white-color);
+    }
+}
+
+// Close btn
+.close-btn {
+    padding: 4px 6px;
+    align-self: flex-start;
+    display: flex;
+    color: var(--text-color);
+    background-color: var(--white-color);
+    cursor: pointer;
+
+    &:hover {
+        color: var(--red-color);
+    }
+
+    svg {
+        --edge: 20px;
+        height: var(--edge);
+        width: var(--edge);
+    }
+}

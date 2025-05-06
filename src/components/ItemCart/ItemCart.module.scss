@@ -1,0 +1,62 @@
+.wrapper {
+    display: flex;
+    padding: 22px 0;
+
+    & + .wrapper {
+        border-top: 1px solid #e5e5e5;
+    }
+}
+
+.img {
+    --edge: 100px;
+    width: var(--edge);
+    height: var(--edge);
+    border-radius: 4px;
+}
+
+.detail {
+    font-size: 1.5rem;
+    flex: 1;
+    margin-left: 16px;
+
+    & p {
+        font-size: 1.4rem;
+        margin-top: 8px;
+    }
+
+    & span + span {
+        position: relative;
+        margin-left: 24px;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 80%;
+            width: 1px;
+            background-color: #666;
+        }
+    }
+}
+
+.name {
+    font-size: 1.6rem;
+}
+
+.price {
+}
+
+.size {
+}
+
+.color {
+}
+
+.quantity {
+}
+
+.subtotal {
+    margin-right: 16px;
+}

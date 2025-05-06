@@ -63,7 +63,7 @@ function Contact() {
                                         Message
                                     </label>
                                     <textarea
-                                        rows={10}
+                                        rows={8}
                                         spellCheck={false}
                                         className={styles['input']}
                                         type="text"

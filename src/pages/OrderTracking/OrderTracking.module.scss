@@ -38,7 +38,8 @@
 }
 
 // Find and not-found order
-.not-found {
+.not-found,
+.found-success {
     width: 460px;
     margin-top: 24px;
     text-align: center;
@@ -62,18 +63,7 @@
 }
 
 .found-success {
-    margin-top: 24px;
-    text-align: center;
-
     & svg {
-        --edge: 48px;
-        width: var(--edge);
-        height: var(--edge);
         color: var(--primary-color);
-    }
-
-    & h3 {
-        font-size: 1.8rem;
-        margin-top: 8px;
     }
 }

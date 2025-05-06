@@ -1,14 +1,15 @@
 const routes = {
     login: '/login',
     register: '/register',
-    home: '/',
-    adidas: '/adidas',
-    nike: '/nike',
-    puma: '/puma',
-    orderTracking: '/order-tracking',
-    contact: '/contact',
-    search: '/search',
-    cart: 'cart',
+    home: '/', //Done
+    adidas: '/adidas', //Done
+    nike: '/nike', //Done
+    puma: '/puma', //Done
+    orderTracking: '/order-tracking', //Done
+    contact: '/contact', //Done
+    search: '/search', //Done
+    cart: '/cart', //Done
+    productDetail: '/product',
     checkout: '/checkout',
     confirmOrder: '/confirm-order',
     orderNotify: '/order-notify',

@@ -7,58 +7,6 @@
     justify-content: space-between;
 }
 
-// Arrange
-.sort-by {
-    position: relative;
-}
-
-.sort-group {
-    padding: 10px 12px;
-    border-radius: 4px;
-    font-size: 1.5rem;
-    outline: none;
-    border: none;
-    cursor: pointer;
-
-    // Base-select make select can be css
-    appearance: base-select;
-    min-width: 200px;
-    background-color: #f5f5f5;
-
-    // Make option can be css, this css for dropdown box
-    &::picker(select) {
-        appearance: base-select;
-    }
-
-    // Icon dropdown
-    &::picker-icon {
-        padding-left: 4px;
-    }
-
-    // Css for option
-    & option {
-        padding: 10px 12px;
-        font-size: 1.5rem;
-
-        &:checked:not(:disabled) {
-            color: var(--primary-color);
-        }
-
-        &:hover:not(:disabled) {
-            color: var(--primary-color);
-        }
-
-        // Style for status of option disabled
-        &:disabled {
-            cursor: text;
-        }
-
-        &:disabled::checkmark {
-            color: transparent;
-        }
-    }
-}
-
 // Display list products
 .list-products {
     margin: 32px 0;
