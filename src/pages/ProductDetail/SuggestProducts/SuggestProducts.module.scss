@@ -1,0 +1,53 @@
+.wrapper {
+    margin-top: 32px;
+}
+
+.title {
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+}
+
+.products-wrap {
+    position: relative;
+}
+
+// Navigation
+.navigation {
+    position: absolute;
+    top: -42px;
+    right: 6px;
+    z-index: 1;
+}
+
+.prev-btn,
+.next-btn {
+    --edge: 36px;
+    width: var(--edge);
+    height: var(--edge);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+    margin-left: 18px;
+    color: var(--text-color);
+    background-color: var(--flash-white-color);
+    cursor: pointer;
+
+    & svg {
+        width: 22px;
+    }
+
+    &:hover {
+        color: var(--primary-color);
+    }
+}
+
+.product-list {
+    margin-left: -12px;
+    margin-right: -12px;
+}
+
+.product-item {
+    padding: 12px;
+}

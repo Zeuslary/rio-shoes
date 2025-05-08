@@ -3,10 +3,10 @@
 
     width: 100%;
 
+    margin: 8px 0;
     border-radius: var(--border-radius);
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
     background-color: var(--white-color);
-    margin: 8px 0;
 }
 
 .img {
@@ -43,12 +43,12 @@ button.label {
 }
 
 .body {
-    padding: 10px;
+    padding: 16px;
     color: var(--text-color);
 }
 
 .name {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -58,31 +58,30 @@ button.label {
 }
 
 .style {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: 300;
-    margin-top: 2px;
+    margin: 2px 0 6px;
 }
 
 .price {
     display: inline-flex;
-    margin: 2px 0 8px;
     align-items: baseline;
 }
 
 .new-price {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     font-weight: bolder;
     margin-right: 12px;
     color: var(--red-color);
 }
 
 .old-price {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: var(--text-color);
     text-decoration: line-through;
 }
 
 .add-btn {
     width: 100%;
-    margin-bottom: 4px;
+    margin: 14px 0 8px;
 }

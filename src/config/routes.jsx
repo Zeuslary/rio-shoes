@@ -9,9 +9,9 @@ const routes = {
     contact: '/contact', //Done
     search: '/search', //Done
     cart: '/cart', //Done
-    productDetail: '/product',
-    checkout: '/checkout',
-    confirmOrder: '/confirm-order',
+    productDetail: '/product', //Done
+    checkout: '/checkout', //Done
+    confirmOrder: '/confirm-order', //Done
     orderNotify: '/order-notify',
     history: '/history',
     orderDetail: '/order-detail',

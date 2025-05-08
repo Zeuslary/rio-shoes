@@ -1,0 +1,98 @@
+.wrapper {
+    background-color: var(--background-color);
+    padding: 32px 0 48px;
+}
+
+.heading {
+    font-size: 2.6rem;
+    margin: 0 0 24px;
+}
+
+.content {
+    display: flex;
+    align-items: flex-start;
+}
+
+// Container: contact, shipping, payment
+.container {
+    flex: 1;
+}
+
+.shipping,
+.payment,
+.order-detail {
+    padding: 24px;
+    border-radius: 8px;
+    background-color: var(--white-color);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.shipping,
+.payment {
+    margin-top: 24px;
+}
+
+// Option for shipping and payment
+.option {
+    display: flex;
+    padding: 12px;
+    margin-top: 12px;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--flash-white-color);
+    }
+}
+
+.option-info {
+}
+
+.option-title {
+    font-size: 1.4rem;
+}
+
+.option-desc {
+    color: #666;
+    font-size: 1.4rem;
+    margin-top: 4px;
+}
+
+.option-price {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+// Order detail
+.order-detail {
+    margin-left: 32px;
+    flex: 0 0 400px;
+}
+
+// Summary
+.summary {
+    font-size: 1.5rem;
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.space-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.confirm-btn {
+    width: 100%;
+    margin: 18px 0 12px;
+}
+
+// Active state of option
+.option-active {
+    background-color: #eee;
+}

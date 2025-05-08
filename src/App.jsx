@@ -1,5 +1,15 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
-import { Home, Products, Contact, OrderTracking, Search, Cart, ProductDetail } from '~/pages';
+import {
+    Home,
+    Products,
+    Contact,
+    OrderTracking,
+    Search,
+    Cart,
+    ProductDetail,
+    Checkout,
+    ConfirmOrder,
+} from '~/pages';
 import DefaultLayout from './layouts/DefaultLayout';
 import routes from './config/routes';
 import ScrollToTop from './components/ScrollToTop';
@@ -50,6 +60,16 @@ const publicRouters = [
         id: 9,
         path: routes.productDetail,
         component: <ProductDetail />,
+    },
+    {
+        id: 10,
+        path: routes.checkout,
+        component: <Checkout />,
+    },
+    {
+        id: 11,
+        path: routes.confirmOrder,
+        component: <ConfirmOrder />,
     },
 ];
 

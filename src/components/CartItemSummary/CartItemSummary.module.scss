@@ -1,0 +1,46 @@
+.wrapper {
+    display: flex;
+    margin-top: 16px;
+}
+
+.img {
+    --edge: 80px;
+    height: var(--edge);
+    width: var(--edge);
+    border-radius: 6px;
+}
+
+.body {
+    flex: 1;
+    margin-left: 12px;
+
+    & p {
+        font-size: 1.3rem;
+    }
+}
+
+.name {
+    font-size: 1.5rem;
+}
+
+.price {
+    font-size: 1.4rem;
+    margin-top: 2px;
+}
+
+.color {
+    margin: 4px 0 4px 16px;
+    position: relative;
+    display: inline-block;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: -8px;
+        transform: translateY(-50%);
+        width: 1px;
+        height: 80%;
+        background-color: #ddd;
+    }
+}

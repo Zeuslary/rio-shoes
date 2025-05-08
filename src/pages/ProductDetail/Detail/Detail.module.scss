@@ -1,0 +1,139 @@
+.wrapper {
+    margin-left: 24px;
+}
+
+// Product detail
+.detail {
+}
+
+.name {
+    font-size: 2.4rem;
+    margin: 16px 0;
+}
+
+// Common
+.title {
+    margin-top: 24px;
+    font-size: 1.7rem;
+    font-weight: bold;
+}
+
+.size-btn,
+.color-btn {
+    padding: 10px 36px;
+    margin: 12px 16px 4px 0;
+    border-radius: 4px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.9;
+        color: var(--white-color);
+        background-color: var(--primary-color);
+    }
+}
+
+// Price
+.price-wrapper {
+}
+
+.new-price {
+    font-size: 1.8rem;
+    color: var(--red-color);
+}
+
+.price {
+    font-size: 1.5rem;
+    text-decoration: line-through;
+    margin-left: 16px;
+}
+
+.size {
+}
+
+// Color
+.color-btn {
+    min-width: 120px;
+}
+
+// Quantity
+.quantity {
+    margin: 18px 0;
+    font-size: 1.6rem;
+
+    & span {
+        margin: 0 18px;
+    }
+}
+
+.decrease-btn,
+.increase-btn {
+    padding: 14px;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    font-size: 1.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+
+    &:hover {
+        background-color: #eee;
+    }
+
+    & svg {
+        width: 12px;
+    }
+}
+
+// Group btn
+.group-btns {
+    display: flex;
+    margin: 36px -10px;
+}
+
+.buy-btn,
+.add-btn {
+    flex: 1;
+    margin: 0 10px;
+}
+
+// Promotions
+.promotions {
+    margin-top: 32px;
+    padding: 24px;
+    border-radius: 4px;
+    background-color: var(--white-color);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.promotion-item {
+    display: flex;
+    align-items: center;
+
+    & span {
+        color: #666;
+        font-size: 1.6rem;
+    }
+
+    svg {
+        --edge: 24px;
+        width: var(--edge);
+        height: var(--edge);
+        margin-right: 24px;
+        display: inline-block;
+    }
+
+    & + .promotion-item {
+        margin-top: 24px;
+    }
+}
+
+// State active
+.active {
+    color: var(--white-color);
+    background-color: var(--primary-color);
+}

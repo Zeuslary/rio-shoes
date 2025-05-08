@@ -1,0 +1,99 @@
+.wrapper {
+    background-color: var(--background-color);
+    padding: 12px 0;
+}
+
+.body {
+    width: 960px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.header {
+    font-size: 2.4rem;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.content {
+    display: flex;
+    align-items: flex-start;
+}
+
+// Common
+.section {
+    flex: 1;
+    padding: 24px;
+    border-radius: 8px;
+    background-color: var(--white-color);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.section + .section {
+    margin-left: 24px;
+}
+
+.section-title {
+    font-size: 1.8rem;
+}
+
+// Shipping info
+.info {
+    font-size: 1.5rem;
+    margin-top: 10px;
+}
+
+.info-item {
+    display: flex;
+    padding: 22px 0 2px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.info-title {
+    width: 140px;
+    flex-shrink: 0;
+    font-weight: 500;
+    align-self: flex-end;
+}
+
+// Order detail
+.order-detail {
+}
+
+.list-items {
+    height: 200px;
+    overflow-y: scroll;
+    padding-right: 8px;
+}
+
+.summary {
+    margin-top: 14px;
+    padding-top: 4px;
+    font-size: 1.4rem;
+    border-top: 1px solid #e5e5e5;
+
+    & p {
+        display: flex;
+        justify-content: space-between;
+        margin: 6px 0;
+    }
+
+    .total {
+        font-size: 1.5rem;
+        margin: 8px 0 0;
+        padding-top: 8px;
+        border-top: 1px solid #e5e5e5;
+    }
+}
+
+.confirm {
+    text-align: center;
+    font-size: 1.2rem;
+    margin: 24px 0;
+    color: #666;
+}
+
+.order-btn {
+    margin-top: 18px;
+    min-width: 220px;
+}

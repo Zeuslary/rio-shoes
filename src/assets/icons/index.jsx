@@ -19,3 +19,5 @@ export { default as ShopeeIcon } from './shopee.svg?react';
 export { default as CloseCircleIcon } from './close-circle.svg?react';
 export { default as CheckCircleIcon } from './check-circle.svg?react';
 export { default as CheckIcon } from './check.svg?react';
+export { default as ReturnIcon } from './return.svg?react';
+export { default as TruckIcon } from './truck.svg?react';

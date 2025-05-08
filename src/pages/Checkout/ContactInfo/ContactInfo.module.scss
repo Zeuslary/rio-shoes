@@ -1,0 +1,114 @@
+.wrapper {
+    width: 100%;
+    padding: 24px;
+    border-radius: 8px;
+    background-color: var(--white-color);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-size: 2rem;
+}
+
+// Common field
+.label {
+    margin-top: 20px;
+    display: block;
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+
+.input {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-size: 1.5rem;
+    margin-top: 8px;
+    outline: none;
+    border: none;
+    resize: none;
+    background-color: var(--flash-white-color);
+}
+
+.error-mes,
+.address-error-mes {
+    color: var(--red-color);
+    font-size: 1.5rem;
+    margin-top: 8px;
+    font-weight: 600;
+}
+
+// Address
+.address {
+    font-weight: 600;
+    font-size: 1.6rem;
+    margin: 18px 0 6px;
+    display: block;
+}
+
+.address-label {
+    display: block;
+    font-size: 1.5rem;
+    margin: 4px 0 8px;
+    font-weight: 500;
+    color: #777;
+}
+
+.address-error-mes {
+    margin: 0 0 8px;
+}
+
+.address-select {
+    outline: none;
+    border: 1px solid transparent;
+    width: 100%;
+    padding: 10px 16px;
+    margin-bottom: 6px;
+
+    border-radius: 4px;
+    font-size: 1.5rem;
+    background-color: #eee;
+    cursor: pointer;
+
+    // Base-select make select can be css
+    appearance: base-select;
+
+    // Make option can be css, this css for dropdown box
+    &::picker(select) {
+        appearance: base-select;
+    }
+
+    // Icon dropdown
+    &::picker-icon {
+        padding-left: 4px;
+    }
+
+    // Css for option
+    & option {
+        padding: 10px 12px;
+        font-size: 1.4rem;
+
+        &:checked:not(:disabled) {
+            color: var(--primary-color);
+        }
+
+        &:hover:not(:disabled) {
+            color: var(--primary-color);
+        }
+
+        // Style for status of option disabled
+        &:disabled {
+            cursor: text;
+        }
+
+        &:disabled::checkmark {
+            color: transparent;
+        }
+    }
+}
+
+// Invalid state
+.invalid {
+    box-shadow: 0 0 0 1px var(--red-color);
+}

@@ -1,0 +1,79 @@
+.wrapper {
+}
+
+.main {
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+@keyframes slideToLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideToRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.main-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    animation: slideToRight both 0.3s;
+}
+
+.slide-prev {
+    animation-name: slideToLeft;
+}
+
+.prev-btn,
+.next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+
+    color: var(--text-color);
+    background-color: transparent;
+    cursor: pointer;
+
+    & svg {
+        width: 24px;
+    }
+
+    &:hover {
+        color: var(--primary-color);
+    }
+}
+
+.prev-btn {
+    left: 6px;
+}
+
+.next-btn {
+    right: 6px;
+}
+
+.img {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}

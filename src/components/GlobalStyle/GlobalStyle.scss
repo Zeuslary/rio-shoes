@@ -13,6 +13,7 @@
     --orange-color: #ed6c02;
     --gray-color: #6c757d;
     --yellow-color: #f09e17;
+    --background-color: #f8f9fa;
 
     --font-family: 'NunitoSans-Regular', sans-serif;
 
@@ -110,7 +111,9 @@ button {
 .col-2-4,
 .col-3,
 .col-4,
+.col-5,
 .col-6,
+.col-7,
 .col-9,
 .col-10,
 .col-12 {
@@ -138,9 +141,19 @@ button {
     max-width: 33.33333%;
 }
 
+.col-5 {
+    flex: 0 0 41.66667%;
+    max-width: 41.66667%;
+}
+
 .col-6 {
     flex: 0 0 50%;
     max-width: 50%;
+}
+
+.col-7 {
+    flex: 0 0 58.33333%;
+    max-width: 58.33333%;
 }
 
 .col-9 {
