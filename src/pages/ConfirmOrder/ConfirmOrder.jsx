@@ -1,5 +1,7 @@
 import CartItemSummary from '~/components/CartItemSummary';
 import Button from '~/components/Button';
+import { ReturnIcon } from '~/assets/icons';
+import routes from '~/config/routes';
 import styles from './ConfirmOrder.module.scss';
 
 // Fake confirm order
@@ -67,6 +69,14 @@ function ConfirmOrder() {
         <div className={styles['wrapper']}>
             <div className={styles['body']}>
                 <h1 className={styles['header']}>Confirm Your Order</h1>
+
+                <Button
+                    to={routes.checkout}
+                    leftIcon={<ReturnIcon />}
+                    customStyle={styles['back-btn']}
+                >
+                    Back
+                </Button>
 
                 <div className={styles['content']}>
                     <div className={styles['section']}>
@@ -148,7 +158,7 @@ function ConfirmOrder() {
 
                 <div className={styles['confirm']}>
                     <p>Please review all information before confirming your order</p>
-                    <Button deepBlack customStyle={styles['order-btn']}>
+                    <Button to={routes.orderDetail} deepBlack customStyle={styles['order-btn']}>
                         Place Order
                     </Button>
                 </div>

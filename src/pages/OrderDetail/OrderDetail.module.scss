@@ -1,0 +1,84 @@
+.wrapper {
+    background-color: var(--background-color);
+    padding: 12px 0 48px;
+
+    & div.custom-grid {
+        max-width: 960px;
+    }
+}
+
+div.custom-row {
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+div.custom-col-6 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.body {
+    display: flex;
+}
+
+.header {
+    font-size: 2.4rem;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.body {
+    display: flex;
+    align-items: flex-start;
+}
+
+// Common
+.section-group {
+    padding: 24px;
+    font-size: 1.5rem;
+    border-radius: 8px;
+    color: #555;
+    background-color: var(--white-color);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+
+    & + .section-group {
+        margin-top: 18px;
+    }
+}
+
+.section-header {
+    font-size: 2rem;
+    margin-bottom: 16px;
+}
+
+.section-item {
+    display: flex;
+    margin-top: 20px;
+    padding-bottom: 1px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.section-label {
+    width: 140px;
+    flex-shrink: 0;
+    font-weight: 600;
+    align-self: flex-end;
+}
+
+// Order detail
+.summary {
+    margin-top: 14px;
+    border-top: 1px solid #e5e5e5;
+
+    .total {
+        font-size: 1.6rem;
+        margin-top: 14px;
+        padding-top: 8px;
+        border-top: 1px solid #e5e5e5;
+    }
+}
+
+.continue-btn {
+    text-align: center;
+    margin-top: 24px;
+}

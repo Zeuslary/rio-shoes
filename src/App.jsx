@@ -9,10 +9,19 @@ import {
     ProductDetail,
     Checkout,
     ConfirmOrder,
+    OrderSuccess,
+    OrderFail,
+    OrderDetail,
+    Register,
+    Login,
 } from '~/pages';
-import DefaultLayout from './layouts/DefaultLayout';
+
+import { AdminLayout, DefaultLayout } from './layouts';
+
 import routes from './config/routes';
 import ScrollToTop from './components/ScrollToTop';
+import OrderHistory from './pages/OrderHistory';
+import { Dashboard } from '~/admin/pages';
 
 const publicRouters = [
     {
@@ -71,6 +80,44 @@ const publicRouters = [
         path: routes.confirmOrder,
         component: <ConfirmOrder />,
     },
+    {
+        id: 12,
+        path: routes.orderSuccess,
+        component: <OrderSuccess />,
+    },
+    {
+        id: 13,
+        path: routes.orderFail,
+        component: <OrderFail />,
+    },
+    {
+        id: 14,
+        path: routes.orderHistory,
+        component: <OrderHistory />,
+    },
+    {
+        id: 15,
+        path: routes.orderDetail,
+        component: <OrderDetail />,
+    },
+    {
+        id: 16,
+        path: routes.register,
+        component: <Register />,
+    },
+    {
+        id: 16,
+        path: routes.login,
+        component: <Login />,
+    },
+];
+
+const privateRoutes = [
+    {
+        id: 1,
+        path: routes.adminDashboard,
+        component: <Dashboard />,
+    },
 ];
 
 function App() {
@@ -78,12 +125,22 @@ function App() {
         <BrowserRouter>
             <ScrollToTop>
                 <Routes>
-                    {publicRouters.map((route) => (
-                        <Route
-                            path={route.path}
-                            element={<DefaultLayout>{route.component}</DefaultLayout>}
-                        />
-                    ))}
+                    {publicRouters.map((route) => {
+                        const Layout = route.layout || DefaultLayout;
+
+                        return (
+                            <Route path={route.path} element={<Layout>{route.component}</Layout>} />
+                        );
+                    })}
+
+                    {privateRoutes.map((route) => {
+                        return (
+                            <Route
+                                path={route.path}
+                                element={<AdminLayout>{route.component}</AdminLayout>}
+                            />
+                        );
+                    })}
                 </Routes>
             </ScrollToTop>
         </BrowserRouter>

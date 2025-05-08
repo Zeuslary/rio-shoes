@@ -21,6 +21,9 @@
 
     // Swiper custom
     --swiper-navigation-size: 24px;
+
+    // Admin
+    --admin-sidebar: 224px;
 }
 
 * {
@@ -169,4 +172,14 @@ button {
 .col-12 {
     flex: 0 0 100%;
     max-width: 100%;
+}
+
+// Common style
+.space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.mt-12 {
+    margin-top: 12px;
 }

@@ -59,6 +59,15 @@
     background-color: var(--red-color);
 }
 
+.gray {
+    color: var(--text-color);
+    background-color: var(--flash-white-color);
+
+    &:hover {
+        background-color: #eee;
+    }
+}
+
 // Rounder
 .rounder {
     border-radius: 999px;

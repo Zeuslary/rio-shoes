@@ -1,8 +1,31 @@
-import styles from './OrderTracking.module.scss';
-import Button from '~/components/Button';
-import { CheckCircleIcon, CloseCircleIcon } from '~/assets/icons';
-import OrderCart from '~/components/OrderCart';
 import { useState } from 'react';
+
+import { CheckCircleIcon, CloseCircleIcon } from '~/assets/icons';
+import Button from '~/components/Button';
+import OrderCart from '~/components/OrderCart';
+import styles from './OrderTracking.module.scss';
+
+const item = {
+    id: 101,
+    status: 'delivered',
+    createdAt: '2025-05-01',
+    items: [
+        {
+            name: 'Nike Air Max 90',
+            image: '/src/assets/images/product/nike-1.png',
+            size: 41,
+            color: 'White',
+            price: 120,
+            quantity: 1,
+        },
+    ],
+    summary: {
+        subTotal: 120,
+        shipping: 19.99,
+        discount: 0,
+        total: 139.99,
+    },
+};
 
 function OrderTracking() {
     const [order, setOrder] = useState(true);
@@ -10,7 +33,7 @@ function OrderTracking() {
     return (
         <div className={styles['wrapper']}>
             <div className={styles['content']}>
-                <h2>Order Tracking</h2>
+                <h1 className={styles['header']}>Order Tracking</h1>
 
                 <div className={styles['find-wrap']}>
                     <input
@@ -44,7 +67,7 @@ function OrderTracking() {
                         <h3>Find your order success</h3>
                     </div> */}
 
-                    <OrderCart />
+                    <OrderCart item={item} />
                 </>
             )}
         </div>

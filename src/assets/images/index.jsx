@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import noImage from './noImage.png';
-import zuri from './noImage.png';
+import zuri from './zuri.png';
 import emptyCart from './empty-product.png';
 import bannerNike from './banner-nike.jpg';
 import bannerAdidas from './banner-adidas.jpg';

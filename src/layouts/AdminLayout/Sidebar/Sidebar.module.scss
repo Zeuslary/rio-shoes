@@ -1,0 +1,82 @@
+.wrapper {
+    flex-shrink: 0;
+    min-height: 100vh;
+    width: var(--admin-sidebar);
+    color: var(--white-color);
+    background-color: #333;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    font-size: 2.1rem;
+    margin: 0;
+    padding: 16px 12px;
+}
+
+// Nav
+.nav-list {
+    flex: 1;
+    border-top: 1px solid #777;
+    border-bottom: 1px solid #777;
+}
+
+.nav-item {
+    display: flex;
+    color: var(--white-color);
+    align-items: center;
+    padding: 12px 12px;
+
+    &:hover {
+        background-color: #444;
+    }
+}
+
+.nav-icon {
+    --edge: 18px;
+    width: var(--edge);
+    height: var(--edge);
+    margin-right: 12px;
+
+    & svg {
+        width: var(--edge);
+        height: var(--edge);
+    }
+}
+
+.nav-label {
+    flex: 1;
+    font-size: 1.7rem;
+}
+
+// Info
+.info {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.info-avatar {
+    --edge: 36px;
+    width: var(--edge);
+    height: var(--edge);
+    border-radius: 50%;
+    margin: 0 12px;
+}
+
+.info-body {
+}
+
+.info-name {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.info-contact {
+    color: #ccc;
+    font-size: 1.3rem;
+}
+
+.active {
+    background-color: #757575;
+}

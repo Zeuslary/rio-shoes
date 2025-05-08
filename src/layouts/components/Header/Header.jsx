@@ -159,7 +159,9 @@ function Header() {
                         </div>
 
                         {/* Button login */}
-                        <Button customStyle={styles['login-btn']}>Login</Button>
+                        <Button to={routes.login} customStyle={styles['login-btn']}>
+                            Login
+                        </Button>
                     </div>
                 </header>
             </div>

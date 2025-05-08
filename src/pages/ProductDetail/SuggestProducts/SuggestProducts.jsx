@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/scss';
@@ -10,6 +11,17 @@ import ProductCart from '~/components/ProductCart';
 import styles from './SuggestProducts.module.scss';
 
 function SuggestProducts({ title = 'Related Products' }) {
+    // Initialize the navigation variables
+    const nextButtonRef = useRef(null);
+    const prevButtonRef = useRef(null);
+
+    useEffect(() => {
+        console.group(title);
+        console.log(nextButtonRef);
+        console.log(prevButtonRef);
+        console.groupEnd();
+    });
+
     return (
         <div className={styles['wrapper']}>
             <h3 className={styles['title']}>{title}</h3>
@@ -18,10 +30,10 @@ function SuggestProducts({ title = 'Related Products' }) {
             <div className={styles['products-wrap']}>
                 {/* Navigation of slider show */}
                 <div className={styles['navigation']}>
-                    <button className={styles['prev-btn']}>
+                    <button ref={prevButtonRef} className={styles['prev-btn']}>
                         <ChevronLeftIcon />
                     </button>
-                    <button className={styles['next-btn']}>
+                    <button ref={nextButtonRef} className={styles['next-btn']}>
                         <ChevronRightIcon />
                     </button>
                 </div>
@@ -30,9 +42,13 @@ function SuggestProducts({ title = 'Related Products' }) {
                     <Swiper
                         slidesPerView={4}
                         scrollbar={true}
+                        onBeforeInit={(swiper) => {
+                            swiper.params.navigation.prevEl = prevButtonRef.current;
+                            swiper.params.navigation.nextEl = nextButtonRef.current;
+                        }}
                         navigation={{
-                            nextEl: `.${styles['next-btn']}`,
-                            prevEl: `.${styles['prev-btn']}`,
+                            nextEl: nextButtonRef.current,
+                            prevEl: prevButtonRef.current,
                         }}
                         loop={true}
                         modules={[Navigation]}

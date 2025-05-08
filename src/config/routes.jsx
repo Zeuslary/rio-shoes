@@ -1,6 +1,6 @@
 const routes = {
-    login: '/login',
-    register: '/register',
+    login: '/login', //Done
+    register: '/register', //Done
     home: '/', //Done
     adidas: '/adidas', //Done
     nike: '/nike', //Done
@@ -12,9 +12,22 @@ const routes = {
     productDetail: '/product', //Done
     checkout: '/checkout', //Done
     confirmOrder: '/confirm-order', //Done
-    orderNotify: '/order-notify',
-    history: '/history',
-    orderDetail: '/order-detail',
+    orderSuccess: '/order-success', //Done
+    orderFail: '/order-fail', //Done
+    orderHistory: '/order-history', //Done
+    orderDetail: '/order-detail', //Done
+
+    // Admin routes
+    adminDashboard: '/admin',
+    adminProducts: '/admin/products',
+    adminOrders: '/admin/orders',
+    adminCustomers: '/admin/customers',
+    adminCategories: '/admin/categories',
+    adminPayments: '/admin/payments',
+    adminPromotions: '/admin/promotions',
+    adminReports: '/admin/reports',
+    adminAdmins: '/admin/admins',
+    adminSettings: '/admin/settings',
 };
 
 export default routes;

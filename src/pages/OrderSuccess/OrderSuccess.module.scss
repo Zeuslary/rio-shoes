@@ -1,0 +1,61 @@
+.wrapper {
+    background-color: var(--background-color);
+    padding: 36px 0;
+}
+
+.content {
+    width: 480px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+// Info
+.info {
+    color: #666;
+    font-size: 1.5rem;
+    padding: 24px 32px 28px;
+    border-radius: 6px;
+    background-color: var(--white-color);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+    --edge: 44px;
+    width: var(--edge);
+    height: var(--edge);
+    color: var(--primary-color);
+}
+
+.header {
+    font-size: 2rem;
+    margin: 4px 0 18px;
+}
+
+.order-id {
+    font-size: 1.6rem;
+    margin: 12px 0;
+}
+
+// Group navigation
+.actions {
+    margin-top: 24px;
+
+    & .continue-btn {
+        margin-left: 24px;
+    }
+}
+
+.view-btn,
+.continue-btn {
+    font-size: 1.4rem;
+    min-width: 150px;
+}
+
+.view-btn {
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+
+    &:hover {
+        background-color: #f7f7f7;
+    }
+}

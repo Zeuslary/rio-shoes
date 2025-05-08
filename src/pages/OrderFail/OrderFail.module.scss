@@ -1,0 +1,73 @@
+.wrapper {
+    background-color: var(--background-color);
+    padding: 36px 0;
+}
+
+.content {
+    width: 480px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+// Info
+.info {
+    color: #666;
+    font-size: 1.5rem;
+    padding: 26px 32px 32px;
+    border-radius: 6px;
+    background-color: var(--white-color);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+    --edge: 44px;
+    width: var(--edge);
+    height: var(--edge);
+    color: var(--red-color);
+}
+
+.header {
+    font-size: 2rem;
+    margin: 4px 0 12px;
+}
+
+.order-id {
+    font-size: 1.6rem;
+    margin: 12px 0;
+}
+
+// Group navigation
+.actions {
+    margin-top: 24px;
+    font-size: 1.4rem;
+
+    & .again-btn {
+        margin-left: 20px;
+    }
+}
+
+.back-btn,
+.again-btn {
+    font-size: 1.4rem;
+    min-width: 150px;
+}
+
+.back-btn {
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+
+    &:hover {
+        background-color: #f7f7f7;
+    }
+}
+
+.contact-btn {
+    color: var(--text-color);
+    display: inline-block;
+    margin: 20px 0 0 4px;
+    transition: all ease-in 0.2s;
+
+    &:hover {
+        color: var(--primary-color);
+    }
+}

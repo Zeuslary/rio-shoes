@@ -61,11 +61,7 @@
 }
 
 .detail-btn {
-    font-weight: 500;
-    background-color: var(--flash-white-color);
-
-    &:hover {
-        color: var(--primary-color);
-        background-color: var(--primary-color-hover);
-    }
+    height: 40px;
+    font-size: 1.5rem;
+    min-width: 120px;
 }

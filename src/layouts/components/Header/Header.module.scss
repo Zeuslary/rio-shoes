@@ -49,6 +49,14 @@
 .nav-right {
     display: flex;
     align-items: center;
+
+    & .login-btn {
+        color: var(--text-color);
+
+        &:hover {
+            color: var(--primary-color);
+        }
+    }
 }
 
 .search-wrapper {
@@ -106,12 +114,6 @@
     border-radius: 999px;
     color: var(--white-color);
     background: var(--red-color);
-}
-
-button.login-btn {
-    &:hover {
-        color: var(--primary-color);
-    }
 }
 
 // Cart tippy
