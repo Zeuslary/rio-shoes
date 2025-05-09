@@ -1,0 +1,12 @@
+.wrapper {
+    position: relative;
+    width: 100%;
+    border-radius: 6px;
+    padding: 16px;
+    background-color: var(--white-color);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+}
+
+.wrapper + .wrapper {
+    margin-left: 24px;
+}

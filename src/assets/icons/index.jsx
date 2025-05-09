@@ -21,3 +21,7 @@ export { default as CheckCircleIcon } from './check-circle.svg?react';
 export { default as CheckIcon } from './check.svg?react';
 export { default as ReturnIcon } from './return.svg?react';
 export { default as TruckIcon } from './truck.svg?react';
+export { default as BellIcon } from './bell.svg?react';
+export { default as DeleteIcon } from './delete.svg?react';
+export { default as EditIcon } from './edit.svg?react';
+export { default as EyeIcon } from './eye.svg?react';

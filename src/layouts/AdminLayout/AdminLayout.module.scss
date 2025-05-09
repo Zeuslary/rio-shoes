@@ -4,4 +4,9 @@
 
 .body {
     flex: 1;
+    background-color: var(--flash-white-color);
+}
+
+.content {
+    padding: 24px;
 }

@@ -30,6 +30,8 @@ function Sidebar() {
                     <NavLink
                         key={item.id}
                         to={item.path}
+                        // Fix error active /admin when on /admin/products
+                        end={item.path === routes.adminDashboard}
                         className={({ isActive }) =>
                             clsx(styles['nav-item'], isActive && styles['active'])
                         }

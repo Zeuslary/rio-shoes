@@ -1,0 +1,109 @@
+.wrapper {
+}
+
+// Common style
+.red-color {
+    color: var(--red-color);
+    background-color: #ff4d4d36;
+}
+
+.green-color {
+    color: var(--green-color);
+    background-color: #e8f5e9;
+}
+
+.orange-color {
+    color: var(--orange-color);
+    background-color: #fff3e0;
+}
+
+.yellow-color {
+    color: var(--yellow-color);
+    background-color: #fef3c7;
+}
+
+.blue-color {
+    color: var(--blue-color);
+    background-color: #e3f2fd;
+}
+
+// Table
+.table {
+    width: 100%;
+    color: #666;
+    font-size: 1.6rem;
+    border-collapse: collapse;
+
+    & th,
+    & td {
+        border: 1px solid #666;
+        padding: 12px;
+        text-align: center;
+    }
+
+    & th {
+        color: var(--text-color);
+        background-color: #eee;
+    }
+}
+
+// Iem product
+.item {
+    display: flex;
+    align-items: center;
+}
+
+.item-img {
+    --edge: 54px;
+    width: var(--edge);
+    height: var(--edge);
+    border-radius: 4px;
+    margin-right: 12px;
+}
+
+.item-detail {
+    text-align: left;
+}
+
+.item-name {
+    font-weight: 600;
+    font-size: 1.6rem;
+    color: var(--text-color);
+}
+
+.item-description {
+    font-size: 1.4rem;
+}
+
+.cell-value {
+    padding: 4px 16px;
+    border-radius: 4px;
+}
+
+// Actions
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 36px;
+    color: #666;
+    border-radius: 4px;
+    background-color: var(--flash-white-color);
+    cursor: pointer;
+
+    // color: white;
+
+    &:hover {
+        color: var(--red-color);
+    }
+
+    & svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    & + .btn {
+        margin-left: 12px;
+    }
+}

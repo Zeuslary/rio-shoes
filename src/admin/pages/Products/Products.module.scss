@@ -1,0 +1,75 @@
+.wrapper {
+    position: relative;
+}
+
+.header {
+    font-size: 2.4rem;
+}
+
+.header-desc {
+    color: #666;
+    font-size: 1.5rem;
+    margin-top: 2px;
+    margin-bottom: 24px;
+}
+
+.add-btn {
+    position: absolute;
+    top: 12px;
+    right: 0;
+    height: 38px;
+}
+
+// Filter left
+.filters {
+    height: 36px;
+}
+
+.brand-btn,
+.active-brand-btn {
+    height: 100%;
+    min-width: 80px;
+
+    & + .brand-btn {
+        margin-left: 16px;
+    }
+
+    & + .active-brand-btn {
+        margin-left: 16px;
+    }
+}
+
+.active-brand-btn {
+    color: var(--white-color);
+    background-color: var(--blue-color);
+}
+
+.brand-btn {
+    color: var(--text-color);
+    background-color: var(--flash-white-color);
+}
+
+// Pagination
+.paginate {
+    display: flex;
+    justify-content: flex-end;
+}
+
+// Filter right
+.search {
+    display: flex;
+    height: 36px;
+}
+
+.search-input {
+    flex: 1;
+    padding-left: 16px;
+    font-size: 1.5rem;
+    border-radius: 4px;
+    background-color: var(--flash-white-color);
+}
+
+.search-btn {
+    height: 100%;
+    margin-left: 12px;
+}

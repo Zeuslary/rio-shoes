@@ -21,7 +21,7 @@ import { AdminLayout, DefaultLayout } from './layouts';
 import routes from './config/routes';
 import ScrollToTop from './components/ScrollToTop';
 import OrderHistory from './pages/OrderHistory';
-import { Dashboard } from '~/admin/pages';
+import { AdminProducts, AdminDashboard, AdminOrders } from '~/admin/pages';
 
 const publicRouters = [
     {
@@ -116,7 +116,17 @@ const privateRoutes = [
     {
         id: 1,
         path: routes.adminDashboard,
-        component: <Dashboard />,
+        component: <AdminDashboard />,
+    },
+    {
+        id: 2,
+        path: routes.adminProducts,
+        component: <AdminProducts />,
+    },
+    {
+        id: 2,
+        path: routes.adminOrders,
+        component: <AdminOrders />,
     },
 ];
 

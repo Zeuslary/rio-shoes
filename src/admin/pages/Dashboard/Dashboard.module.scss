@@ -1,0 +1,42 @@
+.wrapper {
+}
+
+.header {
+    font-size: 2.4rem;
+    margin-bottom: 24px;
+}
+
+.summary {
+    margin: 12px 0 24px;
+}
+
+// Other
+.total-title {
+    color: #666;
+    font-size: 1.6rem;
+    text-transform: capitalize;
+}
+
+.cart-title {
+    flex: 1;
+    font-size: 2.1rem;
+    font-weight: bold;
+    align-self: center;
+}
+
+.view-btn {
+    color: var(--text-color);
+    height: 38px;
+    margin: 12px 0;
+    border-color: #333;
+
+    &:hover {
+        background-color: #eee;
+    }
+}
+
+.cart-number {
+    margin-top: 12px;
+    font-size: 2.2rem;
+    font-weight: bold;
+}
