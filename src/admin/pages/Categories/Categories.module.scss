@@ -1,0 +1,44 @@
+.wrapper {
+    position: relative;
+}
+
+.header {
+    font-size: 2.4rem;
+}
+
+.header-desc {
+    color: #666;
+    font-size: 1.5rem;
+    margin-top: 2px;
+    margin-bottom: 24px;
+}
+
+.add-btn {
+    position: absolute;
+    top: 12px;
+    right: 0;
+    height: 38px;
+}
+
+// Filter left
+.filter-select {
+    min-width: 168px;
+    border-radius: 4px;
+    padding: 8px;
+    cursor: pointer;
+
+    appearance: base-select;
+
+    & option {
+        background-color: var(--white-color);
+    }
+
+    & + .filter-select {
+        margin-left: 24px;
+    }
+}
+
+// Category list
+.category-list {
+    margin-top: 24px;
+}

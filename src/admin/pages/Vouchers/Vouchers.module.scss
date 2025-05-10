@@ -1,0 +1,63 @@
+.wrapper {
+    position: relative;
+}
+
+.header {
+    font-size: 2.4rem;
+}
+
+.header-desc {
+    color: #666;
+    font-size: 1.5rem;
+    margin-top: 2px;
+    margin-bottom: 24px;
+}
+
+.add-btn {
+    position: absolute;
+    top: 12px;
+    right: 0;
+    height: 38px;
+}
+
+// Filter left
+.filter-select {
+    min-width: 168px;
+    border-radius: 4px;
+    padding: 8px;
+    cursor: pointer;
+
+    appearance: base-select;
+
+    & option {
+        background-color: var(--white-color);
+    }
+
+    & + .filter-select {
+        margin-left: 24px;
+    }
+}
+
+// Filter right
+.search {
+    display: flex;
+    height: 36px;
+}
+
+.search-input {
+    flex: 1;
+    padding-left: 16px;
+    font-size: 1.5rem;
+    border-radius: 4px;
+    background-color: var(--flash-white-color);
+}
+
+.search-btn {
+    height: 100%;
+    margin-left: 12px;
+}
+
+//  list
+.list {
+    margin-top: 24px;
+}

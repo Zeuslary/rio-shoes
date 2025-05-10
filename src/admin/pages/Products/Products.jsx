@@ -70,15 +70,15 @@ function Products() {
                 </div>
             </CartBox>
 
-            {/* Pagination */}
-            <div className={styles['paginate']}>
-                <Pagination numPages={4} currentPage={1} />
+            {/* List products */}
+            <div className={styles['list']}>
+                <CartBox>
+                    <ProductList items={items} />
+                </CartBox>
             </div>
 
-            {/* List products */}
-            <CartBox>
-                <ProductList items={items} />
-            </CartBox>
+            {/* Pagination */}
+            <Pagination numPages={4} currentPage={1} />
         </div>
     );
 }

@@ -1,0 +1,53 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    color: var(--text-color);
+    border-bottom: 1px solid #e5e5e5;
+}
+
+// Table
+.table {
+    width: 100%;
+    color: #666;
+    font-size: 1.4rem;
+    border-collapse: collapse;
+
+    & th,
+    & td {
+        padding: 12px 8px;
+        text-align: center;
+        border: 1px solid #666;
+    }
+
+    & th {
+        max-width: 300px;
+        font-size: 1.6rem;
+        color: var(--text-color);
+        background-color: #eee;
+    }
+}
+
+// Iem product
+.item {
+    display: flex;
+    align-items: center;
+}
+
+.item-img {
+    --edge: 54px;
+    width: var(--edge);
+    height: var(--edge);
+    border-radius: 4px;
+    margin-right: 12px;
+}
+
+.item-detail {
+    text-align: left;
+}
+
+.item-name {
+    font-weight: 600;
+    font-size: 1.6rem;
+    color: var(--text-color);
+}

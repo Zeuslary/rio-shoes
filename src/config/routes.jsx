@@ -18,16 +18,17 @@ const routes = {
     orderDetail: '/order-detail', //Done
 
     // Admin routes
-    adminDashboard: '/admin',
-    adminProducts: '/admin/products',
-    adminOrders: '/admin/orders',
-    adminCustomers: '/admin/customers',
-    adminCategories: '/admin/categories',
-    adminPayments: '/admin/payments',
-    adminPromotions: '/admin/promotions',
-    adminReports: '/admin/reports',
-    adminAdmins: '/admin/admins',
-    adminSettings: '/admin/settings',
+    adminDashboard: '/admin', //Done
+    adminProducts: '/admin/products', //Done
+    adminOrders: '/admin/orders', //Done
+    adminCustomers: '/admin/customers', //Done
+    adminCategories: '/admin/categories', //Done
+    adminPayments: '/admin/payments', //Done
+    adminShippings: '/admin/shippings', // Switch promotion -> Shipping methods
+    adminReports: '/admin/reports', //Done
+    adminAccounts: '/admin/accounts', // Switch admins -> Accounts
+    adminSetting: '/admin/settings', //Done
+    adminVouchers: '/admin/vouchers', //Done
 };
 
 export default routes;

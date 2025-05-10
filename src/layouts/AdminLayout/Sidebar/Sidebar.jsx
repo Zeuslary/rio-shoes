@@ -14,10 +14,11 @@ const adminLinks = [
     { id: 4, label: 'Customers', path: routes.adminCustomers, icon: <UserIcon /> },
     { id: 5, label: 'Categories', path: routes.adminCategories, icon: <UserIcon /> },
     { id: 6, label: 'Payments', path: routes.adminPayments, icon: <UserIcon /> },
-    { id: 7, label: 'Promotions', path: routes.adminPromotions, icon: <UserIcon /> },
+    { id: 7, label: 'Shippings', path: routes.adminShippings, icon: <UserIcon /> },
     { id: 8, label: 'Reports', path: routes.adminReports, icon: <UserIcon /> },
-    { id: 9, label: 'Admins', path: routes.adminAdmins, icon: <UserIcon /> },
-    { id: 10, label: 'Settings', path: routes.adminSettings, icon: <UserIcon /> },
+    { id: 9, label: 'Accounts', path: routes.adminAccounts, icon: <UserIcon /> },
+    { id: 10, label: 'Vouchers', path: routes.adminVouchers, icon: <UserIcon /> },
+    { id: 11, label: 'Setting', path: routes.adminSetting, icon: <UserIcon /> },
 ];
 
 function Sidebar() {

@@ -186,6 +186,20 @@ payment
 + id: ObjectId
 + name: string
 
+---------- Database suggestion --------
+1. Customers:
+- id
+- username
+- fullName
+- phone
+- email
+- orderCount
+- lastOrderDate
+- total spent
+- status
+- registerDate
+- avatar
+
 ----------------------
 Pagination
 page: 

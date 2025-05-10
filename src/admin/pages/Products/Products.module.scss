@@ -49,12 +49,6 @@
     background-color: var(--flash-white-color);
 }
 
-// Pagination
-.paginate {
-    display: flex;
-    justify-content: flex-end;
-}
-
 // Filter right
 .search {
     display: flex;
@@ -72,4 +66,8 @@
 .search-btn {
     height: 100%;
     margin-left: 12px;
+}
+
+.list {
+    margin-top: 28px;
 }

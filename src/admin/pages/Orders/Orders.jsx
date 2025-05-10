@@ -92,15 +92,15 @@ function Orders() {
                 </div>
             </CartBox>
 
-            {/* Pagination */}
-            <div className={styles['paginate']}>
-                <Pagination numPages={4} currentPage={1} />
+            {/* Order list */}
+            <div className={styles['order-list']}>
+                <CartBox>
+                    <OrderList orders={orders} />
+                </CartBox>
             </div>
 
-            {/* List Orders */}
-            <CartBox>
-                <OrderList orders={orders} />
-            </CartBox>
+            {/* Pagination */}
+            <Pagination numPages={4} currentPage={1} />
         </div>
     );
 }

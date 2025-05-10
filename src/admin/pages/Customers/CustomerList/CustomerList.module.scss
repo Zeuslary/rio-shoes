@@ -1,0 +1,108 @@
+.wrapper {
+}
+
+// Common style
+.red-color {
+    color: var(--red-color);
+    background-color: #ff4d4d36;
+}
+
+.green-color {
+    color: var(--green-color);
+    background-color: #e8f5e9;
+}
+
+.orange-color {
+    color: var(--orange-color);
+    background-color: #fff3e0;
+}
+
+.yellow-color {
+    color: var(--yellow-color);
+    background-color: #fef3c7;
+}
+
+.blue-color {
+    color: var(--blue-color);
+    background-color: #e3f2fd;
+}
+
+// Table
+.table {
+    width: 100%;
+    color: #666;
+    font-size: 1.4rem;
+    border-collapse: collapse;
+
+    & th,
+    & td {
+        border: 1px solid #666;
+        padding: 12px 8px;
+        text-align: center;
+    }
+
+    & th {
+        max-width: 300px;
+        font-size: 1.6rem;
+        color: var(--text-color);
+        background-color: #eee;
+    }
+}
+
+.cell-value {
+    padding: 4px 16px;
+    border-radius: 4px;
+}
+
+// Customer info
+.customer {
+    display: flex;
+    align-items: center;
+}
+
+.customer-img {
+    --edge: 68px;
+    width: var(--edge);
+    height: var(--edge);
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+.customer-detail {
+    flex: 1;
+    text-align: left;
+}
+
+.customer-name {
+    margin-bottom: 4px;
+    font-size: 1.6rem;
+    color: var(--text-color);
+}
+
+// Actions
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 36px;
+    color: #666;
+    border-radius: 4px;
+    background-color: var(--flash-white-color);
+    cursor: pointer;
+
+    // color: white;
+
+    &:hover {
+        color: var(--red-color);
+    }
+
+    & svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    & + .btn {
+        margin-left: 12px;
+    }
+}

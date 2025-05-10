@@ -36,12 +36,13 @@
 
     & th,
     & td {
-        border: 1px solid #666;
-        padding: 12px;
+        padding: 12px 8px;
         text-align: center;
+        border: 1px solid #666;
     }
 
     & th {
+        max-width: 300px;
         color: var(--text-color);
         background-color: #eee;
     }
@@ -63,8 +64,6 @@
     border-radius: 4px;
     background-color: var(--flash-white-color);
     cursor: pointer;
-
-    // color: white;
 
     &:hover {
         color: var(--red-color);

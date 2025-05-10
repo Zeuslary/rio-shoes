@@ -9,6 +9,7 @@ export { default as Checkout } from './Checkout';
 export { default as ConfirmOrder } from './ConfirmOrder';
 export { default as OrderSuccess } from './OrderSuccess';
 export { default as OrderFail } from './OrderFail';
+export { default as OrderHistory } from './OrderHistory';
 export { default as OrderDetail } from './OrderDetail';
 export { default as Register } from './Register';
 export { default as Login } from './Login';

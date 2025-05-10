@@ -1,3 +1,11 @@
 export { default as AdminDashboard } from './Dashboard';
 export { default as AdminProducts } from './Products';
 export { default as AdminOrders } from './Orders';
+export { default as AdminCustomers } from './Customers';
+export { default as AdminCategories } from './Categories';
+export { default as AdminPayments } from './Payments';
+export { default as AdminShippings } from './Shippings';
+export { default as AdminReport } from './Report';
+export { default as AdminAccounts } from './Accounts';
+export { default as AdminVouchers } from './Vouchers';
+export { default as AdminSetting } from './Setting';

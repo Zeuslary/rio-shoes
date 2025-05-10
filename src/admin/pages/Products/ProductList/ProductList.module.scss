@@ -37,13 +37,14 @@
     & th,
     & td {
         border: 1px solid #666;
-        padding: 12px;
+        padding: 12px 8px;
         text-align: center;
     }
 
     & th {
         color: var(--text-color);
         background-color: #eee;
+        max-width: 300px;
     }
 }
 

@@ -11,6 +11,7 @@ import {
     ConfirmOrder,
     OrderSuccess,
     OrderFail,
+    OrderHistory,
     OrderDetail,
     Register,
     Login,
@@ -20,8 +21,19 @@ import { AdminLayout, DefaultLayout } from './layouts';
 
 import routes from './config/routes';
 import ScrollToTop from './components/ScrollToTop';
-import OrderHistory from './pages/OrderHistory';
-import { AdminProducts, AdminDashboard, AdminOrders } from '~/admin/pages';
+import {
+    AdminProducts,
+    AdminDashboard,
+    AdminOrders,
+    AdminCustomers,
+    AdminCategories,
+    AdminPayments,
+    AdminShippings,
+    AdminReport,
+    AdminAccounts,
+    AdminVouchers,
+    AdminSetting,
+} from '~/admin/pages';
 
 const publicRouters = [
     {
@@ -124,9 +136,49 @@ const privateRoutes = [
         component: <AdminProducts />,
     },
     {
-        id: 2,
+        id: 3,
         path: routes.adminOrders,
         component: <AdminOrders />,
+    },
+    {
+        id: 4,
+        path: routes.adminCustomers,
+        component: <AdminCustomers />,
+    },
+    {
+        id: 5,
+        path: routes.adminCategories,
+        component: <AdminCategories />,
+    },
+    {
+        id: 6,
+        path: routes.adminPayments,
+        component: <AdminPayments />,
+    },
+    {
+        id: 7,
+        path: routes.adminShippings,
+        component: <AdminShippings />,
+    },
+    {
+        id: 8,
+        path: routes.adminReports,
+        component: <AdminReport />,
+    },
+    {
+        id: 9,
+        path: routes.adminAccounts,
+        component: <AdminAccounts />,
+    },
+    {
+        id: 10,
+        path: routes.adminVouchers,
+        component: <AdminVouchers />,
+    },
+    {
+        id: 11,
+        path: routes.adminSetting,
+        component: <AdminSetting />,
     },
 ];
 
