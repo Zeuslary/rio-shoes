@@ -1,0 +1,162 @@
+Table productImports {
+  id ObjectId [pk]
+  productId ObjectId [ref: > products.id]
+  price double
+  quantity int
+  importDate date
+  createdAt date
+  createdBy ObjectId [ref: > admins.id]
+}
+
+Table products {
+  id ObjectId [pk]
+  name string
+  description string
+  image string
+  galleryImages array
+  originalPrice double
+  newPrice double
+  stock int
+  sold int
+  gender string
+  sizes array
+  colors array
+  category string
+  type array
+  style array
+  material array
+  feature array
+  design array
+  releaseYear int
+  origin string
+  tag string
+  status string
+  brandId ObjectId [ref: > brands.id]
+  fakeHot boolean
+  createdAt date
+  updatedAt date
+  createdBy ObjectId [ref: > admins.id]
+}
+
+Table brands {
+  id ObjectId [pk]
+  name string
+  slug string [unique]
+  description string
+  country string
+  foundedYear int
+  logo string
+  status string
+  createdAt date
+  updatedAt date
+}
+
+Table admins {
+  id ObjectId [pk]
+  username string [unique]
+  password string
+  role string
+  firstName string
+  lastName string
+  email string [unique]
+  phone string [unique]
+  avatar string
+  createdAt date
+  updatedAt date
+  lastLogin date
+  status string
+}
+
+Table vouchers {
+  id ObjectId [pk]
+  code string [unique]
+  description string
+  discountType string
+  discountValue double
+  minOrder double
+  maxDiscountValue double
+  startDate date
+  endDate date
+  quantity int
+  usedCount int
+  status string
+  createdAt date
+  createdBy ObjectId [ref: > admins.id] // Assuming this refers to an admin ID
+  updatedAt date
+}
+
+Table orderDetail {
+  id ObjectId [pk]
+  orderId ObjectId [ref: > orders.id]
+  productId ObjectId [ref: > products.id]
+  price double
+  quantity int
+  size string
+  color string
+  name string
+}
+
+Table orders {
+  id ObjectId [pk]
+  customerId ObjectId [ref: > customers.id]
+  shippingId ObjectId [ref: > shippings.id]
+  paymentId ObjectId [ref: > payments.id]
+  subTotal double
+  shippingFee double
+  discount double
+  voucherID ObjectID [ref: > vouchers.id]
+  total double
+  city string
+  district string
+  ward string
+  houseNumber string
+  message string
+  status string
+  shippingDate date
+  deliveryDate date
+  completeDate date
+  createdAt date
+  updateAt date
+}
+
+Table customers {
+  id ObjectId [pk]
+  username string [unique]
+  password string
+  role string
+  firstName string
+  lastName string
+  phone string [unique]
+  email string [unique]
+  city string
+  district string
+  ward string
+  houseNumber string
+  dateOfBirth date
+  avatar string
+  status string
+  lastLogin date
+  lastOrderDate date
+  updatedAt date
+  createdAt date
+}
+
+Table shippings {
+  id ObjectId [pk]
+  name string
+  description string
+  price double
+  estimateTime string
+  status string
+  createdAt date
+  updatedAt date
+}
+
+Table payments {
+  id ObjectId [pk]
+  name string
+  description string
+  status string
+  createdAt date
+  updatedAt date
+}

@@ -199,6 +199,22 @@ payment
 - status
 - registerDate
 - avatar
+2. Products
+- Need add field category and style is array
+3. Voucher
+- id, code, disountType, discountValue, minOrderValue, maxDiscountValue, maxDiscountValue, startDate, endDate, status, quantity
+
+------------------------------
+database:
+- brands #
+- products #
+- customers #
+- admins #
+- payments #
+- shippings #
+- vouchers #
+- orders #
+- productImports #
 
 ----------------------
 Pagination
