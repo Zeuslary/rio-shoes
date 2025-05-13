@@ -1,0 +1,9 @@
+export { default as brandRouters } from './brand.js';
+export { default as adminRouters } from './admin.js';
+export { default as productRouters } from './product.js';
+export { default as paymentRouters } from './payment.js';
+export { default as shippingRouters } from './shipping.js';
+export { default as productImportRouters } from './productImport.js';
+export { default as customerRouters } from './customer.js';
+export { default as voucherRouters } from './voucher.js';
+export { default as orderRouters } from './order.js';

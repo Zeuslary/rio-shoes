@@ -1,25 +1,90 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import path from 'path';
 
+import {
+    brandRouters,
+    adminRouters,
+    productRouters,
+    paymentRouters,
+    shippingRouters,
+    productImportRouters,
+    customerRouters,
+    voucherRouters,
+    orderRouters,
+} from './routes/index.js';
+
+// Get global variable from file .env
+dotenv.config();
+const MONGODB_URL = process.env.MONGODB_URL;
+const FRONTEND_URL = process.env.FRONTEND_URL;
+const PORT = process.env.PORT || 5000;
+
+// Running backend
 const app = express();
 
+// Allow requests from only React frontend
+// port 5173 is your vite app running
+app.use(
+    cors({
+        origin: FRONTEND_URL,
+        credentials: true,
+    }),
+);
+
+// Public static file
+const __dirname = path.resolve();
+app.use('/static', express.static(path.join(__dirname, 'src/assets/images')));
+
+// Allow express to parse JSON data in requests
 app.use(express.json());
 
-// Test route
-app.get('/', (req, res) => {
-    res.send('Hello from Rio Shoes API');
-});
+// -------- ROUTER ---------
+// Make router for brands
+app.use('/api/brand', brandRouters);
 
-mongoose
-    .connect('mongodb://localhost:27017/rio_shoes_dev')
-    .then(() => {
-        console.log('MongoDB connected');
+// Make router for admins
+app.use('/api/admin', adminRouters);
 
-        // Start server
-        app.listen(5000, () => {
-            console.log('Server is running at http:localhost:5000');
+// Make router for products
+app.use('/api/product', productRouters);
+
+// Make router for payments
+app.use('/api/payment', paymentRouters);
+
+// Make router for shippings
+app.use('/api/shipping', shippingRouters);
+
+// Make router for product imports
+app.use('/api/product-import', productImportRouters);
+
+// Make router for customers
+app.use('/api/customer', customerRouters);
+
+// Make router for vouchers
+app.use('/api/voucher', voucherRouters);
+
+// Make router for orders
+app.use('/api/order', orderRouters);
+
+// Make function to Connect to MongoDB
+const connect = async () => {
+    await mongoose
+        .connect(MONGODB_URL)
+        .then(() => {
+            console.log('MongoDB connected');
+
+            // Start server
+            app.listen(PORT, () => {
+                console.log(`Server is running at http://localhost:${PORT}`);
+            });
+        })
+        .catch((err) => {
+            console.error('MongoDB connection failed:', err.message);
         });
-    })
-    .catch((err) => {
-        console.error('MongoDB connection failed:', err.message);
-    });
+};
+
+// Start connect
+connect();

@@ -206,15 +206,15 @@ payment
 
 ------------------------------
 database:
-- brands #
-- products #
-- customers #
-- admins #
-- payments #
-- shippings #
-- vouchers #
-- orders #
-- productImports #
+- brands # - #
+- products # - #
+- customers # - #
+- admins # - #
+- payments # - #
+- shippings # - #
+- vouchers # - #
+- orders # - #
+- productImports # - #
 
 ----------------------
 Pagination
