@@ -215,6 +215,11 @@ database:
 - vouchers # - #
 - orders # - #
 - productImports # - #
+------------ Api  ------------------
+- payment - CRUD
+
+----------- Suggestion ----------
+- Make a dialog to choice when delete or remove something
 
 ----------------------
 Pagination

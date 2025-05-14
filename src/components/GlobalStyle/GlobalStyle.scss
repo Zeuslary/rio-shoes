@@ -195,3 +195,101 @@ button {
 .text-center {
     text-align: center;
 }
+
+// Form global
+.form-label {
+    font-weight: 600;
+    font-size: 1.6rem;
+    margin-top: 20px;
+    display: block;
+}
+
+.form-input {
+    border: none;
+    outline: none;
+    width: 100%;
+    margin-top: 8px;
+    font-size: 1.5rem;
+    padding: 10px 16px;
+    border-radius: 4px;
+    resize: none;
+    background-color: var(--flash-white-color);
+}
+
+// State input invalid
+.form-input-invalid {
+    box-shadow: 0 0 0 1px var(--red-color);
+}
+
+.form-select {
+    width: 100%;
+    border-radius: 4px;
+    padding: 8px;
+    margin-top: 8px;
+    cursor: pointer;
+    appearance: base-select;
+
+    &::picker(select) {
+        appearance: base-select;
+    }
+
+    & option {
+        padding: 10px 12px;
+        font-size: 1.4rem;
+
+        // Style for status of option disabled
+        &:disabled {
+            cursor: text;
+        }
+
+        &:disabled::checkmark {
+            color: transparent;
+        }
+    }
+}
+
+.form-msg-err {
+    color: var(--red-color);
+    font-size: 1.4rem;
+    margin-top: 12px;
+    line-height: 1;
+}
+
+// Common color
+.red-color,
+.green-color,
+.orange-color,
+.yellow-color,
+.blue-color {
+    min-width: 80px;
+    text-align: center;
+    padding: 4px 16px;
+    border-radius: 4px;
+    font-size: 1.6rem;
+    display: inline-block;
+}
+
+.red-color {
+    color: var(--red-color);
+    background-color: #ff4d4d36;
+}
+
+.green-color {
+    color: var(--green-color);
+    background-color: #e8f5e9;
+}
+
+.orange-color {
+    color: var(--orange-color);
+    background-color: #fff3e0;
+}
+
+.yellow-color {
+    color: var(--yellow-color);
+    background-color: #fef3c7;
+}
+
+.blue-color {
+    color: var(--blue-color);
+    background-color: #e3f2fd;
+}

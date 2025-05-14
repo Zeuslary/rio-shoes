@@ -12,6 +12,7 @@
     },
     "dependencies": {
         "@tippyjs/react": "^4.2.6",
+        "axios": "^1.9.0",
         "clsx": "^2.1.1",
         "cors": "^2.8.5",
         "dotenv": "^16.5.0",
@@ -23,6 +24,7 @@
         "react-dom": "^19.0.0",
         "react-hook-form": "^7.56.2",
         "react-router": "^7.5.3",
+        "react-toastify": "^11.0.5",
         "rio-shoes": "file:",
         "swiper": "^11.2.6"
     },

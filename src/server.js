@@ -38,7 +38,10 @@ app.use(
 const __dirname = path.resolve();
 app.use('/static', express.static(path.join(__dirname, 'src/assets/images')));
 
-// Allow express to parse JSON data in requests
+// This is middleware tells Express automatically parse incoming request
+//  with JSON payloads, and make the data available on req.body
+//  If don't include this, when client sends JSON data to server, server
+//  won't able to read (req.body = undefined)
 app.use(express.json());
 
 // -------- ROUTER ---------
