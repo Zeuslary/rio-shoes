@@ -1,5 +1,6 @@
 import { toastSuccess, toastError } from '~/utils/toast';
 
+import styleStatus from '~/utils/styleStatus';
 import api from '~/utils/api.js';
 import backEndApi from '~/utils/backendApi';
 import { DeleteIcon, EditIcon } from '~/assets/icons';
@@ -50,15 +51,7 @@ function PaymentList({ payments, setPayments, setPaymentAction, setPaymentEdit }
                             </td>
 
                             <td>
-                                <span
-                                    className={
-                                        payment.status === 'active'
-                                            ? 'green-color'
-                                            : payment.status === 'inactive'
-                                            ? 'orange-color'
-                                            : 'red-color'
-                                    }
-                                >
+                                <span className={styleStatus(payment.status)}>
                                     {payment.status.slice(0, 1).toUpperCase() +
                                         payment.status.slice(1)}
                                 </span>

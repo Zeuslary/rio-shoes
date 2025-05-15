@@ -11,18 +11,22 @@ import backEndApi from '~/utils/backendApi';
 import styles from './Payments.module.scss';
 
 function Payments() {
-    const [payments, setPayments] = useState();
+    const [payments, setPayments] = useState([]);
     const [paymentAction, setPaymentAction] = useState('view');
     const [paymentEdit, setPaymentEdit] = useState();
 
     useEffect(() => {
-        // Fetch payment from backend
-        try {
-            const data = api.get(backEndApi.payment);
-            data.then((data) => setPayments(data));
-        } catch (err) {
-            console.error('Error fetching data!', err);
-        }
+        const fetchingData = async () => {
+            // Fetch payment from backend
+            try {
+                const data = await api.getAll(backEndApi.payment);
+                setPayments(data);
+            } catch (err) {
+                console.error('Error fetching data!', err);
+            }
+        };
+
+        fetchingData();
     }, []);
 
     useEffect(() => {
@@ -36,7 +40,7 @@ function Payments() {
     return (
         <div className={styles['wrapper']}>
             <h2 className={styles['header']}>Payments</h2>
-            <p className={styles['header-desc']}>{`${payments?.length || 0} Payments`} </p>
+            <p className={styles['header-desc']}>{`${payments?.length} Payments`} </p>
 
             {/* Button just appear in view and edit */}
             {paymentAction !== 'add' && (
@@ -53,14 +57,12 @@ function Payments() {
                 {/* View payment */}
                 {paymentAction === 'view' && (
                     <CartBox>
-                        {payments && (
-                            <PaymentList
-                                payments={payments}
-                                setPayments={setPayments}
-                                setPaymentAction={setPaymentAction}
-                                setPaymentEdit={setPaymentEdit}
-                            />
-                        )}
+                        <PaymentList
+                            payments={payments}
+                            setPayments={setPayments}
+                            setPaymentAction={setPaymentAction}
+                            setPaymentEdit={setPaymentEdit}
+                        />
                     </CartBox>
                 )}
 
@@ -85,7 +87,10 @@ function Payments() {
                         <Button
                             leftIcon={<ReturnIcon />}
                             gray
-                            onClick={() => setPaymentAction('view')}
+                            onClick={() => {
+                                setPaymentEdit();
+                                setPaymentAction('view');
+                            }}
                         >
                             Back
                         </Button>

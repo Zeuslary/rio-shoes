@@ -115,6 +115,7 @@ function PaymentEdit({ paymentEdit, setPaymentEdit, setPayments, setPaymentActio
                     {/* Actions like cancel, add */}
                     <div className={styles['actions']}>
                         <Button
+                            type="button"
                             gray
                             customStyle={styles['cancel-btn']}
                             onClick={() => setPaymentAction('view')}

@@ -44,6 +44,9 @@ app.use('/static', express.static(path.join(__dirname, 'src/assets/images')));
 //  won't able to read (req.body = undefined)
 app.use(express.json());
 
+// Allow pass data base on x-www-form-urlencoded to test in Postman
+app.use(express.urlencoded({ extended: true }));
+
 // -------- ROUTER ---------
 // Make router for brands
 app.use('/api/brand', brandRouters);

@@ -130,6 +130,7 @@ function AccountSetting({ account }) {
                                 <p className={styles['error-msg']}>
                                     {errors.phoneNumber && errors.phoneNumber.message}
                                 </p>
+
                                 {/* Change avatar */}
                                 <label className={styles['label']} htmlFor="avatar">
                                     Avatar:
@@ -149,6 +150,7 @@ function AccountSetting({ account }) {
                                 <div className="text-center mt-12">
                                     <Image className={styles['info-avatar']} src={preview} />
                                 </div>
+
                                 {/* Button Change */}
                                 <p className="text-center">
                                     <Button

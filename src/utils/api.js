@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
-const get = async (path) => {
+const getAll = async (path) => {
     try {
         const res = await axios.get(API_BASE_URL + path);
         console.group('Get ', path);
@@ -45,7 +45,7 @@ const deleteById = async (path, id) => {
 
 const putById = async (path, id, data) => {
     try {
-        console.group('Delete ', path);
+        console.group('Put ', path);
         console.log('Id: ', id);
         console.log('Data: ', data);
 
@@ -61,7 +61,7 @@ const putById = async (path, id, data) => {
 };
 
 export default {
-    get,
+    getAll,
     post,
     deleteById,
     putById,

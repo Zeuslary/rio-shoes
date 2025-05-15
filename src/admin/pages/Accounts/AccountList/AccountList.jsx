@@ -1,9 +1,11 @@
 import clsx from 'clsx';
+
 import { DeleteIcon, EditIcon, EyeIcon } from '~/assets/icons';
+import styleStatus from '~/utils/styleStatus';
 import styles from './AccountList.module.scss';
 
 function AccountList({ accounts }) {
-    console.log(accounts);
+    // console.log('account: ', accounts);
 
     return (
         <div className={styles['wrapper']}>
@@ -11,11 +13,12 @@ function AccountList({ accounts }) {
                 {/* Header */}
                 <thead>
                     <tr>
-                        <th>Account ID</th>
                         <th>Name</th>
                         <th>Role</th>
+                        <th>Phone</th>
+                        <th>Email</th>
                         <th>Status</th>
-                        <th>CreatedAt</th>
+                        <th>Created At</th>
                         <th>Last Login</th>
                         <th>Actions</th>
                     </tr>
@@ -24,54 +27,43 @@ function AccountList({ accounts }) {
                 {/* Body */}
                 <tbody>
                     {accounts.map((account) => (
-                        <tr key={account.id}>
+                        <tr key={account._id}>
                             <td>
-                                <span className={styles['cell-value']}>{account.id}</span>
-                            </td>
-                            <td>
-                                <strong className={styles['cell-value']}>{account.fullName}</strong>
+                                <strong>
+                                    {`${account?.fullName?.firstName} ${account?.fullName?.lastName}`}
+                                </strong>
                             </td>
                             <td>
                                 <span
-                                    className={clsx(
-                                        styles['cell-value'],
-                                        styles[
-                                            account.role === 'admin'
-                                                ? 'green-color'
-                                                : 'yellow-color'
-                                        ],
-                                    )}
+                                    className={
+                                        account.role === 'admin'
+                                            ? 'green-color'
+                                            : account.role === 'customer'
+                                            ? 'orange-color'
+                                            : 'blue-color'
+                                    }
                                 >
-                                    {account.role}
+                                    {account.role.slice(0, 1).toUpperCase() + account.role.slice(1)}
                                 </span>
                             </td>
 
                             <td>
-                                <span
-                                    className={clsx(
-                                        styles['cell-value'],
-                                        styles[
-                                            account.status === 'active'
-                                                ? 'green-color'
-                                                : account.status === 'inactive'
-                                                ? 'red-color'
-                                                : 'blue-color'
-                                        ],
-                                    )}
-                                >
+                                <span>{account.phone}</span>
+                            </td>
+                            <td>
+                                <span>{account.email}</span>
+                            </td>
+                            <td>
+                                <span className={styleStatus(account.status)}>
                                     {account.status.slice(0, 1).toUpperCase() +
                                         account.status.slice(1)}
                                 </span>
                             </td>
                             <td>
-                                <span className={styles['cell-value']}>
-                                    {account.createdAt.slice(0, 10)}
-                                </span>
+                                <span>{account.createdAt && account.createdAt.slice(0, 10)}</span>
                             </td>
                             <td>
-                                <span className={styles['cell-value']}>
-                                    {account.lastLogin.slice(0, 10)}
-                                </span>
+                                <span>{account.lastLogin && account.lastLogin.slice(0, 10)}</span>
                             </td>
                             <td>
                                 <button className={styles['btn']}>

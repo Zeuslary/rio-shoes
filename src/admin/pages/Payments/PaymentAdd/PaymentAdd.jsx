@@ -14,7 +14,7 @@ function PaymentAdd({ setPayments, setPaymentAction }) {
         formState: { errors },
         handleSubmit,
     } = useForm({
-        defaultValue: {
+        defaultValues: {
             code: '',
             name: '',
             description: '',
@@ -62,7 +62,7 @@ function PaymentAdd({ setPayments, setPaymentAction }) {
                         Payment Name
                     </label>
                     <input
-                        className={clsx('form-input', errors.code && 'form-input-invalid')}
+                        className={clsx('form-input', errors.name && 'form-input-invalid')}
                         type="text"
                         placeholder="Eg: Cash on Delivery"
                         id="name"
@@ -101,6 +101,7 @@ function PaymentAdd({ setPayments, setPaymentAction }) {
 
                     <div className={styles['actions']}>
                         <Button
+                            type="button"
                             gray
                             customStyle={styles['cancel-btn']}
                             onClick={() => setPaymentAction('view')}

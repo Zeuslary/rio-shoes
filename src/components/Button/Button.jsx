@@ -24,6 +24,7 @@ function Button({
     leftIcon,
     rightIcon,
     onClick,
+    ...rest
 }) {
     let Comp = 'button';
     const props = {
@@ -56,7 +57,7 @@ function Button({
     }
 
     return (
-        <Comp className={classNames} {...props}>
+        <Comp className={classNames} {...props} {...rest}>
             {leftIcon && leftIcon}
             <span>{children}</span>
             {rightIcon && rightIcon}

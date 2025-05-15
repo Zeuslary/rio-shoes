@@ -8,8 +8,8 @@ const adminSchema = new Schema(
         password: { type: String, required: true },
         role: { type: String, default: 'admin' },
         fullName: {
-            firstName: { type: String, required: true },
-            lastName: String,
+            firstName: { type: String, default: '' },
+            lastName: { type: String, default: '' },
         },
         phone: String,
         email: String,

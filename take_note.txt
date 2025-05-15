@@ -217,9 +217,32 @@ database:
 - productImports # - #
 ------------ Api  ------------------
 - payment - CRUD
+- shipping - CRUD
+- admin
+- brand
+- voucher
+- customer
+- product
+- order
+- productImport
+
+--------- Some HTTP status -----------
+200: Ok
+201: Created 
+302: Found
+304: Not Modified -> Should use 200 to avoid error in axios
+400: Bad request
+404: Not found
+500: Internal server error
+
 
 ----------- Suggestion ----------
 - Make a dialog to choice when delete or remove something
+- Password not security
+
+------------- Note --------------
+- Regax phone vn: /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}
+- Regax email: 
 
 ----------------------
 Pagination

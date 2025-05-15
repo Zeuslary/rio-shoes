@@ -1,15 +1,36 @@
-import { DeleteIcon, EditIcon, EyeIcon } from '~/assets/icons';
+import api from '~/utils/api';
+import backEndApi from '~/utils/backendApi';
+import { toastSuccess, toastError } from '~/utils/toast';
+
+import styleStatus from '~/utils/styleStatus';
+import formatCurrencyVN from '~/utils/formatCurrency';
+import { DeleteIcon, EditIcon } from '~/assets/icons';
 import styles from './ShippingList.module.scss';
 
-function ShippingList({ shippings }) {
+function ShippingList({ shippings, setShippings, setMode, setShippingEdit }) {
+    const handleDelete = async (id) => {
+        try {
+            await api.deleteById(backEndApi.shipping, id);
+            setShippings((prev) => prev.filter((shipping) => shipping._id !== id));
+            toastSuccess('Delete shipping successfully!');
+        } catch (err) {
+            console.error('Delete shipping failed...', err);
+            toastError('Delete shipping failed, please check again!');
+        }
+    };
+
+    const handleEdit = (shipping) => {
+        setShippingEdit(shipping);
+        setMode('edit');
+    };
+
     return (
         <div className={styles['wrapper']}>
             <table className={styles['table']}>
                 {/* Header */}
                 <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Shipping Name</th>
+                        <th>Name</th>
                         <th>Description</th>
                         <th>Price</th>
                         <th>Estimate time</th>
@@ -21,10 +42,7 @@ function ShippingList({ shippings }) {
                 {/* Body */}
                 <tbody>
                     {shippings.map((shipping) => (
-                        <tr key={shipping.id}>
-                            <td>
-                                <span>{shipping.id}</span>
-                            </td>
+                        <tr key={shipping._id}>
                             <td>
                                 <span>
                                     {shipping.name.slice(0, 1).toUpperCase() +
@@ -35,29 +53,29 @@ function ShippingList({ shippings }) {
                                 <span>{shipping.description}</span>
                             </td>
                             <td>
-                                <strong>${shipping.price}</strong>
+                                <strong>{formatCurrencyVN(shipping.price)}</strong>
                             </td>
                             <td>
-                                <span>{shipping.estimatedTime}</span>
+                                <span>{shipping.estimateTime}</span>
                             </td>
 
                             <td>
-                                <span
-                                    className={
-                                        styles[shipping.isAvailable ? 'green-color' : 'red-color']
-                                    }
-                                >
-                                    {shipping.isAvailable ? 'Active' : 'Hidden'}
+                                <span className={styleStatus(shipping.status)}>
+                                    {shipping.status.slice(0, 1).toUpperCase() +
+                                        shipping.status.slice(1)}
                                 </span>
                             </td>
                             <td>
-                                <button className={styles['btn']}>
-                                    <EyeIcon />
-                                </button>
-                                <button className={styles['btn']}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleEdit(shipping)}
+                                >
                                     <EditIcon />
                                 </button>
-                                <button className={styles['btn']}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleDelete(shipping._id)}
+                                >
                                     <DeleteIcon />
                                 </button>
                             </td>
