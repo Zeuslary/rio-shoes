@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const { Schema, model, Types } = mongoose;
 
+// discountType: [fixed, percent]
 const voucherSchema = new Schema(
     {
         code: { type: String, required: true },
@@ -15,6 +16,7 @@ const voucherSchema = new Schema(
         quantity: { type: Number, default: 1 },
         usedCount: { type: Number, default: 0 },
         createdBy: { type: Types.ObjectId, ref: 'Admin' },
+        status: { type: String, enum: ['active', 'scheduled', 'expired'], default: 'active' },
     },
     { timestamps: true },
 );

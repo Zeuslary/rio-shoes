@@ -29,6 +29,7 @@ const routes = {
     adminAccounts: '/admin/accounts', // Switch admins -> Accounts
     adminSetting: '/admin/settings', //Done
     adminVouchers: '/admin/vouchers', //Done
+    adminBrands: '/admin/brands',
 };
 
 export default routes;

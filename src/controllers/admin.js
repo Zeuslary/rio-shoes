@@ -150,7 +150,7 @@ const updateById = async (req, res) => {
         if (!isChange)
             return res.status(200).json({
                 message: 'Admin is not change!',
-                originalAdmin,
+                data: originalAdmin,
             });
 
         // option new = true to get document after modifier

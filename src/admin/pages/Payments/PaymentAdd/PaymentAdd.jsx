@@ -18,7 +18,7 @@ function PaymentAdd({ setPayments, setPaymentAction }) {
             code: '',
             name: '',
             description: '',
-            status: '',
+            status: 'active',
         },
     });
 

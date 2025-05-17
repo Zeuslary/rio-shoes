@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import images from '~/assets/images';
@@ -13,6 +13,10 @@ function Image({
     ...props
 }) {
     const [altImg, setAltImg] = useState('');
+
+    useEffect(() => {
+        setAltImg();
+    }, [src]);
 
     return (
         <img

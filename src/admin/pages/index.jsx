@@ -9,3 +9,4 @@ export { default as AdminReport } from './Report';
 export { default as AdminAccounts } from './Accounts';
 export { default as AdminVouchers } from './Vouchers';
 export { default as AdminSetting } from './Setting';
+export { default as AdminBrands } from './Brands';

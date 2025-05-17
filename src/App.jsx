@@ -33,6 +33,7 @@ import {
     AdminAccounts,
     AdminVouchers,
     AdminSetting,
+    AdminBrands,
 } from '~/admin/pages';
 
 const publicRouters = [
@@ -179,6 +180,11 @@ const privateRoutes = [
         id: 11,
         path: routes.adminSetting,
         component: <AdminSetting />,
+    },
+    {
+        id: 12,
+        path: routes.adminBrands,
+        component: <AdminBrands />,
     },
 ];
 
