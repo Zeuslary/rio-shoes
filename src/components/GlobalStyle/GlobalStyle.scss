@@ -296,3 +296,17 @@ button {
     color: var(--blue-color);
     background-color: #e3f2fd;
 }
+
+// Cell table
+.cell-item {
+    display: flex;
+    padding: 22px 0 2px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.cell-title {
+    width: 140px;
+    flex-shrink: 0;
+    font-weight: 500;
+    align-self: flex-end;
+}

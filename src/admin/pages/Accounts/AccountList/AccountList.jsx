@@ -1,11 +1,35 @@
-import clsx from 'clsx';
+import api from '~/utils/api';
+import backEndApi from '~/utils/backendApi';
 
+import { toastSuccess, toastError } from '~/utils/toast';
 import { DeleteIcon, EditIcon, EyeIcon } from '~/assets/icons';
 import styleStatus from '~/utils/styleStatus';
 import styles from './AccountList.module.scss';
 
-function AccountList({ accounts }) {
+function AccountList({ accounts, setAdmins, setMode, setViewDetail, setAdminEdit }) {
     // console.log('account: ', accounts);
+
+    const handleDelete = async (account) => {
+        try {
+            const result = await api.deleteById(backEndApi.admin, account._id);
+            console.log('Delete result: ', result);
+            toastSuccess(result.message);
+            setAdmins((prev) => prev.filter((acc) => acc._id !== result.data._id));
+        } catch (err) {
+            console.error('Delete failed...', err);
+            toastError('Delete admin failed!');
+        }
+    };
+
+    const handleViewDetail = (account) => {
+        setViewDetail(account);
+        setMode('view-detail');
+    };
+
+    const handleEdit = (account) => {
+        setAdminEdit(account);
+        setMode('edit');
+    };
 
     return (
         <div className={styles['wrapper']}>
@@ -13,6 +37,7 @@ function AccountList({ accounts }) {
                 {/* Header */}
                 <thead>
                     <tr>
+                        <th>STT</th>
                         <th>Name</th>
                         <th>Role</th>
                         <th>Phone</th>
@@ -26,8 +51,11 @@ function AccountList({ accounts }) {
 
                 {/* Body */}
                 <tbody>
-                    {accounts.map((account) => (
+                    {accounts.map((account, index) => (
                         <tr key={account._id}>
+                            <td>
+                                <span>{index + 1}</span>
+                            </td>
                             <td>
                                 <strong>
                                     {`${account?.fullName?.firstName} ${account?.fullName?.lastName}`}
@@ -66,13 +94,22 @@ function AccountList({ accounts }) {
                                 <span>{account.lastLogin && account.lastLogin.slice(0, 10)}</span>
                             </td>
                             <td>
-                                <button className={styles['btn']}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleViewDetail(account)}
+                                >
                                     <EyeIcon />
                                 </button>
-                                <button className={styles['btn']}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleEdit(account)}
+                                >
                                     <EditIcon />
                                 </button>
-                                <button className={styles['btn']}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleDelete(account)}
+                                >
                                     <DeleteIcon />
                                 </button>
                             </td>

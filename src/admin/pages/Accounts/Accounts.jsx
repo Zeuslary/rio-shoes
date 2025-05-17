@@ -3,15 +3,15 @@ import { useEffect, useState } from 'react';
 import api from '~/utils/api';
 import backEndApi from '~/utils/backendApi';
 
-import { toastError } from '~/utils/toast';
 import AccountAdd from './AccountAdd';
+import AccountList from './AccountList';
+import AccountViewDetail from './AccountViewDetail';
+import AccountEdit from './AccountEdit';
 
+import { toastError } from '~/utils/toast';
 import { ReturnIcon } from '~/assets/icons';
-import fakeAccounts from '~/data/fakeAccounts';
-import Pagination from '~/components/Pagination';
 import CartBox from '~/admin/components/CartBox';
 import Button from '~/components/Button';
-import AccountList from './AccountList';
 import styles from './Accounts.module.scss';
 
 function Accounts() {
@@ -20,8 +20,8 @@ function Accounts() {
 
     const [admins, setAdmins] = useState([]);
     const [mode, setMode] = useState('view');
-
-    const totalAccounts = fakeAccounts.length;
+    const [viewDetail, setViewDetail] = useState();
+    const [adminEdit, setAdminEdit] = useState();
 
     useEffect(() => {
         const fetchingData = async () => {
@@ -48,10 +48,16 @@ function Accounts() {
         })
         .filter((account) => (filterRole ? account.role === filterRole : true));
 
+    const handleBack = () => {
+        setAdminEdit();
+        setViewDetail();
+        setMode('view');
+    };
+
     return (
         <div className={styles['wrapper']}>
             <h2 className={styles['header']}>Account Admin</h2>
-            <p className={styles['header-desc']}>{`${totalAccounts} Accounts`} </p>
+            <p className={styles['header-desc']}>{`${admins.length || 0} Accounts`} </p>
             <Button deepBlack customStyle={styles['add-btn']} onClick={() => setMode('add')}>
                 Add new account admin
             </Button>
@@ -104,7 +110,13 @@ function Accounts() {
 
                     <div className="mt-24">
                         <CartBox>
-                            <AccountList accounts={accounts} />
+                            <AccountList
+                                accounts={accounts}
+                                setAdmins={setAdmins}
+                                setMode={setMode}
+                                setViewDetail={setViewDetail}
+                                setAdminEdit={setAdminEdit}
+                            />
                         </CartBox>
                     </div>
                 </div>
@@ -112,13 +124,26 @@ function Accounts() {
 
             {/* Back to view */}
             {mode !== 'view' && (
-                <Button leftIcon={<ReturnIcon />} gray onClick={() => setMode('view')}>
+                <Button leftIcon={<ReturnIcon />} gray onClick={handleBack}>
                     Back
                 </Button>
             )}
 
             {/* Mode add */}
             {mode === 'add' && <AccountAdd setAdmins={setAdmins} setMode={setMode} />}
+
+            {/* Mode view detail */}
+            {mode === 'view-detail' && <AccountViewDetail viewDetail={viewDetail} />}
+
+            {/* Mode edit */}
+            {mode === 'edit' && (
+                <AccountEdit
+                    adminEdit={adminEdit}
+                    setAdminEdit={setAdminEdit}
+                    setAdmins={setAdmins}
+                    setMode={setMode}
+                />
+            )}
         </div>
     );
 }

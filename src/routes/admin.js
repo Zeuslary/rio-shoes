@@ -1,26 +1,20 @@
-import multer from 'multer';
 import express from 'express';
+
+import uploadStorage from '../multer/uploadStorage.js';
 import { adminController } from '../controllers/index.js';
 
 const router = express.Router();
 
-// Configure local storage img
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/avatars');
-    },
-    filename: (req, file, cb) => {
-        cb(null, new Date.toISOString() + file.originalname);
-    },
-});
-
-const upload = multer({ storage: storage });
-
 router.get('/', adminController.getAll);
 router.get('/:id', adminController.getById);
 
-router.post('/', upload.single(), adminController.create);
+console.log('Upload: ', uploadStorage);
+
+// Save a file of field 'avatar'into local storage you configure
+router.post('/', uploadStorage.admins.single('avatar'), adminController.create);
 router.delete('/:id', adminController.deleteById);
-router.put('/:id', adminController.updateById);
+
+// Update and get field avatar to handle
+router.put('/:id', uploadStorage.admins.single('avatar'), adminController.updateById);
 
 export default router;

@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const API_BASE_URL = 'http://localhost:5000/api';
+import { API_BASE_URL } from '~/constants';
 
 const getAll = async (path) => {
     try {
@@ -60,10 +59,82 @@ const putById = async (path, id, data) => {
     }
 };
 
+// ---------Multipart/form-data-------------
+
+// We need use formData to post data as multipart/form-data
+// formData need be a FormData
+const postMultipart = async (path, data) => {
+    try {
+        // Create FormData
+        const formData = new FormData();
+
+        // Save key-value into formData
+        for (const key in data) {
+            formData.append(key, data[key]);
+        }
+
+        console.group('FormData send to server');
+        for (const key of formData.entries()) {
+            console.log(key);
+        }
+        console.groupEnd();
+
+        const res = await axios.post(API_BASE_URL + path, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        console.group('Post multipart: ', path);
+        console.log('Result: ', res);
+        console.groupEnd();
+
+        return res.data;
+    } catch (err) {
+        console.error('Error post data multipart...', err);
+        throw err;
+    }
+};
+
+const putMultipart = async (path, id, data) => {
+    try {
+        const formData = new FormData();
+        console.group('Updating...');
+        console.log('Data: ', data);
+        console.log('ID: ', id);
+
+        // Save data into formData
+        for (const key in data) {
+            formData.append(key, data[key]);
+        }
+
+        console.group('Form data send to server:');
+        for (const pair of formData.entries()) {
+            console.log('pair: ', pair);
+        }
+        console.groupEnd();
+
+        // Put into server
+        const res = await axios.put(API_BASE_URL + path + '/' + id, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        console.log('Res: ', res);
+        console.groupEnd();
+
+        return res.data;
+    } catch (err) {
+        console.error('Update data failed...', err);
+        throw err;
+    }
+};
+
 export default {
     getAll,
     post,
     deleteById,
     putById,
+    postMultipart,
+    putMultipart,
 };
-export { API_BASE_URL };

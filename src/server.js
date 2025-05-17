@@ -37,6 +37,7 @@ app.use(
 // Public static file
 const __dirname = path.resolve();
 app.use('/static', express.static(path.join(__dirname, 'src/assets/images')));
+app.use('/uploads', express.static('uploads'));
 
 // This is middleware tells Express automatically parse incoming request
 //  with JSON payloads, and make the data available on req.body

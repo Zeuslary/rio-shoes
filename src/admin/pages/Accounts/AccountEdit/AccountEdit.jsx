@@ -6,13 +6,16 @@ import api from '~/utils/api';
 import backEndApi from '~/utils/backendApi';
 
 import flatObject from '~/utils/flatObject';
+import { IMG_ADMIN_PATH } from '~/constants';
 import Image from '~/components/Image';
 import { toastSuccess, toastError } from '~/utils/toast';
 import Button from '~/components/Button';
 import CartBox from '~/admin/components/CartBox';
-import styles from './AccountAdd.module.scss';
+import styles from './AccountEdit.module.scss';
 
-function AccountAdd({ setAdmins, setMode }) {
+function AccountEdit({ adminEdit, setAdminEdit, setAdmins, setMode }) {
+    console.group('Editing...', adminEdit);
+
     const {
         register,
         formState: { errors },
@@ -21,40 +24,57 @@ function AccountAdd({ setAdmins, setMode }) {
     } = useForm({
         defaultValues: {
             fullName: {
-                firstName: '',
-                lastName: '',
+                firstName: adminEdit.fullName.firstName,
+                lastName: adminEdit.fullName.lastName,
             },
-            username: '',
-            password: '',
-            phone: '',
-            email: '',
-            avatar: '',
-            status: 'active',
-            role: 'admin',
+            username: adminEdit.username,
+            password: adminEdit.password,
+            phone: adminEdit.phone,
+            email: adminEdit.email,
+            avatar: adminEdit.avatar,
+            status: adminEdit.status,
+            role: adminEdit.role,
         },
     });
-    const avatarFile = watch('avatar')?.[0];
-    const preview = avatarFile ? URL.createObjectURL(avatarFile) : '';
+
+    const avatarFile = watch('avatar');
+
+    let preview = '';
+
+    if (typeof avatarFile === 'string') {
+        preview = IMG_ADMIN_PATH + avatarFile;
+    } else if (avatarFile.length > 0) {
+        preview = URL.createObjectURL(avatarFile[0]);
+    }
 
     useEffect(() => {
-        // console.log('err: ', errors);
-        // console.log('preview', preview);
+        console.log('Prev: ', preview);
 
         return () => {
             // Clear temporary img to avoid memory leak
-            URL.revokeObjectURL(preview);
+            if (preview.startsWith('blob:')) URL.revokeObjectURL(preview);
         };
-    });
+    }, [preview]);
 
-    const handleAdd = async (data) => {
+    const handleEdit = async (data) => {
         console.log(data);
 
         try {
-            const result = await api.postMultipart(backEndApi.admin, flatObject(data));
+            const result = await api.putMultipart(
+                backEndApi.admin,
+                adminEdit._id,
+                flatObject(data),
+            );
 
             console.log('Create admin success:', result);
             toastSuccess(result.message);
-            setAdmins((prev) => [...prev, result.data]);
+
+            // Save value just update into list account
+            setAdmins((prev) =>
+                prev.map((acc) => (acc._id === result.data._id ? result.data : acc)),
+            );
+
+            setAdminEdit();
             setMode('view');
         } catch (err) {
             console.error('Error add admin!', err);
@@ -62,12 +82,14 @@ function AccountAdd({ setAdmins, setMode }) {
         }
     };
 
+    console.groupEnd();
+
     return (
         <div className={styles['wrapper']}>
             <CartBox>
-                <h2 className={styles['header']}>Add account admin</h2>
+                <h2 className={styles['header']}>Update account admin</h2>
 
-                <form action="" onSubmit={handleSubmit(handleAdd)} encType="multipart/form-data">
+                <form action="" onSubmit={handleSubmit(handleEdit)} encType="multipart/form-data">
                     {/* FullName */}
                     <div className="row">
                         {/* First Name */}
@@ -248,7 +270,7 @@ function AccountAdd({ setAdmins, setMode }) {
                             Cancel
                         </Button>
                         <Button deepBlack customStyle={styles['submit-btn']} type="submit">
-                            Add method
+                            Update
                         </Button>
                     </div>
                 </form>
@@ -257,4 +279,4 @@ function AccountAdd({ setAdmins, setMode }) {
     );
 }
 
-export default AccountAdd;
+export default AccountEdit;

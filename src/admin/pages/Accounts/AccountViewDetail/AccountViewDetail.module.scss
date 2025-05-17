@@ -3,22 +3,22 @@
     margin: 0 auto;
 }
 
+.body {
+    margin: 0 auto;
+    padding: 20px 48px 24px;
+}
+
 .header {
-    margin: 24px 0 16px;
+    margin-bottom: 24px;
     font-size: 2.2rem;
     text-align: center;
     text-transform: uppercase;
 }
 
-.cancel-btn {
-    margin-right: 12px;
-}
-
 .avatar {
-    --edge: 70px;
+    margin: 12px 0 12px;
+    --edge: 100px;
     width: var(--edge);
     height: var(--edge);
-    align-self: center;
     border-radius: 50%;
-    margin-right: 12px;
 }
