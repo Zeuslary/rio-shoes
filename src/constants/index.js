@@ -5,8 +5,10 @@ export const UPLOAD_FOLDERS = {
     admin: 'uploads/admins',
     product: 'uploads/products',
     brand: 'uploads/brands',
+    customer: 'uploads/customers',
 };
 
 export const IMG_ADMIN_PATH = `${FRONT_END_URL}/${UPLOAD_FOLDERS.admin}/`;
 export const IMG_PRODUCT_PATH = `${FRONT_END_URL}/${UPLOAD_FOLDERS.product}/`;
 export const IMG_BRAND_PATH = `${FRONT_END_URL}/${UPLOAD_FOLDERS.brand}/`;
+export const IMG_CUSTOMER_PATH = `${FRONT_END_URL}/${UPLOAD_FOLDERS.customer}/`;

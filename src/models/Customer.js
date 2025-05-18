@@ -4,7 +4,7 @@ const { Schema, model, Types } = mongoose;
 
 const customerSchema = new Schema(
     {
-        username: { type: String, unique: true },
+        username: String,
         password: String,
         role: { type: String, default: 'customer' },
         fullName: {

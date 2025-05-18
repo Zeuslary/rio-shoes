@@ -220,7 +220,7 @@ database:
 - shipping - CRUD
 - admin - CRUD
 - brand - CRUD
-- voucher - R
+- voucher - CRUD
 - customer
 - product
 - order
@@ -240,6 +240,9 @@ database:
 - Make a dialog to choice when delete or remove something
 - Password not security
 - Validate img to save into server
+- Format input number of voucher: 20000 -> 20,000
+
+
 
 ------------- Note --------------
 - Regax phone vn: /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}

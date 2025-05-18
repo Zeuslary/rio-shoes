@@ -25,9 +25,11 @@ const storage = (folder) => {
 const admins = multer({ storage: storage(UPLOAD_FOLDERS.admin) });
 const products = multer({ storage: storage(UPLOAD_FOLDERS.product) });
 const brands = multer({ storage: storage(UPLOAD_FOLDERS.brand) });
+const customers = multer({ storage: storage(UPLOAD_FOLDERS.customer) });
 
 export default {
     admins,
     products,
     brands,
+    customers,
 };

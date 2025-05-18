@@ -4,6 +4,8 @@ import api from '~/utils/api.js';
 import backEndApi from '~/utils/backendApi';
 
 import VoucherViewDetail from './VoucherViewDetail';
+import VoucherAdd from './VoucherAdd';
+import VoucherEdit from './VoucherEdit';
 
 import { toastError } from '~/utils/toast';
 import { ReturnIcon } from '~/assets/icons';
@@ -20,6 +22,7 @@ function Vouchers() {
     const [vouchers, setVouchers] = useState([]);
     const [mode, setMode] = useState('view');
     const [viewDetail, setViewDetail] = useState();
+    const [voucherEdit, setVoucherEdit] = useState();
 
     const statuses = ['active', 'scheduled', 'expired'];
 
@@ -71,9 +74,11 @@ function Vouchers() {
         <div className={styles['wrapper']}>
             <h2 className={styles['header']}>Vouchers</h2>
             <p className={styles['header-desc']}>{`${vouchers.length || 0} Vouchers`} </p>
-            <Button deepBlack customStyle={styles['add-btn']} onClick={() => setMode('add')}>
-                Add new voucher
-            </Button>
+            {mode !== 'add' && (
+                <Button deepBlack customStyle={styles['add-btn']} onClick={() => setMode('add')}>
+                    Add new voucher
+                </Button>
+            )}
 
             {mode === 'view' && (
                 <div>
@@ -140,8 +145,10 @@ function Vouchers() {
                         <CartBox>
                             <VoucherList
                                 vouchers={vouchersFilter}
+                                setVouchers={setVouchers}
                                 setMode={setMode}
                                 setViewDetail={setViewDetail}
+                                setVoucherEdit={setVoucherEdit}
                             />
                         </CartBox>
                     </div>
@@ -157,6 +164,19 @@ function Vouchers() {
 
             {/* Mode: view-detail */}
             {mode === 'view-detail' && <VoucherViewDetail viewDetail={viewDetail} />}
+
+            {/* Mode: add */}
+            {mode === 'add' && <VoucherAdd setVouchers={setVouchers} setMode={setMode} />}
+
+            {/* Mode: edit */}
+            {mode === 'edit' && (
+                <VoucherEdit
+                    voucherEdit={voucherEdit}
+                    setVoucherEdit={setVoucherEdit}
+                    setVouchers={setVouchers}
+                    setMode={setMode}
+                />
+            )}
         </div>
     );
 }

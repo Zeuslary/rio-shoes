@@ -1,11 +1,35 @@
+import api from '~/utils/api';
+import backEndApi from '~/utils/backendApi';
+
+import { toastSuccess, toastError } from '~/utils/toast';
 import { DeleteIcon, EditIcon, EyeIcon } from '~/assets/icons';
 import formatCurrencyVN from '~/utils/formatCurrency';
 import styles from './VoucherList.module.scss';
 
-function VoucherList({ vouchers, setMode, setViewDetail }) {
+function VoucherList({ vouchers, setVouchers, setMode, setViewDetail, setVoucherEdit }) {
     const handleDetail = (voucher) => {
         setViewDetail(voucher);
         setMode('view-detail');
+    };
+
+    const handleDelete = async (voucher) => {
+        console.log('Deleting...', voucher);
+        try {
+            const deleteVoucher = await api.deleteById(backEndApi.voucher, voucher._id);
+
+            console.log('Delete: ', deleteVoucher);
+
+            toastSuccess(deleteVoucher.message);
+            setVouchers((prev) => prev.filter((voucher) => voucher._id !== deleteVoucher.data._id));
+        } catch (err) {
+            console.error('Delete voucher failed...', err);
+            toastError('Delete voucher error');
+        }
+    };
+
+    const handleEdit = (voucher) => {
+        setVoucherEdit(voucher);
+        setMode('edit');
     };
 
     return (
@@ -83,10 +107,16 @@ function VoucherList({ vouchers, setMode, setViewDetail }) {
                                 >
                                     <EyeIcon />
                                 </button>
-                                <button className={styles['btn']}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleEdit(voucher)}
+                                >
                                     <EditIcon />
                                 </button>
-                                <button className={styles['btn']}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleDelete(voucher)}
+                                >
                                     <DeleteIcon />
                                 </button>
                             </td>

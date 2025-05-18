@@ -11,6 +11,11 @@ const flatObject = (data, parentKey = '') => {
             result[fullKey] = value;
         }
 
+        // Format date into ISOString
+        else if (value instanceof Date) {
+            result[fullKey] = new Date(value).toISOString();
+        }
+
         // Handle when key-value is FileList
         else if (value instanceof FileList) {
             const fileList = Array.from(value);
