@@ -8,18 +8,29 @@ const { Schema, model, Types } = mongoose;
 // timestamps option: set it true, Mongoose will add 2 prop
 //  createdAt, and updatedAt auto
 
+// type: ['sport', 'lifestyle', 'casual', 'formal', 'training', 'hiking', 'running', 'walking']
+// category: ['shoes', 'sneakers', 'sandals', 'boots', 'slippers', 'accessories']
+// style: ['low-top', 'mid-top', 'high-top', 'chunky', 'sleek', 'minimalist', 'retro', 'modern']
+// design: ['classic', 'sporty', 'elegant', 'casual', 'streetwear', 'vintage', 'futuristic', 'artistic']
+// material: ['leather', 'canvas', 'mesh', 'synthetic', 'rubber', 'textile', 'suede', 'nylon']
+// origin: ['Vietnam', 'China', 'USA', 'Germany', 'Italy', 'Indonesia', 'India', 'Thailand']
+// tag: ['hot', 'new', 'sale', 'best-seller', 'limited-edition', 'exclusive']
+// colors: ['black', 'white', 'red', 'blue', 'green', 'yellow', 'gray', 'brown', 'pink', 'orange', 'beige', 'purple']
+// sizes: ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45']
+// gender:  ['male', 'female', 'unisex', 'kids']
+
 const productSchema = new Schema(
     {
         name: { type: String, required: true },
         description: String,
         brandId: { type: Types.ObjectId, ref: 'Brand', required: true },
-        category: String, // Eg: shoes, sneakers
-        type: String, // Eg: sport, lifestyle
-        style: String, // Eg: sport, lifestyle
+        category: String,
+        type: String,
+        style: String,
         material: [String],
-        design: String, // Eg: low-top, high-top
+        design: String,
         releaseYear: Number,
-        origin: String, // Eg: VietNam, TrungQuoc
+        origin: String,
         colors: [String],
         sizes: [String],
         stock: Number,
@@ -28,12 +39,12 @@ const productSchema = new Schema(
         newPrice: Number,
         image: String,
         galleryImages: [String],
-        tag: String, // Eg: hot, new
+        tag: String,
         fakeHot: Boolean, // Desc: Sometime you want to fake that this product is hot
-        status: { type: String, enum: ['active', 'inactive', 'banned'], default: 'active' }, // Eg: active, inactive
+        status: { type: String, enum: ['active', 'inactive', 'banned'], default: 'active' },
         feature: String, // Eg: Lightweight, Durable
         gender: String,
-        createdBy: { type: Types.ObjectId, ref: 'Admin', required: true },
+        createdBy: { type: Types.ObjectId, ref: 'Admin' },
     },
     { timestamps: true }, // automatically add and update createdAt and updatedAt fields for you every time you create or update a product.
 );

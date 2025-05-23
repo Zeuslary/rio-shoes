@@ -221,8 +221,8 @@ database:
 - admin - CRUD
 - brand - CRUD
 - voucher - CRUD
-- customer
-- product
+- customer - CRUD
+- product - Backend - RD
 - order
 - productImport
 

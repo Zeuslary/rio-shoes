@@ -5,6 +5,7 @@ const backEndApi = {
     brand: '/brand',
     voucher: '/voucher',
     customer: '/customer',
+    product: '/product',
 };
 
 export default backEndApi;

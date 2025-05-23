@@ -1,11 +1,42 @@
-import Image from '~/components/Image';
-import { DeleteIcon, EditIcon, EyeIcon } from '~/assets/icons';
-import styles from './ProductList.module.scss';
 import clsx from 'clsx';
 
-const statuses = ['active', 'hidden'];
+import api from '~/utils/api';
+import backEndApi from '~/utils/backendApi';
 
-function ProductList({ items }) {
+import { toastError, toastSuccess } from '~/utils/toast';
+import { IMG_PRODUCT_PATH } from '~/constants';
+import { DeleteIcon, EditIcon, EyeIcon } from '~/assets/icons';
+import formatCurrencyVN from '~/utils/formatCurrency';
+import Image from '~/components/Image';
+import styleStatus from '~/utils/styleStatus';
+import styles from './ProductList.module.scss';
+
+function ProductList({ products, setProducts, setMode, setProductViewDetail, setProductEdit }) {
+    const handleView = (product) => {
+        console.log('Switch to view detail ', product);
+        setProductViewDetail(product);
+        setMode('view-detail');
+    };
+
+    const handleEdit = (product) => {
+        setProductEdit(product);
+        setMode('edit');
+    };
+
+    const handleDelete = async (product) => {
+        console.log('Deleting...', product);
+        try {
+            const deleteProduct = await api.deleteById(backEndApi.product, product._id);
+
+            setProducts((prev) => prev.filter((product) => product._id !== deleteProduct.data._id));
+            toastSuccess(deleteProduct.message);
+            setMode('view');
+        } catch (err) {
+            console.error('Delete product failed...', err);
+            toastError('Delete product error');
+        }
+    };
+
     return (
         <div className={styles['wrapper']}>
             <table className={styles['table']}>
@@ -25,64 +56,73 @@ function ProductList({ items }) {
 
                 {/* Body */}
                 <tbody>
-                    {items.map((item) => (
-                        <tr key={item.id}>
+                    {products.map((product) => (
+                        <tr key={product._id}>
                             <td>
                                 <div className={styles['item']}>
-                                    <Image src={item.image} className={styles['item-img']} />
+                                    <Image
+                                        src={IMG_PRODUCT_PATH + product.image}
+                                        className={styles['item-img']}
+                                    />
                                     <div className={styles['item-detail']}>
-                                        <h5 className={styles['item-name']}>{item.name}</h5>
-                                        <p className={styles['item-description']}>ID: {item.id}</p>
+                                        <h5 className={styles['item-name']}>{product.name}</h5>
+                                        <p>ID: {product._id}</p>
+                                        <p>Colors: {product.colors.join(' - ')}</p>
+                                        <p>Sizes: {product.sizes.join(' - ')}</p>
                                     </div>
                                 </div>
                             </td>
 
                             <td>
-                                <span className={styles['cell-value']}>{item.brand_id}</span>
+                                <span className={styles['cell-value']}>{product.brandName}</span>
                             </td>
                             <td>
-                                <span className={styles['cell-value']}>{item.originalPrice}</span>
+                                <span className={styles['cell-value']}>
+                                    {product.originalPrice &&
+                                        formatCurrencyVN(product.originalPrice)}
+                                </span>
                             </td>
                             <td>
-                                <span className={styles['cell-value']}>{item.newPrice}</span>
+                                <span className={styles['cell-value']}>
+                                    {product.newPrice && formatCurrencyVN(product.newPrice)}
+                                </span>
                             </td>
                             <td>
                                 <span
                                     className={clsx(
                                         styles['cell-value'],
-                                        item.stock.toFixed(2) < 10 && styles['red-color'],
+                                        product?.stock < 10 && styles['red-color'],
                                     )}
                                 >
-                                    {item.stock}
+                                    {product.stock}
                                 </span>
                             </td>
                             <td>
-                                <span className={styles['cell-value']}>{item.sold}</span>
+                                <span className={styles['cell-value']}>{product.sold}</span>
                             </td>
                             <td>
-                                <span
-                                    className={clsx(
-                                        styles['cell-value'],
-                                        styles[
-                                            item.status === 'active'
-                                                ? 'green-color'
-                                                : item.status === 'hidden'
-                                                ? 'red-color'
-                                                : 'blue-color'
-                                        ],
-                                    )}
-                                >
-                                    {item.status}
+                                <span className={styleStatus(product.status)}>
+                                    {product.status.slice(0, 1).toUpperCase() +
+                                        product.status.slice(1)}
                                 </span>
                             </td>
                             <td>
-                                <button className={styles['btn']}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleView(product)}
+                                >
                                     <EyeIcon />
                                 </button>
-                                <button className={styles['btn']}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleEdit(product)}
+                                >
                                     <EditIcon />
                                 </button>
-                                <button className={styles['btn']}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleDelete(product)}
+                                >
                                     <DeleteIcon />
                                 </button>
                             </td>

@@ -220,6 +220,11 @@ button {
     background-color: var(--flash-white-color);
 }
 
+.form-label-checkbox {
+    margin: 12px 18px 0 4px;
+    display: inline-block;
+}
+
 // State input invalid
 .form-input-invalid {
     box-shadow: 0 0 0 1px var(--red-color);

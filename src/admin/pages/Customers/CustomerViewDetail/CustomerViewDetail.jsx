@@ -47,9 +47,7 @@ function CustomerViewDetail({ viewDetail }) {
                     </p>
                     <p className="cell-item">
                         <span className="cell-title">Address:</span>
-                        <span>{`${viewDetail?.address?.houseNumber || ' '}${
-                            viewDetail?.address?.ward
-                        } - ${viewDetail?.address?.district} - ${viewDetail?.address?.city}`}</span>
+                        <span>{`${viewDetail?.address?.houseNumber} - ${viewDetail?.address?.ward} - ${viewDetail?.address?.district} - ${viewDetail?.address?.city}`}</span>
                     </p>
                     <p className="cell-item">
                         <span className="cell-title">Date of birth:</span>

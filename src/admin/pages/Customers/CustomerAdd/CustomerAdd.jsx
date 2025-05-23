@@ -1,38 +1,25 @@
 import clsx from 'clsx';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
 import api from '~/utils/api';
 import backEndApi from '~/utils/backendApi';
+import provincesApi from '~/utils/provinces';
 
 import { toastSuccess, toastError } from '~/utils/toast';
 import flatObject from '~/utils/flatObject';
 import Image from '~/components/Image';
 import Button from '~/components/Button';
 import CartBox from '~/admin/components/CartBox';
+import convertAddress from '~/utils/convertAddress';
 import styles from './CustomerAdd.module.scss';
-
-const cities = [
-    { id: '1', name: 'Hanoi' },
-    { id: '2', name: 'Ho Chi Minh City' },
-    { id: '3', name: 'Da Nang' },
-];
-const districts = [
-    { id: '1', name: 'Ba Dinh' },
-    { id: '2', name: 'Hoan Kiem' },
-    { id: '3', name: 'Tay Ho' },
-];
-const wards = [
-    { id: '1', name: 'Ngoc Ha' },
-    { id: '2', name: 'Kim Ma' },
-    { id: '3', name: 'Cua Dong' },
-];
 
 function CustomerAdd({ setCustomers, setMode }) {
     const {
         register,
         formState: { errors },
         watch,
+        control,
         handleSubmit,
     } = useForm({
         defaultValues: {
@@ -45,9 +32,9 @@ function CustomerAdd({ setCustomers, setMode }) {
             phone: '',
             email: '',
             address: {
-                city: 'default-value',
-                district: 'default-value',
-                ward: 'default-value',
+                city: 'default',
+                district: 'default',
+                ward: 'default',
                 houseNumber: '',
             },
             avatar: '',
@@ -58,22 +45,73 @@ function CustomerAdd({ setCustomers, setMode }) {
         },
     });
 
+    const [cities, setCities] = useState([]);
+    const [districts, setDistricts] = useState([]);
+    const [wards, setWards] = useState([]);
+
+    // Handle load cities
+    useEffect(() => {
+        // Handle get provinces
+        const handleGetProvinces = async () => {
+            try {
+                const result = await provincesApi.getProvinces();
+                setCities(result);
+            } catch (err) {
+                console.error('Fetching provinces failed...', err);
+            }
+        };
+
+        handleGetProvinces();
+    }, []);
+
+    // Handle load districts
+    const handleLoadDistricts = async (e) => {
+        const provinceCode = e.target.value;
+
+        try {
+            const result = await provincesApi.getDistricts(provinceCode);
+
+            setDistricts(result);
+        } catch (err) {
+            console.error('Fetching districts failed...', err);
+            toastError('Fetching districts error');
+        }
+    };
+
+    // Handle load wards
+    const handleLoadWards = async (e) => {
+        const districtCode = e.target.value;
+
+        try {
+            const result = await provincesApi.getWards(districtCode);
+
+            setWards(result);
+        } catch (err) {
+            console.error('Fetching wards failed...', err);
+            toastError('Fetching wards error');
+        }
+    };
+
+    // Handle show preview image
     const avatarFile = watch('avatar')?.[0];
     const preview = avatarFile ? URL.createObjectURL(avatarFile) : '';
 
     useEffect(() => {
-        // console.log('err: ', errors);
-        // console.log('preview', preview);
-
         return () => {
             // Clear temporary img to avoid memory leak
             URL.revokeObjectURL(preview);
         };
     }, [preview]);
 
+    // Handle add customer into db
     const handleAdd = async (data) => {
         console.log('Adding...');
         console.log(flatObject(data));
+
+        // Convert address: city, district, ward
+        data.address.city = convertAddress(cities, data.address.city);
+        data.address.district = convertAddress(districts, data.address.district);
+        data.address.ward = convertAddress(wards, data.address.ward);
 
         try {
             const result = await api.postMultipart(backEndApi.customer, flatObject(data));
@@ -234,25 +272,38 @@ function CustomerAdd({ setCustomers, setMode }) {
                             <label className="form-label" htmlFor="city">
                                 City
                             </label>
-                            <select
-                                className="form-select"
-                                name="city"
-                                id="city"
-                                {...register('address.city', {
+
+                            <Controller
+                                control={control}
+                                name="address.city"
+                                rules={{
                                     required: 'This field is required',
                                     validate: (value) =>
-                                        value !== 'default-value' || 'Please select this field',
-                                })}
-                            >
-                                <option value="default-value" disabled hidden>
-                                    Select City
-                                </option>
-                                {cities.map((city) => (
-                                    <option key={city.id} value={city.id}>
-                                        {city.name}
-                                    </option>
-                                ))}
-                            </select>
+                                        value !== 'default' || 'Please select this field',
+                                }}
+                                render={({ field }) => (
+                                    <select
+                                        {...field}
+                                        className="form-select"
+                                        name="city"
+                                        id="city"
+                                        onChange={(e) => {
+                                            field.onChange(e);
+                                            handleLoadDistricts(e);
+                                        }}
+                                    >
+                                        <option value="default" disabled hidden>
+                                            Select City
+                                        </option>
+                                        {cities.map((city) => (
+                                            <option key={city.code} value={city.code}>
+                                                {city.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
+                            />
+
                             <p className="form-msg-err">
                                 {errors.address?.city && errors.address?.city.message}
                             </p>
@@ -260,25 +311,39 @@ function CustomerAdd({ setCustomers, setMode }) {
 
                         <div className="col-4">
                             <label className="form-label">District</label>
-                            <select
+
+                            <Controller
+                                control={control}
                                 className="form-select"
-                                name="district"
-                                id="district"
-                                {...register('address.district', {
+                                name="address.district"
+                                rules={{
                                     required: 'This field is required',
                                     validate: (value) =>
-                                        value !== 'default-value' || 'Please select this field',
-                                })}
-                            >
-                                <option value="default-value" disabled hidden>
-                                    Select District
-                                </option>
-                                {districts.map((district) => (
-                                    <option key={district.id} value={district.id}>
-                                        {district.name}
-                                    </option>
-                                ))}
-                            </select>
+                                        value !== 'default' || 'Please select this field',
+                                }}
+                                render={({ field }) => (
+                                    <select
+                                        {...field}
+                                        className="form-select"
+                                        name="district"
+                                        id="district"
+                                        onChange={(e) => {
+                                            field.onChange(e);
+                                            handleLoadWards(e);
+                                        }}
+                                    >
+                                        <option value="default" disabled hidden>
+                                            Select District
+                                        </option>
+                                        {districts.map((district) => (
+                                            <option key={district.code} value={district.code}>
+                                                {district.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
+                            />
+
                             <p className="form-msg-err">
                                 {errors.address?.district && errors.address?.district.message}
                             </p>
@@ -286,25 +351,34 @@ function CustomerAdd({ setCustomers, setMode }) {
 
                         <div className="col-4">
                             <label className="form-label">Ward</label>
-                            <select
-                                className="form-select"
-                                name="ward"
-                                id="ward"
-                                {...register('address.ward', {
+
+                            <Controller
+                                control={control}
+                                name={'address.ward'}
+                                rules={{
                                     required: 'This field is required',
                                     validate: (value) =>
-                                        value !== 'default-value' || 'Please select this field',
-                                })}
-                            >
-                                <option value="default-value" disabled hidden>
-                                    Select Ward
-                                </option>
-                                {wards.map((ward) => (
-                                    <option key={ward.id} value={ward.id}>
-                                        {ward.name}
-                                    </option>
-                                ))}
-                            </select>
+                                        value !== 'default' || 'Please select this field',
+                                }}
+                                render={({ field }) => (
+                                    <select
+                                        {...field}
+                                        className="form-select"
+                                        name="ward"
+                                        id="ward"
+                                    >
+                                        <option value="default" disabled hidden>
+                                            Select Ward
+                                        </option>
+                                        {wards.map((ward) => (
+                                            <option key={ward.code} value={ward.code}>
+                                                {ward.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
+                            />
+
                             <p className="form-msg-err">
                                 {errors.address?.ward && errors.address?.ward.message}
                             </p>
