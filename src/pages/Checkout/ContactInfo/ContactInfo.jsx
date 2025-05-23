@@ -80,8 +80,8 @@ function ContactInfo() {
                             {...register('phoneNumber', {
                                 required: true,
                                 pattern: {
-                                    value: /^[0-9]{9,11}$/, // Example: 9–11 digits
-                                    message: 'Invalid phone number format',
+                                    value: /^(84|0[3|5|7|8|9])+([0-9]{8})\b$/,
+                                    message: 'Invalid phone number',
                                 },
                             })}
                         />
@@ -93,7 +93,7 @@ function ContactInfo() {
                     </div>
 
                     <div className="col-6">
-                        <label className={styles['label']} htmlFor="email" {...register('email')}>
+                        <label className={styles['label']} htmlFor="email">
                             Email
                         </label>
                         <input

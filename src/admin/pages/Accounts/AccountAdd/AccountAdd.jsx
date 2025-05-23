@@ -173,7 +173,7 @@ function AccountAdd({ setAdmins, setMode }) {
                         id="phone"
                         {...register('phone', {
                             pattern: {
-                                value: /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/,
+                                value: /^(84|0[3|5|7|8|9])+([0-9]{8})\b$/,
                                 message: 'Phone is not valid',
                             },
                         })}
@@ -191,7 +191,7 @@ function AccountAdd({ setAdmins, setMode }) {
                         id="email"
                         {...register('email', {
                             pattern: {
-                                value: /^\S+@\S+\.\S+$/,
+                                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                                 message: 'Email is not valid',
                             },
                         })}

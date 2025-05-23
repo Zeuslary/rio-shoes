@@ -1,13 +1,15 @@
 import _ from 'lodash';
 import mongoose from 'mongoose';
 
-import deleteFileDiskStorage from '../utils/deleteFileDiskStorage.js';
 import { UPLOAD_FOLDERS } from '../constants/index.js';
+import nestObject from '../utils/nestObject.js';
+import deleteFileDiskStorage from '../utils/deleteFileDiskStorage.js';
 import { Customer } from '../models/index.js';
 
 const getAll = async (req, res) => {
     try {
         const customers = await Customer.find();
+
         return res.status(200).json(customers);
     } catch (err) {
         console.error(`Error fetching Customers: ${err}`);
@@ -64,6 +66,7 @@ const create = async (req, res) => {
         const file = req.file;
 
         console.log('File client upload: ', file);
+        req.body = nestObject(req.body);
 
         if (!req.body) {
             if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.customer);
@@ -83,7 +86,6 @@ const create = async (req, res) => {
             }
         }
 
-        console.log('Body before validate: ', req.body);
         if (!isValidBody(req.body)) {
             if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.customer);
             return res.status(400).json({

@@ -1,139 +1,253 @@
-import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
-import fakeCustomers from '~/data/fakeCustomers';
-import Pagination from '~/components/Pagination';
+import api from '~/utils/api';
+import backEndApi from '~/utils/backendApi';
+
+import CustomerViewDetail from './CustomerViewDetail';
+import CustomerAdd from './CustomerAdd';
+import CustomerEdit from './CustomerEdit';
+
+import { toastError } from '~/utils/toast';
+import { ReturnIcon } from '~/assets/icons';
 import CartBox from '~/admin/components/CartBox';
 import Button from '~/components/Button';
 import CustomerList from './CustomerList';
 import styles from './Customers.module.scss';
 
-// Fake status to filters.
-const statuses = [...new Set(fakeCustomers.map((order) => order.status))];
-
 function Customers() {
     const [filterStatus, setFilterStatus] = useState('all');
-    const [filterRegisterDate, setFilterRegisterDate] = useState('');
-    const [filterOrders, setFilterOrders] = useState('');
+    const [arrangeCreatedDate, setArrangeCreatedDate] = useState('default');
+    const [arrangeOrderCount, setArrangeOrderCount] = useState('default');
+    const [arrangeTotalSpent, setArrangeTotalSpent] = useState('default');
 
-    const totalCustomers = fakeCustomers.length;
+    const [customers, setCustomers] = useState([]);
+    const [mode, setMode] = useState('view');
+    const [viewDetail, setViewDetail] = useState();
+    const [customerEdit, setCustomerEdit] = useState();
 
-    // Fake get order list filter
-    const customers = fakeCustomers
-        .sort((customerA, customerB) => {
-            const dateA = new Date(customerA.registerDate);
-            const dateB = new Date(customerB.registerDate);
+    const statuses = ['active', 'inactive', 'banned'];
 
-            const orderA = customerA.orderCount;
-            const orderB = customerB.orderCount;
+    useEffect(() => {
+        const fetchingData = async () => {
+            try {
+                const data = await api.getAll(backEndApi.customer);
 
-            // Sort by register date
-            if (filterRegisterDate) {
-                return filterRegisterDate === 'asc' ? dateA - dateB : dateB - dateA;
+                setCustomers(data);
+                console.log('Fetching customers successfully!');
+            } catch (err) {
+                console.error('Fetching customers failed...', err);
+                toastError('Fetching customers error!');
             }
+        };
+        fetchingData();
+    }, []);
 
-            // Sort by order count
-            if (filterOrders) {
-                return filterOrders === 'asc' ? orderA - orderB : orderB - orderA;
-            }
-
-            return 0;
-        })
+    // Filter and arrange customers
+    const customersFilter = customers
         .filter((customer) => {
             if (filterStatus === 'all') return customer;
 
             return customer.status === filterStatus;
+        })
+        .sort((customerA, customerB) => {
+            const dateA = new Date(customerA.createdAt);
+            const dateB = new Date(customerB.createdAt);
+
+            const orderA = customerA.orderCount;
+            const orderB = customerB.orderCount;
+
+            const totalSpentA = customerA.totalSpent;
+            const totalSpentB = customerB.totalSpent;
+
+            // Sort by created date
+            if (arrangeCreatedDate) {
+                return arrangeCreatedDate === 'asc' ? dateA - dateB : dateB - dateA;
+            }
+
+            // Sort by order count
+            if (arrangeOrderCount) {
+                return arrangeOrderCount === 'asc' ? orderA - orderB : orderB - orderA;
+            }
+
+            // Sort by total spent
+            if (arrangeTotalSpent) {
+                return arrangeTotalSpent === 'asc'
+                    ? totalSpentA - totalSpentB
+                    : totalSpentB - totalSpentA;
+            }
+
+            return 0;
         });
 
+    // Handle back
+    const handleBack = () => {
+        setViewDetail();
+        setCustomerEdit();
+        setMode('view');
+    };
+
+    // Handle open add new customer
+    const handleOpenAdd = () => {
+        setViewDetail();
+        setCustomerEdit();
+        setMode('add');
+    };
+
+    // Handle arrange created date
+    const handleArrangeCreatedDate = (e) => {
+        setArrangeOrderCount('default');
+        setArrangeTotalSpent('default');
+        setArrangeCreatedDate(e.target.value);
+    };
+
+    // Handle arrange orders
+    const handleArrangeOrders = (e) => {
+        setArrangeCreatedDate('default');
+        setArrangeTotalSpent('default');
+        setArrangeOrderCount(e.target.value);
+    };
+
+    // Handle arrange total spent
+    const handleArrangeTotalSpent = (e) => {
+        setArrangeCreatedDate('default');
+        setArrangeOrderCount('default');
+        setArrangeTotalSpent(e.target.value);
+    };
+
     useEffect(() => {
-        // console.log('Filter status: ', filterStatus);
-        // console.log('Filter register: ', filterRegisterDate);
-        // console.log('Filter orders: ', filterOrders);
-    });
+        console.group('Filter');
+        console.log('Filter status: ', filterStatus);
+        console.log('Filter created: ', arrangeCreatedDate);
+        console.log('Filter orders: ', arrangeOrderCount);
+        console.log('Filter total spent: ', arrangeTotalSpent);
+        console.groupEnd();
+    }, [filterStatus, arrangeCreatedDate, arrangeOrderCount, arrangeTotalSpent]);
 
     return (
         <div className={styles['wrapper']}>
             <h2 className={styles['header']}>Customers</h2>
-            <p className={styles['header-desc']}>{`${totalCustomers} Customers`} </p>
-            <Button deepBlack customStyle={styles['add-btn']}>
-                Add new customers
-            </Button>
+            <p className={styles['header-desc']}>{`${customers.length} Customers`} </p>
 
-            {/* Filters follow condition */}
-            <CartBox>
-                <div className="space-between">
-                    <div>
-                        {/* Filter follow Status */}
-                        <select
-                            className={styles['filter-select']}
-                            value={filterStatus}
-                            onChange={(e) => setFilterStatus(e.target.value)}
-                        >
-                            <option value="all">All Status</option>
+            {/* Button add new customer */}
+            {mode !== 'add' && (
+                <Button deepBlack customStyle={styles['add-btn']} onClick={handleOpenAdd}>
+                    Add new customers
+                </Button>
+            )}
 
-                            {statuses.map((status) => (
-                                <option key={status} value={status}>
-                                    {status.slice(0, 1).toUpperCase() + status.slice(1)}
-                                </option>
-                            ))}
-                        </select>
+            {/* Mode: view */}
+            {mode === 'view' && (
+                <div>
+                    {/* Filters, Arrange follow condition */}
+                    <CartBox>
+                        <div className="space-between">
+                            <div>
+                                {/* Filter follow Status */}
+                                <select
+                                    className={styles['filter-select']}
+                                    value={filterStatus}
+                                    onChange={(e) => setFilterStatus(e.target.value)}
+                                >
+                                    <option value="all">All Status</option>
 
-                        {/* Filter follow Register Date */}
-                        <select
-                            className={styles['filter-select']}
-                            value={filterRegisterDate}
-                            onChange={(e) => {
-                                setFilterOrders('');
-                                setFilterRegisterDate(e.target.value);
-                            }}
-                        >
-                            <option value="" disabled>
-                                Arrange Register Date
-                            </option>
-                            <option value="desc">Date Newest</option>
-                            <option value="asc">Date Oldest</option>
-                        </select>
+                                    {statuses.map((status) => (
+                                        <option key={status} value={status}>
+                                            {status.slice(0, 1).toUpperCase() + status.slice(1)}
+                                        </option>
+                                    ))}
+                                </select>
 
-                        {/* Filter follow Quantity orders */}
-                        <select
-                            className={styles['filter-select']}
-                            value={filterOrders}
-                            onChange={(e) => {
-                                setFilterRegisterDate('');
-                                setFilterOrders(e.target.value);
-                            }}
-                        >
-                            <option value="" disabled>
-                                Arrange Orders
-                            </option>
-                            <option value="desc">Orders Desc</option>
-                            <option value="asc">Orders Asc</option>
-                        </select>
-                    </div>
+                                {/* Arrange follow Created Date */}
+                                <select
+                                    className={styles['filter-select']}
+                                    value={arrangeCreatedDate}
+                                    onChange={handleArrangeCreatedDate}
+                                >
+                                    <option value="default" disabled>
+                                        Arrange Created Date
+                                    </option>
+                                    <option value="desc">Created Newest</option>
+                                    <option value="asc">Created Oldest</option>
+                                </select>
 
-                    {/* Search */}
-                    <div className={styles['search']}>
-                        <input
-                            className={styles['search-input']}
-                            type="text"
-                            placeholder="Search..."
-                        />
-                        <Button deepBlack customStyle={styles['search-btn']}>
-                            Search
-                        </Button>
+                                {/* Arrange follow orders */}
+                                <select
+                                    className={styles['filter-select']}
+                                    value={arrangeOrderCount}
+                                    onChange={handleArrangeOrders}
+                                >
+                                    <option value="default" disabled>
+                                        Arrange Orders
+                                    </option>
+                                    <option value="desc">Orders Desc</option>
+                                    <option value="asc">Orders Asc</option>
+                                </select>
+
+                                {/* Arrange follow Total Spent */}
+                                <select
+                                    className={styles['filter-select']}
+                                    value={arrangeTotalSpent}
+                                    onChange={handleArrangeTotalSpent}
+                                >
+                                    <option value="default" disabled>
+                                        Arrange Total Spent
+                                    </option>
+                                    <option value="desc">Total Spent Desc</option>
+                                    <option value="asc">Total Spent Asc</option>
+                                </select>
+                            </div>
+
+                            {/* Search */}
+                            <div className={styles['search']}>
+                                <input
+                                    className={styles['search-input']}
+                                    type="text"
+                                    placeholder="Search..."
+                                />
+                                <Button deepBlack customStyle={styles['search-btn']}>
+                                    Search
+                                </Button>
+                            </div>
+                        </div>
+                    </CartBox>
+
+                    {/* Order list */}
+                    <div className={styles['order-list']}>
+                        <CartBox>
+                            <CustomerList
+                                customers={customersFilter}
+                                setCustomers={setCustomers}
+                                setViewDetail={setViewDetail}
+                                setCustomerEdit={setCustomerEdit}
+                                setMode={setMode}
+                            />
+                        </CartBox>
                     </div>
                 </div>
-            </CartBox>
+            )}
 
-            {/* Order list */}
-            <div className={styles['order-list']}>
-                <CartBox>
-                    <CustomerList customers={customers} />
-                </CartBox>
-            </div>
+            {/* Button Back into Mode view */}
+            {mode !== 'view' && (
+                <Button leftIcon={<ReturnIcon />} gray onClick={handleBack}>
+                    Back
+                </Button>
+            )}
 
-            {/* Pagination */}
-            <Pagination numPages={4} currentPage={1} />
+            {/* Mode: view-detail */}
+            {mode === 'view-detail' && <CustomerViewDetail viewDetail={viewDetail} />}
+
+            {/* Mode: add */}
+            {mode === 'add' && <CustomerAdd setCustomers={setCustomers} setMode={setMode} />}
+
+            {/* Mode: edit */}
+            {mode === 'edit' && (
+                <CustomerEdit
+                    customerEdit={customerEdit}
+                    setCustomerEdit={setCustomerEdit}
+                    setCustomers={setCustomers}
+                    setMode={setMode}
+                />
+            )}
         </div>
     );
 }

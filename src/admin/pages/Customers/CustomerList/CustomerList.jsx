@@ -1,10 +1,41 @@
-import clsx from 'clsx';
-import Image from '~/components/Image';
+import api from '~/utils/api';
+import backEndApi from '~/utils/backendApi';
+
+import { toastError, toastSuccess } from '~/utils/toast';
+import formatCurrencyVN from '~/utils/formatCurrency';
+
+import { IMG_CUSTOMER_PATH } from '~/constants';
 import { DeleteIcon, EditIcon, EyeIcon } from '~/assets/icons';
+import Image from '~/components/Image';
+import styleStatus from '~/utils/styleStatus';
 import styles from './CustomerList.module.scss';
 
-function CustomerList({ customers }) {
-    // console.log(customers);
+function CustomerList({ customers, setCustomers, setViewDetail, setCustomerEdit, setMode }) {
+    const handleViewDetail = (customers) => {
+        setViewDetail(customers);
+        setMode('view-detail');
+    };
+
+    const handleDelete = async (customer) => {
+        try {
+            const deleteCustomer = await api.deleteById(backEndApi.customer, customer._id);
+
+            console.log('Deleting customer successfully!', deleteCustomer);
+            setCustomers((prev) =>
+                prev.filter((customer) => customer._id !== deleteCustomer.data._id),
+            );
+            toastSuccess(deleteCustomer.message);
+            setMode('view');
+        } catch (err) {
+            console.error('Deleting customer failed...', err);
+            toastError('Deleting customer error!');
+        }
+    };
+
+    const handleEdit = async (customer) => {
+        setCustomerEdit(customer);
+        setMode('edit');
+    };
 
     return (
         <div className={styles['wrapper']}>
@@ -13,7 +44,7 @@ function CustomerList({ customers }) {
                 <thead>
                     <tr>
                         <th>Customer</th>
-                        <th>Register date</th>
+                        <th>Created at</th>
                         <th>Orders</th>
                         <th>Total Spent</th>
                         <th>Last order</th>
@@ -25,71 +56,69 @@ function CustomerList({ customers }) {
                 {/* Body */}
                 <tbody>
                     {customers.map((customer) => (
-                        <tr key={customer.id}>
+                        <tr key={customer._id}>
                             <td>
                                 <div className={styles['customer']}>
                                     <Image
-                                        src={customer.avatar}
+                                        src={IMG_CUSTOMER_PATH + customer.avatar}
+                                        alt="customer"
                                         className={styles['customer-img']}
                                     />
                                     <div className={styles['customer-detail']}>
                                         <h5 className={styles['customer-name']}>
-                                            {customer.fullName}
+                                            {`${customer?.fullName?.firstName} ${customer?.fullName?.lastName}`}
                                         </h5>
                                         <p>
-                                            <strong>ID:</strong> {customer.id}
+                                            <strong>ID:</strong> {customer._id}
                                         </p>
                                         <p>
                                             <strong>Phone:</strong> {customer.phone}
                                         </p>
                                         <p>
-                                            <strong>Email:</strong> {customer.email}
+                                            <strong>Email:</strong> {customer?.email}
                                         </p>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <span>{customer.registerDate.slice(0, 10)}</span>
+                                <span>{customer?.createdAt.slice(0, 10)}</span>
                             </td>
                             <td>
                                 <span>{customer.orderCount}</span>
                             </td>
                             <td>
                                 <span>
-                                    {/* Random from 100 - 300 */}
-                                    <strong>${Math.floor(Math.random() * 201 + 100)}</strong>
+                                    <span>{formatCurrencyVN(customer.totalSpent)}</span>
                                 </span>
                             </td>
 
                             <td>
-                                <span>{customer.lastOrderDate.slice(0, 10)}</span>
+                                <span>{customer?.lastOrderDate?.slice(0, 10)}</span>
                             </td>
                             <td>
-                                <span
-                                    className={clsx(
-                                        styles['cell-value'],
-                                        styles[
-                                            customer.status === 'active'
-                                                ? 'green-color'
-                                                : customer.status === 'Inactive'
-                                                ? 'orange-color'
-                                                : 'blue-color'
-                                        ],
-                                    )}
-                                >
+                                <span className={styleStatus(customer.status)}>
                                     {customer.status.slice(0, 1).toUpperCase() +
                                         customer.status.slice(1)}
                                 </span>
                             </td>
 
                             <td>
-                                <button className={styles['btn']}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleViewDetail(customer)}
+                                >
                                     <EyeIcon />
                                 </button>
-                                <button className={styles['btn']}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleEdit(customer)}
+                                >
                                     <EditIcon />
                                 </button>
-                                <button className={styles['btn']}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleDelete(customer)}
+                                >
                                     <DeleteIcon />
                                 </button>
                             </td>

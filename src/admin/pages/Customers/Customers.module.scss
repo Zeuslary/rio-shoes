@@ -26,15 +26,12 @@
     border-radius: 4px;
     padding: 8px;
     cursor: pointer;
+    margin: 0 12px 12px;
 
     appearance: base-select;
 
     & option {
         background-color: var(--white-color);
-    }
-
-    & + .filter-select {
-        margin-left: 24px;
     }
 }
 

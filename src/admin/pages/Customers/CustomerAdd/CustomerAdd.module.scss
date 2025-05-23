@@ -1,0 +1,34 @@
+.wrapper {
+    width: 600px;
+    margin: 0 auto;
+}
+
+.header {
+    margin: 24px 0 16px;
+    font-size: 2.2rem;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.address {
+    display: block;
+    margin: 16px 0 -14px;
+    font-weight: bolder;
+}
+
+label.house-number {
+    margin-top: 6px;
+}
+
+.cancel-btn {
+    margin-right: 12px;
+}
+
+.avatar {
+    --edge: 70px;
+    width: var(--edge);
+    height: var(--edge);
+    align-self: center;
+    border-radius: 50%;
+    margin-right: 12px;
+}
