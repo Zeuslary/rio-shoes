@@ -180,6 +180,10 @@ button {
     justify-content: space-between;
 }
 
+.dif {
+    display: inline-flex;
+}
+
 .mt-12 {
     margin-top: 12px;
 }
@@ -190,6 +194,10 @@ button {
 
 .mb-12 {
     margin-bottom: 12px;
+}
+
+.mr-24 {
+    margin-right: 24px;
 }
 
 .text-left {
@@ -221,8 +229,8 @@ button {
 }
 
 .form-label-checkbox {
-    margin: 12px 18px 0 4px;
-    display: inline-block;
+    margin: 0 24px 0 4px;
+    line-height: 1;
 }
 
 // State input invalid

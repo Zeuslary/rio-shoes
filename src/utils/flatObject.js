@@ -7,7 +7,7 @@ const flatObject = (data, parentKey = '') => {
         const fullKey = parentKey ? `${parentKey}.${key}` : key;
 
         // Handle when key-value is normal
-        if (typeof value !== 'object') {
+        if (typeof value !== 'object' || Array.isArray(value) || value instanceof FileList) {
             result[fullKey] = value;
         }
 
@@ -17,16 +17,27 @@ const flatObject = (data, parentKey = '') => {
         }
 
         // Handle when key-value is FileList
-        else if (value instanceof FileList) {
-            const fileList = Array.from(value);
-            if (fileList.length === 1) {
-                result[fullKey] = fileList[0];
-            } else {
-                fileList.map((file, index) => {
-                    result[`${fullKey}[${index}]`] = file;
-                });
-            }
-        }
+        // else if (value instanceof FileList) {
+        //     const fileList = Array.from(value);
+        //     if (fileList.length === 1) {
+        //         result[fullKey] = fileList[0];
+        //     } else {
+        //         fileList.map((file, index) => {
+        //             result[`${fullKey}[${index}]`] = file;
+        //         });
+        //     }
+        // }
+
+        // Handle if value is array
+        // else if (Array.isArray(value)) {
+        //     if (value.length === 1) {
+        //         result[fullKey] = value[0];
+        //     } else {
+        //         value.forEach((value, index) => {
+        //             result[`${fullKey}[${index}]`] = value;
+        //         });
+        //     }
+        // }
 
         // Handle when key-value is nest object
         else if (typeof value === 'object') {

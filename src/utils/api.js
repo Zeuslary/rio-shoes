@@ -70,7 +70,21 @@ const postMultipart = async (path, data) => {
 
         // Save key-value into formData
         for (const key in data) {
-            formData.append(key, data[key]);
+            const value = data[key];
+
+            // Handle when value is array
+            if (Array.isArray(value)) {
+                value.forEach((item) => formData.append(key, item));
+            }
+
+            // Handle when value is FileList
+            else if (value instanceof FileList) {
+                for (let i = 0; i < value.length; i++) {
+                    formData.append(key, value[i]);
+                }
+            } else {
+                formData.append(key, value);
+            }
         }
 
         console.group('FormData send to server');
@@ -105,7 +119,21 @@ const putMultipart = async (path, id, data) => {
 
         // Save data into formData
         for (const key in data) {
-            formData.append(key, data[key]);
+            const value = data[key];
+
+            // Handle when value is array
+            if (Array.isArray(value)) {
+                value.forEach((item) => formData.append(key, item));
+            }
+
+            // Handle when value is FileList
+            else if (value instanceof FileList) {
+                for (let i = 0; i < value.length; i++) {
+                    formData.append(key, value[i]);
+                }
+            } else {
+                formData.append(key, value);
+            }
         }
 
         console.group('Form data send to server:');

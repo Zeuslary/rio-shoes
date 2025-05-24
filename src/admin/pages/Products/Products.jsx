@@ -6,6 +6,7 @@ import backEndApi from '~/utils/backendApi';
 import ProductList from './ProductList';
 import ProductViewDetail from './ProductViewDetail';
 import ProductAdd from './ProductAdd';
+import ProductEdit from './ProductEdit';
 
 import { ReturnIcon } from '~/assets/icons';
 import CartBox from '~/admin/components/CartBox';
@@ -15,20 +16,24 @@ import styles from './Products.module.scss';
 
 function Products() {
     const [filter, setFilter] = useState('');
+    const [brands, setBrands] = useState([]);
 
     const [products, setProducts] = useState([]);
     const [mode, setMode] = useState('view');
     const [productViewDetail, setProductViewDetail] = useState();
     const [productEdit, setProductEdit] = useState();
 
-    let brands = [...new Set(products.map((product) => product.brandName))];
-
-    // Fetch products from API
+    // Fetch products and brands from API
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const res = await api.getAll(backEndApi.product);
                 console.log('Fetching products successfully!');
+
+                const resBrands = await api.getAll(backEndApi.brand);
+
+                setBrands(resBrands);
+
                 setProducts(res);
             } catch (err) {
                 console.error('Error fetching products!', err);
@@ -53,7 +58,7 @@ function Products() {
     };
 
     useEffect(() => {
-        console.group();
+        console.group('Products Component');
         console.log('Mode: ', mode);
         console.log('view product: ', productViewDetail);
         console.log('edit product: ', productEdit);
@@ -83,15 +88,17 @@ function Products() {
                                 </Button>
                                 {brands.map((brand) => (
                                     <Button
-                                        key={brand}
+                                        key={brand._id}
                                         customStyle={
                                             styles[
-                                                filter === brand ? 'active-brand-btn' : 'brand-btn'
+                                                filter === brand.name
+                                                    ? 'active-brand-btn'
+                                                    : 'brand-btn'
                                             ]
                                         }
-                                        onClick={() => setFilter(brand)}
+                                        onClick={() => setFilter(brand.name)}
                                     >
-                                        {brand}
+                                        {brand.name}
                                     </Button>
                                 ))}
                             </div>
@@ -114,6 +121,7 @@ function Products() {
                             <ProductList
                                 products={items}
                                 setProducts={setProducts}
+                                brands={brands}
                                 setMode={setMode}
                                 setProductViewDetail={setProductViewDetail}
                                 setProductEdit={setProductEdit}
@@ -131,7 +139,9 @@ function Products() {
             )}
 
             {/* Mode: view-detail */}
-            {mode === 'view-detail' && <ProductViewDetail productViewDetail={productViewDetail} />}
+            {mode === 'view-detail' && (
+                <ProductViewDetail productViewDetail={productViewDetail} brands={brands} />
+            )}
 
             {/* Mode: add */}
             {mode === 'add' && (
@@ -139,6 +149,15 @@ function Products() {
             )}
 
             {/* Mode: edit */}
+            {mode === 'edit' && (
+                <ProductEdit
+                    setProducts={setProducts}
+                    brands={brands}
+                    productEdit={productEdit}
+                    setProductEdit={setProductEdit}
+                    setMode={setMode}
+                />
+            )}
 
             {/* Pagination */}
             {/* <Pagination numPages={4} currentPage={1} /> */}

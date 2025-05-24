@@ -11,7 +11,14 @@ import Image from '~/components/Image';
 import styleStatus from '~/utils/styleStatus';
 import styles from './ProductList.module.scss';
 
-function ProductList({ products, setProducts, setMode, setProductViewDetail, setProductEdit }) {
+function ProductList({
+    products,
+    setProducts,
+    brands,
+    setMode,
+    setProductViewDetail,
+    setProductEdit,
+}) {
     const handleView = (product) => {
         console.log('Switch to view detail ', product);
         setProductViewDetail(product);
@@ -74,7 +81,9 @@ function ProductList({ products, setProducts, setMode, setProductViewDetail, set
                             </td>
 
                             <td>
-                                <span className={styles['cell-value']}>{product.brandName}</span>
+                                <span className={styles['cell-value']}>
+                                    {brands.find((brand) => brand._id === product.brandId).name}
+                                </span>
                             </td>
                             <td>
                                 <span className={styles['cell-value']}>

@@ -4,6 +4,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 
 import api from '~/utils/api';
 import backEndApi from '~/utils/backendApi';
+import { IMG_PRODUCT_PATH } from '~/constants';
 
 import { CheckboxGroup, CartBox } from '~/admin/components';
 
@@ -22,36 +23,36 @@ import {
 import { toastSuccess, toastError } from '~/utils/toast';
 import Image from '~/components/Image';
 import Button from '~/components/Button';
-import styles from './ProductAdd.module.scss';
+import styles from './ProductEdit.module.scss';
 
-function ProductAdd({ brands, setProducts, setMode }) {
-    // console.log('Brands ', brands);
+function ProductEdit({ setProducts, brands, productEdit, setProductEdit, setMode }) {
+    console.log('productEdit ', productEdit);
 
     const methods = useForm({
         defaultValues: {
-            name: '',
-            description: '',
-            style: [],
-            category: [],
-            type: [],
-            brandId: brands[0]?.id,
-            material: [],
-            design: [],
-            releaseYear: '',
-            origin: '',
-            colors: [],
-            sizes: [],
-            stock: '',
-            sold: 0,
-            originalPrice: '',
-            newPrice: '',
-            image: '',
-            galleryImages: [],
-            tag: [],
-            fakeHot: 'false',
-            feature: '',
-            gender: 'male',
-            status: 'active',
+            name: productEdit.name,
+            description: productEdit.description,
+            style: productEdit.style,
+            category: productEdit.category,
+            type: productEdit.type,
+            brandId: productEdit.brandId,
+            material: productEdit.material,
+            design: productEdit.design,
+            releaseYear: productEdit.releaseYear,
+            origin: productEdit.origin,
+            colors: productEdit.colors,
+            sizes: productEdit.sizes,
+            stock: productEdit.stock,
+            sold: productEdit.sold,
+            originalPrice: productEdit.originalPrice,
+            newPrice: productEdit.newPrice,
+            image: productEdit.image,
+            galleryImages: productEdit.galleryImages,
+            tag: productEdit.tag,
+            fakeHot: productEdit.fakeHot,
+            feature: productEdit.feature,
+            gender: productEdit.gender,
+            status: productEdit.status,
         },
     });
 
@@ -67,18 +68,31 @@ function ProductAdd({ brands, setProducts, setMode }) {
     const [galleryImagesPreview, setGalleryImagesPreview] = useState([]);
 
     // Init preview image
-    const imageFile = watch('image')?.[0];
+    let imageFile = watch('image')?.[0];
+
+    if (typeof watch('image') === 'string') {
+        imageFile = watch('image');
+    } else if (watch('image') instanceof File) {
+        imageFile = watch('image')?.[0];
+    }
+
     const galleryImages = watch('galleryImages');
 
     // console.log('Preview: ', preview);
-    // console.log('Gallery images: ', galleryImagesPreview);
+    // console.log('Gallery images preview: ', galleryImagesPreview);
+    // console.log('Image: ', imageFile);
+    // console.log('GalleryImages: ', galleryImages);
 
     useEffect(() => {
         let url;
 
-        if (imageFile) {
+        console.error('Ima', imageFile, imageFile instanceof File);
+
+        if (imageFile && imageFile instanceof File) {
             url = URL.createObjectURL(imageFile);
             setPreview(url);
+        } else {
+            setPreview(IMG_PRODUCT_PATH + imageFile);
         }
 
         return () => {
@@ -90,12 +104,20 @@ function ProductAdd({ brands, setProducts, setMode }) {
     useEffect(() => {
         let urls = [];
 
-        if (galleryImages && galleryImages.length > 0) {
+        if (galleryImages && galleryImages.length > 0 && galleryImages instanceof FileList) {
             for (let i = 0; i < galleryImages.length; i++) {
                 urls.push(URL.createObjectURL(galleryImages[i]));
             }
 
             setGalleryImagesPreview(urls);
+        } else {
+            const localUrls = [];
+
+            for (let i = 0; i < galleryImages.length; i++) {
+                localUrls.push(IMG_PRODUCT_PATH + galleryImages[i]);
+            }
+
+            setGalleryImagesPreview(localUrls);
         }
 
         return () => {
@@ -107,35 +129,49 @@ function ProductAdd({ brands, setProducts, setMode }) {
     }, [galleryImages]);
 
     // Handle add customer into db
-    const handleAdd = async (data) => {
+    const handleEdit = async (data) => {
         console.log('Adding...', data);
 
         // Convert colors into array
-        data.colors = data.colors.split(',').map((color) => color.trim());
+        if (data.colors && !Array.isArray(data.colors))
+            data.colors = data.colors.split(',').map((color) => color.trim());
 
         console.log('Data: ', data);
 
+        // Delete image if not change
+        if (typeof data.image === 'string') delete data.image;
+        if (data.galleryImages && typeof data.galleryImages[0] === 'string')
+            delete data.galleryImages;
+
+        // Delete field have value null
+        if (!data.releaseYear) delete data.releaseYear;
+
+        console.log('Data after delete: ', data);
+
         try {
-            const result = await api.postMultipart(backEndApi.product, data);
-            console.log('Create product success:', result);
+            const result = await api.putMultipart(backEndApi.product, productEdit._id, data);
+            console.log('Update product success:', result);
             toastSuccess(result.message);
-            setProducts((prev) => [...prev, result.data]);
+            setProducts((prev) =>
+                prev.map((prod) => (prod._id === result.data._id ? result.data : prod)),
+            );
+            setProductEdit();
             setMode('view');
         } catch (err) {
-            console.error('Error add product!', err);
-            toastError(err.response?.data?.message || 'Add product failed!');
+            console.error('Update product failed...', err);
+            toastError(err.response?.data?.message || 'Update product error!');
         }
     };
 
     return (
         <div className={styles['wrapper']}>
             <CartBox>
-                <h2 className={styles['header']}>Add product</h2>
+                <h2 className={styles['header']}>Update product</h2>
 
                 <FormProvider {...methods}>
                     <form
                         action=""
-                        onSubmit={handleSubmit(handleAdd)}
+                        onSubmit={handleSubmit(handleEdit)}
                         encType="multipart/form-data"
                     >
                         <div className={styles['row']}>
@@ -526,4 +562,4 @@ function ProductAdd({ brands, setProducts, setMode }) {
     );
 }
 
-export default ProductAdd;
+export default ProductEdit;

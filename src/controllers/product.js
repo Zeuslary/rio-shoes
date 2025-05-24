@@ -4,23 +4,10 @@ import mongoose from 'mongoose';
 import { UPLOAD_FOLDERS } from '../constants/index.js';
 import deleteFileDiskStorage from '../utils/deleteFileDiskStorage.js';
 import Product from '../models/Product.js';
-import Brand from '../models/Brand.js';
 
 const getAll = async (req, res) => {
     try {
         const products = await Product.find();
-
-        const brands = await Brand.find().select('_id name');
-
-        // Add field brandName to each product
-        products.forEach((product) => {
-            const brand = brands.find(
-                (brand) => brand._id.toString() === product.brandId.toString(),
-            );
-            if (brand) {
-                product._doc.brandName = brand.name;
-            }
-        });
 
         return res.status(200).json(products);
     } catch (err) {
@@ -94,10 +81,13 @@ const create = async (req, res) => {
         console.log('File image: ', files.image);
         console.log('File galleryImages: ', files.galleryImages);
 
-        if (!req.body)
+        if (!req.body) {
+            if (files) deleteFileStorage(files.image, files.galleryImages);
+
             return res.status(400).json({
                 message: 'Empty body',
             });
+        }
 
         if (!req.body.name || !req.body.brandId) {
             if (files) deleteFileStorage(files.image, files.galleryImages);
