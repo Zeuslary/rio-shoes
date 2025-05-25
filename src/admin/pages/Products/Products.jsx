@@ -45,7 +45,7 @@ function Products() {
 
     // Filter products
     const items = products.filter((item) => {
-        if (filter) return item.brandName === filter;
+        if (filter) return item.brandId === filter._id;
 
         return item;
     });
@@ -62,8 +62,10 @@ function Products() {
         console.log('Mode: ', mode);
         console.log('view product: ', productViewDetail);
         console.log('edit product: ', productEdit);
+        console.log('Filter: ', filter);
+        console.log('Brands: ', brands);
         console.groupEnd();
-    }, [mode, productViewDetail, productEdit]);
+    }, [mode, productViewDetail, productEdit, filter, brands]);
 
     return (
         <div className={styles['wrapper']}>
@@ -91,12 +93,12 @@ function Products() {
                                         key={brand._id}
                                         customStyle={
                                             styles[
-                                                filter === brand.name
+                                                filter.name === brand.name
                                                     ? 'active-brand-btn'
                                                     : 'brand-btn'
                                             ]
                                         }
-                                        onClick={() => setFilter(brand.name)}
+                                        onClick={() => setFilter(brand)}
                                     >
                                         {brand.name}
                                     </Button>

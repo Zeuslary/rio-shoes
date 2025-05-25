@@ -251,6 +251,9 @@ const updateById = async (req, res) => {
             });
         }
 
+        // When update error, need delete file upload
+        if (files) deleteFileStorage(files.image, files.galleryImages);
+
         return res.status(400).json({
             message: 'Update product error',
             data: req.body,

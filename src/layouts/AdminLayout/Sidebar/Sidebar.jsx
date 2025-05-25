@@ -19,6 +19,7 @@ const adminLinks = [
     { id: 8, label: 'Reports', path: routes.adminReports, icon: <UserIcon /> },
     { id: 9, label: 'Accounts', path: routes.adminAccounts, icon: <UserIcon /> },
     { id: 10, label: 'Vouchers', path: routes.adminVouchers, icon: <UserIcon /> },
+    { id: 13, label: 'Imports', path: routes.adminImports, icon: <UserIcon /> },
     { id: 11, label: 'Setting', path: routes.adminSetting, icon: <UserIcon /> },
 ];
 

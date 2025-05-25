@@ -222,9 +222,10 @@ database:
 - brand - CRUD
 - voucher - CRUD
 - customer - CRUD
-- product - Backend - RD
-- order
-- productImport
+- product - Backend - RD - C (Need fix upload delete img) - D
+- productImport - CRUD
+- order - Backend - Make list success
+
 
 --------- Some HTTP status -----------
 200: Ok

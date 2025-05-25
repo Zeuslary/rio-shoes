@@ -1,3 +1,4 @@
+import formatCurrencyVN from '~/utils/formatCurrency';
 import { IMG_PRODUCT_PATH } from '~/constants';
 import Image from '~/components/Image';
 import CartBox from '~/admin/components/CartBox';
@@ -53,11 +54,11 @@ function ProductViewDetail({ productViewDetail, brands }) {
                             </p>
                             <p className="cell-item">
                                 <span className="cell-title">Original Price:</span>
-                                <span>{productViewDetail?.originalPrice}</span>
+                                <span>{formatCurrencyVN(productViewDetail?.originalPrice)}</span>
                             </p>
                             <p className="cell-item">
                                 <span className="cell-title">New Price:</span>
-                                <span>{productViewDetail?.newPrice}</span>
+                                <span>{formatCurrencyVN(productViewDetail?.newPrice)}</span>
                             </p>
                             <p className="cell-item">
                                 <span className="cell-title">Gender:</span>

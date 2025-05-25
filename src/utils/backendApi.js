@@ -6,6 +6,8 @@ const backEndApi = {
     voucher: '/voucher',
     customer: '/customer',
     product: '/product',
+    productImports: '/product-import',
+    order: '/order',
 };
 
 export default backEndApi;

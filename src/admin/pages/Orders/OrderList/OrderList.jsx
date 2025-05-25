@@ -2,16 +2,32 @@ import clsx from 'clsx';
 import { DeleteIcon, EditIcon, EyeIcon } from '~/assets/icons';
 import styles from './OrderList.module.scss';
 
-function OrderList({ orders }) {
+function OrderList({ orders, setOrderDetail, setOrderEdit, setMode }) {
+    const handleViewDetail = (order) => {
+        console.log('View...');
+        setOrderDetail(order);
+        setMode('view-detail');
+    };
+
+    const handleDelete = (order) => {
+        console.log('Deleting...');
+    };
+
+    const handleEdit = (order) => {
+        console.log('Editing...');
+        setOrderEdit(order);
+        setMode('edit');
+    };
+
     return (
         <div className={styles['wrapper']}>
             <table className={styles['table']}>
                 {/* Header */}
                 <thead>
                     <tr>
-                        <th>Order ID</th>
-                        <th>Customer ID</th>
-                        <th>Date</th>
+                        <th>STT</th>
+                        <th>Customer</th>
+                        <th>Created date</th>
                         <th>Items</th>
                         <th>Total</th>
                         <th>Status</th>
@@ -21,16 +37,18 @@ function OrderList({ orders }) {
 
                 {/* Body */}
                 <tbody>
-                    {orders.map((order) => (
-                        <tr key={order.id}>
+                    {orders.map((order, index) => (
+                        <tr key={order._id}>
                             <td>
-                                <span className={styles['cell-value']}>{order.id}</span>
+                                <span className={styles['cell-value']}>{index + 1}</span>
                             </td>
                             <td>
-                                <span className={styles['cell-value']}>{order.userId}</span>
+                                <span className={styles['cell-value']}>{order.fullName}</span>
                             </td>
                             <td>
-                                <span className={styles['cell-value']}>{order.createdAt}</span>
+                                <span className={styles['cell-value']}>
+                                    {order.createdAt?.slice(0, 10)}
+                                </span>
                             </td>
                             <td>
                                 <span className={styles['cell-value']}>{order.items.length}</span>
@@ -45,13 +63,15 @@ function OrderList({ orders }) {
                                     className={clsx(
                                         styles['cell-value'],
                                         styles[
-                                            order.status === 'delivered'
-                                                ? 'green-color'
-                                                : order.status === 'in-transit'
-                                                ? 'orange-color'
-                                                : order.status === 'processing'
+                                            order.status === 'pending'
                                                 ? 'yellow-color'
-                                                : 'blue-color'
+                                                : order.status === 'shipping'
+                                                ? 'orange-color'
+                                                : order.status === 'delivered'
+                                                ? 'blue-color'
+                                                : order.status === 'completed'
+                                                ? 'green-color'
+                                                : 'red-color'
                                         ],
                                     )}
                                 >
@@ -60,13 +80,19 @@ function OrderList({ orders }) {
                             </td>
 
                             <td>
-                                <button className={styles['btn']}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleViewDetail(order)}
+                                >
                                     <EyeIcon />
                                 </button>
-                                <button className={styles['btn']}>
+                                <button className={styles['btn']} onClick={() => handleEdit(order)}>
                                     <EditIcon />
                                 </button>
-                                <button className={styles['btn']}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleDelete(order)}
+                                >
                                     <DeleteIcon />
                                 </button>
                             </td>

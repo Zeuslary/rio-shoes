@@ -1,30 +1,37 @@
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
-import fakeOrders from '~/data/fakeOrders';
+import api from '~/utils/api';
+import backEndApi from '~/utils/backendApi';
+
+import { toastError } from '~/utils/toast';
 import Pagination from '~/components/Pagination';
 import CartBox from '~/admin/components/CartBox';
 import Button from '~/components/Button';
 import OrderList from './OrderList';
 import styles from './Orders.module.scss';
 
-// Fake status to filters.
-const statuses = [...new Set(fakeOrders.map((order) => order.status))];
-
 function Orders() {
     const [filterStatus, setFilterStatus] = useState('all');
-    const [filterDate, setFilterDate] = useState('');
+    const [sortCreatedDate, setSortCreatedDate] = useState('');
 
-    const totalOrders = fakeOrders.length;
+    const statuses = ['pending', 'shipping', 'delivered', 'completed', 'cancelled'];
+
+    const [orders, setOrders] = useState([]);
+    const [customers, setCustomers] = useState([]);
+
+    const [orderDetail, setOrderDetail] = useState();
+    const [orderEdit, setOrderEdit] = useState();
+    const [mode, setMode] = useState('view');
 
     // Fake get order list filter
-    const orders = fakeOrders
+    const ordersFilter = orders
         .sort((orderA, orderB) => {
             const dateA = new Date(orderA.createdAt);
             const dateB = new Date(orderB.createdAt);
 
-            if (filterDate === 'asc') return dateA - dateB;
-            else if (filterDate === 'desc') return dateB - dateA;
+            if (sortCreatedDate === 'asc') return dateA - dateB;
+            else if (sortCreatedDate === 'desc') return dateB - dateA;
             else return 0;
         })
         .filter((order) => {
@@ -33,17 +40,49 @@ function Orders() {
             return order.status === filterStatus;
         });
 
-    // useEffect(() => {
-    //     console.log('Filter: ', filter);
-    // });
+    useEffect(() => {
+        const fetchingData = async () => {
+            try {
+                let res = await api.getAll(backEndApi.order);
+                const resCustomers = await api.getAll(backEndApi.customer);
+
+                // Add field fullName for each order
+                if (res)
+                    res = res.map((order) => {
+                        const cus = resCustomers.find((cus) => cus._id === order.customerId);
+                        order.fullName = `${cus?.fullName?.firstName || ''} ${
+                            cus?.fullName?.lastName || ''
+                        }`;
+                        return order;
+                    });
+
+                setOrders(res);
+                setCustomers(resCustomers);
+            } catch (err) {
+                console.error('Fetching orders failed...', err);
+                toastError('Fetching orders error!');
+            }
+        };
+
+        fetchingData();
+    }, []);
+
+    useEffect(() => {
+        console.group('Changing...');
+        console.log('customers: ', customers);
+        console.log('orders: ', orders);
+        console.log('filterStatus: ', filterStatus);
+        console.log('sortCreatedDate: ', sortCreatedDate);
+        console.log('orderDetail: ', orderDetail);
+        console.log('orderEdit: ', orderEdit);
+        console.log('mode: ', mode);
+        console.groupEnd();
+    }, [filterStatus, sortCreatedDate, orderDetail, orderEdit, mode, customers, orders]);
 
     return (
         <div className={styles['wrapper']}>
             <h2 className={styles['header']}>Orders</h2>
-            <p className={styles['header-desc']}>{`${totalOrders} Orders`} </p>
-            <Button deepBlack customStyle={styles['add-btn']}>
-                Add new order
-            </Button>
+            <p className={styles['header-desc']}>{`${orders.length} Orders`}</p>
 
             {/* Filters follow condition */}
             <CartBox>
@@ -67,8 +106,8 @@ function Orders() {
                         {/* Filter follow Date */}
                         <select
                             className={styles['filter-select']}
-                            value={filterDate}
-                            onChange={(e) => setFilterDate(e.target.value)}
+                            value={sortCreatedDate}
+                            onChange={(e) => setSortCreatedDate(e.target.value)}
                         >
                             <option value="" disabled hidden>
                                 Arrange
@@ -95,12 +134,17 @@ function Orders() {
             {/* Order list */}
             <div className={styles['order-list']}>
                 <CartBox>
-                    <OrderList orders={orders} />
+                    <OrderList
+                        orders={ordersFilter}
+                        setOrderDetail={setOrderDetail}
+                        setOrderEdit={setOrderEdit}
+                        setMode={setMode}
+                    />
                 </CartBox>
             </div>
 
             {/* Pagination */}
-            <Pagination numPages={4} currentPage={1} />
+            {/* <Pagination numPages={4} currentPage={1} /> */}
         </div>
     );
 }

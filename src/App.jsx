@@ -34,6 +34,7 @@ import {
     AdminVouchers,
     AdminSetting,
     AdminBrands,
+    AdminImports,
 } from '~/admin/pages';
 
 const publicRouters = [
@@ -185,6 +186,11 @@ const privateRoutes = [
         id: 12,
         path: routes.adminBrands,
         component: <AdminBrands />,
+    },
+    {
+        id: 13,
+        path: routes.adminImports,
+        component: <AdminImports />,
     },
 ];
 
