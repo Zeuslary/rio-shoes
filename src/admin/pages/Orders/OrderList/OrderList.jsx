@@ -1,16 +1,37 @@
 import clsx from 'clsx';
+
+import api from '~/utils/api';
+import backEndApi from '~/utils/backendApi';
+
+import { toastSuccess, toastError } from '~/utils/toast';
+
 import { DeleteIcon, EditIcon, EyeIcon } from '~/assets/icons';
 import styles from './OrderList.module.scss';
 
-function OrderList({ orders, setOrderDetail, setOrderEdit, setMode }) {
+function OrderList({ orders, setOrders, setOrderDetail, setOrderEdit, setMode }) {
     const handleViewDetail = (order) => {
         console.log('View...');
         setOrderDetail(order);
         setMode('view-detail');
     };
 
-    const handleDelete = (order) => {
-        console.log('Deleting...');
+    const handleDelete = async (order) => {
+        console.log('Deleting...', order);
+        try {
+            const deleteOrder = await api.deleteById(backEndApi.order, order._id);
+
+            console.log('Delete order response:', deleteOrder);
+
+            if (deleteOrder) {
+                toastSuccess(deleteOrder.message);
+
+                // Remove the deleted order from the list
+                setOrders((prev) => prev.filter((order) => order._id !== deleteOrder.data._id));
+            }
+        } catch (err) {
+            console.error('Deleting order failed...', err);
+            toastError('Deleting order error!');
+        }
     };
 
     const handleEdit = (order) => {
@@ -28,6 +49,7 @@ function OrderList({ orders, setOrderDetail, setOrderEdit, setMode }) {
                         <th>STT</th>
                         <th>Customer</th>
                         <th>Created date</th>
+                        <th>Shipping</th>
                         <th>Items</th>
                         <th>Total</th>
                         <th>Status</th>
@@ -43,11 +65,16 @@ function OrderList({ orders, setOrderDetail, setOrderEdit, setMode }) {
                                 <span className={styles['cell-value']}>{index + 1}</span>
                             </td>
                             <td>
-                                <span className={styles['cell-value']}>{order.fullName}</span>
+                                <span className={styles['cell-value']}>{order.customerName}</span>
                             </td>
                             <td>
                                 <span className={styles['cell-value']}>
                                     {order.createdAt?.slice(0, 10)}
+                                </span>
+                            </td>
+                            <td>
+                                <span className={styles['cell-value']}>
+                                    {order.paymentId?.name}
                                 </span>
                             </td>
                             <td>

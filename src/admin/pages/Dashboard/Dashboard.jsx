@@ -1,51 +1,35 @@
 import clsx from 'clsx';
+import { useEffect, useState } from 'react';
+
+import api from '~/utils/api';
+import backEndApi from '~/utils/backendApi';
+import routes from '~/config/routes';
+
+import formatCurrencyVN from '~/utils/formatCurrency';
+import { IMG_PRODUCT_PATH } from '~/constants';
+
 import Button from '~/components/Button';
 import CartBox from '~/admin/components/CartBox';
 import CartItem from './CartItem';
-import routes from '~/config/routes';
 import styles from './Dashboard.module.scss';
 
-const fakeOrders = [
-    { id: 'ORD001', quantity: 2, total: 150.0, status: 'delivered' },
-    { id: 'ORD002', quantity: 1, total: 80.0, status: 'in-transit' },
-    { id: 'ORD003', quantity: 3, total: 240.0, status: 'processing' },
-    { id: 'ORD004', quantity: 5, total: 500.0, status: 'completed' },
-    { id: 'ORD005', quantity: 4, total: 420.0, status: 'delivered' },
-];
-
-const fakeProducts = [
-    {
-        name: 'Nike Air Max',
-        price: 120.0,
-        image: '/src/assets/images/product/nike-1.png',
-        sold: 320,
-    },
-    {
-        name: 'Adidas Ultraboost',
-        price: 150.0,
-        image: '/src/assets/images/product/nike-1.png',
-        sold: 280,
-    },
-    { name: 'Puma RS-X', price: 100.0, image: '/src/assets/images/product/nike-1.png', sold: 210 },
-    {
-        name: 'Converse Chuck 70',
-        price: 90.0,
-        image: '/src/assets/images/product/nike-1.png',
-        sold: 185,
-    },
-    {
-        name: 'New Balance 550',
-        price: 130.0,
-        image: '/src/assets/images/product/nike-1.png',
-        sold: 160,
-    },
-];
-
 function Dashboard() {
-    const revenue = fakeOrders.reduce((total, order) => total + order.total, 0);
-    const totalProducts = 684;
-    const totalOrders = 234;
-    const totalCustomers = 98;
+    const [dashboardData, setDashboardData] = useState({});
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await api.getAll(backEndApi.dashboard);
+
+                console.log('Dashboard data fetched successfully!', data);
+                setDashboardData(data.data);
+            } catch (err) {
+                console.error('Fetching dashboard data failed...', err);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <div className={'wrapper'}>
@@ -57,25 +41,28 @@ function Dashboard() {
                     <div className="col-3">
                         <CartBox>
                             <p className={styles['total-title']}>Total products</p>
-                            <p className={styles['cart-number']}>{totalProducts}</p>
+                            <p className={styles['cart-number']}>{dashboardData.totalProducts}</p>
                         </CartBox>
                     </div>
                     <div className="col-3">
                         <CartBox>
                             <p className={styles['total-title']}>Total order</p>
-                            <p className={styles['cart-number']}>{totalOrders}</p>
+                            <p className={styles['cart-number']}>{dashboardData.totalOrders}</p>
                         </CartBox>
                     </div>
                     <div className="col-3">
                         <CartBox>
                             <p className={styles['total-title']}>Total customers</p>
-                            <p className={styles['cart-number']}>{totalCustomers}</p>
+                            <p className={styles['cart-number']}>{dashboardData.totalCustomers}</p>
                         </CartBox>
                     </div>
                     <div className="col-3">
                         <CartBox>
                             <p className={styles['total-title']}>Total revenue</p>
-                            <p className={styles['cart-number']}>${revenue}</p>
+                            <p className={styles['cart-number']}>
+                                {dashboardData.totalRevenue &&
+                                    formatCurrencyVN(dashboardData.totalRevenue)}
+                            </p>
                         </CartBox>
                     </div>
                 </div>
@@ -95,15 +82,16 @@ function Dashboard() {
                             </div>
 
                             <div className={styles['list-products']}>
-                                {fakeProducts.slice(0, 3).map((product, index) => (
-                                    <CartItem
-                                        key={product.id || index}
-                                        name={`${product.name}`}
-                                        image={product.image}
-                                        description={`Sold: ${product.sold}`}
-                                        rightLabel={`$${product.price}`}
-                                    />
-                                ))}
+                                {dashboardData.topProducts &&
+                                    dashboardData.topProducts.map((product) => (
+                                        <CartItem
+                                            key={product._id}
+                                            name={`${product.name}`}
+                                            image={IMG_PRODUCT_PATH + product.image}
+                                            description={`Sold: ${product.sold}`}
+                                            rightLabel={formatCurrencyVN(product.originalPrice)}
+                                        />
+                                    ))}
                             </div>
                         </CartBox>
                     </div>
@@ -119,14 +107,17 @@ function Dashboard() {
                             </div>
 
                             <div className={styles['list-orders']}>
-                                {fakeOrders.slice(0, 3).map((order, index) => (
-                                    <CartItem
-                                        key={order.id || index}
-                                        name={`Order: #${order.id}`}
-                                        description={`Quantity: ${order.quantity}`}
-                                        rightLabel={`${order.status}`}
-                                    />
-                                ))}
+                                {dashboardData.recentOrders &&
+                                    dashboardData.recentOrders.map((order) => (
+                                        <CartItem
+                                            key={order._id}
+                                            name={`Order: #${order._id}`}
+                                            description={`Total: ${formatCurrencyVN(
+                                                order.summary.total,
+                                            )} - ${order.itemsCount} items`}
+                                            rightLabel={`${order.status}`}
+                                        />
+                                    ))}
                             </div>
                         </CartBox>
                     </div>

@@ -12,7 +12,7 @@ const adminLinks = [
     { id: 2, label: 'Products', path: routes.adminProducts, icon: <UserIcon /> },
     { id: 3, label: 'Orders', path: routes.adminOrders, icon: <UserIcon /> },
     { id: 4, label: 'Customers', path: routes.adminCustomers, icon: <UserIcon /> },
-    { id: 5, label: 'Categories', path: routes.adminCategories, icon: <UserIcon /> },
+    // { id: 5, label: 'Categories', path: routes.adminCategories, icon: <UserIcon /> },
     { id: 12, label: 'Brands', path: routes.adminBrands, icon: <UserIcon /> },
     { id: 6, label: 'Payments', path: routes.adminPayments, icon: <UserIcon /> },
     { id: 7, label: 'Shippings', path: routes.adminShippings, icon: <UserIcon /> },

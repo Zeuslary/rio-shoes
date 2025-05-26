@@ -27,7 +27,12 @@ const customerSchema = new Schema(
         lastOrderDate: { type: Date, default: null },
         status: { type: String, enum: ['active', 'inactive', 'banned'], default: 'active' },
     },
-    { timestamps: true },
+    { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
+
+// Add virtual method for Customer
+customerSchema.virtual('getFullName').get(function () {
+    return ((this.fullName?.firstName || '') + ' ' + (this.fullName?.lastName || '')).trim();
+});
 
 export default model('Customer', customerSchema);

@@ -22,7 +22,7 @@ const routes = {
     adminProducts: '/admin/products', //Done
     adminOrders: '/admin/orders', //Done
     adminCustomers: '/admin/customers', //Done
-    adminCategories: '/admin/categories', //Done
+    adminCategories: '/admin/categories', //Done -> Not used, but kept for future use
     adminPayments: '/admin/payments', //Done
     adminShippings: '/admin/shippings', // Switch promotion -> Shipping methods
     adminReports: '/admin/reports', //Done

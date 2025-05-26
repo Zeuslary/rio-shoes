@@ -1,0 +1,88 @@
+.wrapper {
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: 24px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.cancel-btn {
+    margin-right: 12px;
+}
+
+.avatar {
+    --edge: 70px;
+    width: var(--edge);
+    height: var(--edge);
+    align-self: center;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+.section-title {
+    margin-top: 12px;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.section-des {
+    text-align: center;
+    font-size: 1.4rem;
+    color: #999;
+}
+
+.address {
+    font-weight: bolder;
+    margin-top: 12px;
+    display: block;
+    margin-bottom: -10px;
+    color: #333;
+}
+
+// Summary order
+.list-items {
+    // height: 200px;
+    max-height: 100%;
+    overflow-y: scroll;
+    padding-right: 8px;
+}
+
+// Shipping info
+.info {
+    font-size: 1.5rem;
+    margin-top: 10px;
+}
+
+.info-item {
+    display: flex;
+    padding: 18px 0 0px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.info-title {
+    width: 140px;
+    flex-shrink: 0;
+    font-weight: 500;
+    align-self: flex-end;
+}
+
+// Summary
+.summary {
+    margin-top: 14px;
+    padding-top: 4px;
+    border-top: 1px solid #e5e5e5;
+
+    & p {
+        display: flex;
+        justify-content: space-between;
+        margin: 6px 0;
+    }
+
+    .total {
+        margin: 8px 0 0;
+        padding-top: 8px;
+        border-top: 1px solid #e5e5e5;
+    }
+}

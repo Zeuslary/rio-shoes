@@ -7,3 +7,4 @@ export { default as productImportRouters } from './productImport.js';
 export { default as customerRouters } from './customer.js';
 export { default as voucherRouters } from './voucher.js';
 export { default as orderRouters } from './order.js';
+export { default as dashboardRouters } from './dashboard.js';

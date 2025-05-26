@@ -225,6 +225,7 @@ database:
 - product - Backend - RD - C (Need fix upload delete img) - D
 - productImport - CRUD
 - order - Backend - Make list success
+- dashboard - C - Just render
 
 
 --------- Some HTTP status -----------

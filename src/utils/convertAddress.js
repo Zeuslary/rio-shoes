@@ -1,2 +1,7 @@
-const convertAddress = (data, code) => data.find((item) => item.code == code).name;
+const convertAddress = (listData, data) => {
+    const isCode = !!parseInt(data);
+
+    if (isCode) return listData.find((item) => item.code == data)?.name;
+    return listData.find((item) => item.name == data)?.name;
+};
 export default convertAddress;

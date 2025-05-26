@@ -3,7 +3,22 @@ import { Order } from '../models/index.js';
 
 const getAll = async (req, res) => {
     try {
-        const orders = await Order.find();
+        const orders = await Order.find()
+            .populate('customerId', 'fullName email phone')
+            .populate('paymentId', 'name')
+            .populate('shippingId', 'name');
+
+        console.log('Orders: ', orders);
+
+        // Add field customerName for each order
+        // Add field addressDetail for each order
+        orders.forEach((order) => {
+            order._doc.customerName = order.customerId?.getFullName;
+            order._doc.addressDetail = order?.getAddressDetail;
+        });
+
+        console.log('Orders: ', orders);
+
         return res.status(200).json(orders);
     } catch (err) {
         console.error(`Fetching all order failed...`, err);
@@ -110,13 +125,22 @@ const updateById = async (req, res) => {
         const updateOrder = await Order.findByIdAndUpdate(id, req.body, {
             new: true,
             runValidators: true,
-        });
+        }).populate('customerId', 'fullName email phone');
 
-        if (updateOrder)
+        if (updateOrder) {
+            // Add field customerName and addressDetail for order
+            updateOrder._doc.customerName = updateOrder.customerId?.getFullName;
+            updateOrder._doc.addressDetail = updateOrder?.getAddressDetail;
+
+            console.log('Body: ', req.body);
+
+            console.log('Update order: ', updateOrder);
+
             return res.status(200).json({
                 message: 'Update order successfully!',
                 data: updateOrder,
             });
+        }
 
         return res.status(400).json({
             message: 'Update order error',

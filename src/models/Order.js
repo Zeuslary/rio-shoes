@@ -38,11 +38,18 @@ const orderSchema = new Schema(
         },
         statusDate: {
             shipping: Date,
-            delivery: Date,
-            complete: Date,
+            delivered: Date,
+            completed: Date,
+            cancelled: Date,
         },
     },
-    { timestamps: true },
+    { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } },
 );
+
+orderSchema.virtual('getAddressDetail').get(function () {
+    return `${(
+        this.address?.houseNumber + ',' || ''
+    ).trim()} ${this.address?.ward + ','} ${this.address?.district + ','} ${this.address?.city}`;
+});
 
 export default model('Order', orderSchema);

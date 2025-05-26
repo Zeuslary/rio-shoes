@@ -7,3 +7,4 @@ export { default as productImportController } from './productImport.js';
 export { default as customerController } from './customer.js';
 export { default as voucherController } from './voucher.js';
 export { default as orderController } from './order.js';
+export { default as dashboardController } from './dashboard.js';

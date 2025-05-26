@@ -14,6 +14,7 @@ import {
     customerRouters,
     voucherRouters,
     orderRouters,
+    dashboardRouters,
 } from './routes/index.js';
 
 // Get global variable from file .env
@@ -75,6 +76,11 @@ app.use('/api/voucher', voucherRouters);
 
 // Make router for orders
 app.use('/api/order', orderRouters);
+
+// Make router for dashboard
+app.use('/api/dashboard', dashboardRouters);
+
+// -------- END ROUTER ---------
 
 // Make function to Connect to MongoDB
 const connect = async () => {
