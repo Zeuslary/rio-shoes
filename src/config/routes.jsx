@@ -18,7 +18,9 @@ const routes = {
     orderDetail: '/order-detail', //Done
 
     // Admin routes
-    adminDashboard: '/admin', //Done
+    adminLogin: '/admin', //
+
+    adminDashboard: '/admin/dashboard', //Done
     adminProducts: '/admin/products', //Done
     adminOrders: '/admin/orders', //Done
     adminCustomers: '/admin/customers', //Done
@@ -30,7 +32,7 @@ const routes = {
     adminSetting: '/admin/settings', //Done
     adminVouchers: '/admin/vouchers', //Done
     adminBrands: '/admin/brands', // Done
-    adminImports: '/admin/imports',
+    adminImports: '/admin/imports', // Done
 };
 
 export default routes;

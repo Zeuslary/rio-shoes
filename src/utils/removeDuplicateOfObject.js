@@ -1,4 +1,4 @@
-const removeDuplicateObject = (data) => {
+const removeDuplicateOfObject = (data) => {
     const result = [];
     const brandIds = {};
 
@@ -10,4 +10,4 @@ const removeDuplicateObject = (data) => {
     return result;
 };
 
-export default removeDuplicateObject;
+export default removeDuplicateOfObject;

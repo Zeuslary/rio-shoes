@@ -9,6 +9,8 @@ const backEndApi = {
     productImports: '/product-import',
     order: '/order',
     dashboard: '/dashboard',
+
+    adminLogin: '/admin-login',
 };
 
 export default backEndApi;

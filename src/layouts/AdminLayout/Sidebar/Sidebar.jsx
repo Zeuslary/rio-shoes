@@ -1,8 +1,10 @@
 import clsx from 'clsx';
 import { NavLink } from 'react-router';
 
-import { UserIcon } from '~/assets/icons';
 import routes from '~/config/routes';
+import { storage } from '~/utils';
+
+import { UserIcon } from '~/assets/icons';
 import Image from '~/components/Image';
 import styles from './Sidebar.module.scss';
 import images from '~/assets/images';
@@ -24,6 +26,8 @@ const adminLinks = [
 ];
 
 function Sidebar() {
+    console.log('Token: ', storage.get('token'));
+
     return (
         <div className={styles['wrapper']}>
             <h1 className={styles['header']}>RioShoes Admin</h1>

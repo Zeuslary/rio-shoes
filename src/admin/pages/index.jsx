@@ -11,3 +11,4 @@ export { default as AdminVouchers } from './Vouchers';
 export { default as AdminSetting } from './Setting';
 export { default as AdminBrands } from './Brands';
 export { default as AdminImports } from './Imports';
+export { default as AdminLogin } from './Login';

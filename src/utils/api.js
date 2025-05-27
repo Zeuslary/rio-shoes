@@ -1,9 +1,31 @@
 import axios from 'axios';
 import { API_BASE_URL } from '~/constants';
+import storage from './storage.js';
+
+// Create custom axios, with config as you want
+// baseURL: every request will auto use this prefix
+// timeout: max-time of request
+//  after 10s if server not response -> will run code catch
+const instanceAxios = axios.create({
+    baseURL: API_BASE_URL,
+    timeout: 10000,
+});
+
+// Axios interceptor is a function run before request is sent
+// config: object default contain info of axios like baseURL, method, url,...
+// Bearer: token based auth usually JWT
+instanceAxios.interceptors.request.use((config) => {
+    const token = storage.get('token');
+
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+
+    // give back config of axios
+    return config;
+});
 
 const getAll = async (path) => {
     try {
-        const res = await axios.get(API_BASE_URL + path);
+        const res = await instanceAxios.get(path);
         console.group('Get ', path);
         console.log('Result: ', res);
         console.groupEnd();
@@ -16,7 +38,7 @@ const getAll = async (path) => {
 
 const post = async (path, data) => {
     try {
-        const res = await axios.post(API_BASE_URL + path, data);
+        const res = await instanceAxios.post(path, data);
         console.group('Post ', path);
         console.log('Data: ', data);
         console.log('Result: ', res);
@@ -30,7 +52,7 @@ const post = async (path, data) => {
 
 const deleteById = async (path, id) => {
     try {
-        const res = await axios.delete(`${API_BASE_URL}${path}/${id}`);
+        const res = await instanceAxios.delete(path + '/' + id);
         console.group('Delete ', path);
         console.log('Id: ', id);
         console.log('Result: ', res);
@@ -48,7 +70,7 @@ const putById = async (path, id, data) => {
         console.log('Id: ', id);
         console.log('Data: ', data);
 
-        const res = await axios.put(API_BASE_URL + path + '/' + id, data);
+        const res = await instanceAxios.put(path + '/' + id, data);
 
         console.log('Result: ', res);
         console.groupEnd();
@@ -93,7 +115,7 @@ const postMultipart = async (path, data) => {
         }
         console.groupEnd();
 
-        const res = await axios.post(API_BASE_URL + path, formData, {
+        const res = await instanceAxios.post(path, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -143,7 +165,7 @@ const putMultipart = async (path, id, data) => {
         console.groupEnd();
 
         // Put into server
-        const res = await axios.put(API_BASE_URL + path + '/' + id, formData, {
+        const res = await instanceAxios.put(path + '/' + id, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

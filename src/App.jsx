@@ -1,4 +1,12 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
+
+import ScrollToTop from './components/ScrollToTop';
+
+import { AccountLayout, AdminLayout, DefaultLayout } from './layouts';
+
+import AdminAuth from './auth/AdminAuth';
+import routes from './config/routes';
+
 import {
     Home,
     Products,
@@ -16,11 +24,6 @@ import {
     Register,
     Login,
 } from '~/pages';
-
-import { AdminLayout, DefaultLayout } from './layouts';
-
-import routes from './config/routes';
-import ScrollToTop from './components/ScrollToTop';
 import {
     AdminProducts,
     AdminDashboard,
@@ -35,6 +38,7 @@ import {
     AdminSetting,
     AdminBrands,
     AdminImports,
+    AdminLogin,
 } from '~/admin/pages';
 
 const publicRouters = [
@@ -207,14 +211,29 @@ function App() {
                         );
                     })}
 
-                    {privateRoutes.map((route) => {
-                        return (
-                            <Route
-                                path={route.path}
-                                element={<AdminLayout>{route.component}</AdminLayout>}
-                            />
-                        );
-                    })}
+                    {/* Admin Login */}
+                    <Route
+                        path={routes.adminLogin}
+                        element={
+                            <AccountLayout>
+                                <AdminLogin />
+                            </AccountLayout>
+                        }
+                    />
+
+                    {/* Private Admin */}
+                    <Route element={<AdminAuth />}>
+                        {privateRoutes.map((route) => {
+                            const Layout = route.layout || AdminLayout;
+
+                            return (
+                                <Route
+                                    path={route.path}
+                                    element={<Layout>{route.component}</Layout>}
+                                />
+                            );
+                        })}
+                    </Route>
                 </Routes>
             </ScrollToTop>
         </BrowserRouter>
