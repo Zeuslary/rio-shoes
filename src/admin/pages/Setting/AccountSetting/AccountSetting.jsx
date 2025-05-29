@@ -1,171 +1,190 @@
 import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useContext } from 'react';
+
+import {
+    api,
+    backEndApi,
+    flatObject,
+    storage,
+    toastError,
+    toastSuccess,
+    isSameValueObject,
+    toastInfo,
+    patternValidate,
+} from '~/utils';
+import { ProfileContext } from '~/components/ProfileProvider';
+import { IMG_ADMIN_PATH } from '~/constants';
 
 import Button from '~/components/Button';
 import Image from '~/components/Image';
-import images from '~/assets/images';
 import CartBox from '~/admin/components/CartBox';
 import styles from './AccountSetting.module.scss';
 
-function AccountSetting({ account }) {
+function AccountSetting() {
+    const { profile, setProfile } = useContext(ProfileContext);
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors },
     } = useForm({
         defaultValues: {
-            fullName: account.fullName,
-            email: account.email,
-            phoneNumber: account.phone,
+            fullName: {
+                firstName: profile?.fullName?.firstName,
+                lastName: profile?.fullName?.lastName,
+            },
+            email: profile?.email,
+            phone: profile?.phone,
+            avatar: profile?.avatar,
         },
     });
-    const [preview, setPreview] = useState(account.avatar);
 
-    // useEffect(() => {
-    //     console.log(errors);
-    // });
+    const [preview, setPreview] = useState(() => {
+        const avatar = watch('avatar');
 
-    const handlePreview = (e) => {
-        // revoke preUrl to prevent memory leak
-        URL.revokeObjectURL(preview);
-        const src = URL.createObjectURL(e.target.files[0]);
-        setPreview(src);
-        console.log('Change....', e);
-    };
+        if (avatar && typeof avatar === 'string') return IMG_ADMIN_PATH + avatar;
+        return '';
+    });
 
-    const handleUpdate = (data) => {
-        console.log('Update...', data);
-    };
+    const avatar = watch('avatar');
+
+    useEffect(() => {
+        // Before create new URL, delete old URL
+        if (preview && preview.startsWith('blob:')) {
+            URL.revokeObjectURL(preview);
+        }
+
+        if (avatar instanceof FileList && avatar.length > 0) {
+            setPreview(URL.createObjectURL(avatar[0]));
+        }
+    }, [avatar]);
+
+    const handleUpdate = useCallback(async (data) => {
+        if (typeof data.avatar === 'string') delete data.avatar;
+
+        if (isSameValueObject(data, profile)) {
+            toastInfo('Nothing modified!');
+            return;
+        }
+
+        try {
+            const result = await api.putMultipart(backEndApi.admin, profile._id, flatObject(data));
+            storage.save('profile', result.data);
+            setProfile(result.data);
+            toastSuccess(result.message);
+        } catch (err) {
+            toastError(err.response?.data?.message || 'Update admin error!');
+        }
+    }, []);
 
     return (
         <div className={styles['wrapper']}>
-            <h2 className={styles['header']}>Account Setting</h2>
-            <div className="grid mt-24">
-                <div className="row">
-                    {/* Origin info */}
-                    <div className="col-6">
-                        <CartBox>
-                            <h3 className={styles['info-title']}>Original info</h3>
-                            <div className="space-between">
-                                <Image className={styles['info-avatar']} src={account.avatar} />
-                                <div className={styles['info-detail']}>
-                                    <p className={styles['info-value']}>
-                                        <strong>Fullname: </strong> {account.fullName}
-                                    </p>
-                                    <p className={styles['info-value']}>
-                                        <strong>Email: </strong> {account.email}
-                                    </p>
-                                    <p className={styles['info-value']}>
-                                        <strong>Phone: </strong> {account.phone}
-                                    </p>
-                                </div>
-                            </div>
-                        </CartBox>
+            <CartBox>
+                <form action="" onSubmit={handleSubmit(handleUpdate)}>
+                    <h2 className={styles['header']}>Change info</h2>
+
+                    {/* FullName */}
+                    <div className="row">
+                        {/* First Name */}
+                        <div className="col-6">
+                            <label className="form-label" htmlFor="firstName">
+                                First Name
+                            </label>
+                            <input
+                                className={clsx(
+                                    'form-input',
+                                    errors.fullName?.firstName && 'form-input-invalid',
+                                )}
+                                type="text"
+                                placeholder="Eg: Rio"
+                                id="firstName"
+                                {...register('fullName.firstName', {
+                                    required: 'This field is required',
+                                })}
+                            />
+                            <p className="form-msg-err">
+                                {errors.fullName?.firstName && errors.fullName.firstName.message}
+                            </p>
+                        </div>
+
+                        {/* Last Name */}
+                        <div className="col-6">
+                            <label className="form-label" htmlFor="lastName">
+                                Last Name
+                            </label>
+                            <input
+                                className="form-input"
+                                type="text"
+                                placeholder="Eg: Lander"
+                                id="lastName"
+                                {...register('fullName.lastName')}
+                            />
+                        </div>
                     </div>
 
-                    {/* Change info */}
-                    <div className="col-6">
-                        <CartBox>
-                            <form
-                                action=""
-                                className={styles['form']}
-                                onSubmit={handleSubmit(handleUpdate)}
-                            >
-                                <h3 className="text-center">Change info</h3>
-                                {/* Fullname */}
-                                <label className={styles['label']} htmlFor="fullName">
-                                    Fullname:
-                                </label>
-                                <input
-                                    className={clsx(
-                                        styles['input'],
-                                        errors.fullName && styles['invalid'],
-                                    )}
-                                    type="text"
-                                    id="fullName"
-                                    name="fullName"
-                                    {...register('fullName', {
-                                        required: 'This field is required',
-                                    })}
-                                />
-                                <p className={styles['error-msg']}>
-                                    {errors.fullName && errors.fullName.message}
-                                </p>
-                                {/* Email */}
-                                <label className={styles['label']} htmlFor="email">
-                                    Email:
-                                </label>
-                                <input
-                                    className={clsx(
-                                        styles['input'],
-                                        errors.email && styles['invalid'],
-                                    )}
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    {...register('email', {
-                                        required: 'This field is required',
-                                    })}
-                                />
-                                <p className={styles['error-msg']}>
-                                    {errors.email && errors.email.message}
-                                </p>
-                                {/* Phone number */}
-                                <label className={styles['label']} htmlFor="phoneNumber">
-                                    Phone number:
-                                </label>
-                                <input
-                                    className={clsx(
-                                        styles['input'],
-                                        errors.phoneNumber && styles['invalid'],
-                                    )}
-                                    type="phoneNumber"
-                                    id="phoneNumber"
-                                    name="phoneNumber"
-                                    {...register('phoneNumber', {
-                                        required: 'This field is required',
-                                    })}
-                                />
-                                <p className={styles['error-msg']}>
-                                    {errors.phoneNumber && errors.phoneNumber.message}
-                                </p>
+                    <div className="row">
+                        {/* Email */}
+                        <div className="col-6">
+                            <label className="form-label" htmlFor="email">
+                                Email:
+                            </label>
+                            <input
+                                className={errors.email ? 'form-input-invalid' : 'form-input'}
+                                type="email"
+                                id="email"
+                                name="email"
+                                {...register('email', {
+                                    required: 'This field is required',
+                                    pattern: patternValidate.email,
+                                })}
+                            />
+                            <p className="form-msg-err">{errors.email && errors.email.message}</p>
+                        </div>
 
-                                {/* Change avatar */}
-                                <label className={styles['label']} htmlFor="avatar">
-                                    Avatar:
-                                </label>
-                                <input
-                                    className={clsx(
-                                        styles['input'],
-                                        errors.avatar && styles['invalid'],
-                                    )}
-                                    type="file"
-                                    id="avatar"
-                                    name="avatar"
-                                    onChange={handlePreview}
-                                    {...register('avatar')}
-                                />
-                                {/* Preview image */}
-                                <div className="text-center mt-12">
-                                    <Image className={styles['info-avatar']} src={preview} />
-                                </div>
-
-                                {/* Button Change */}
-                                <p className="text-center">
-                                    <Button
-                                        deepBlack
-                                        type="submit"
-                                        customStyle={styles['update-btn']}
-                                    >
-                                        Update changes
-                                    </Button>
-                                </p>
-                            </form>
-                        </CartBox>
+                        {/* Phone */}
+                        <div className="col-6">
+                            <label className="form-label" htmlFor="phone">
+                                Phone:
+                            </label>
+                            <input
+                                className={errors.phone ? 'form-input-invalid' : 'form-input'}
+                                type="phone"
+                                id="phone"
+                                name="phone"
+                                {...register('phone', {
+                                    required: 'This field is required',
+                                    pattern: patternValidate.phone,
+                                })}
+                            />
+                            <p className="form-msg-err">{errors.phone && errors.phone.message}</p>
+                        </div>
                     </div>
-                </div>
-            </div>
+
+                    {/* Change avatar */}
+                    <label className="form-label" htmlFor="avatar">
+                        Avatar:
+                    </label>
+                    <input
+                        className={errors.avatar ? 'form-input-invalid' : 'form-input'}
+                        type="file"
+                        id="avatar"
+                        name="avatar"
+                        {...register('avatar')}
+                    />
+                    {/* Preview image */}
+                    <div className="text-center">
+                        <Image className={styles['avatar']} src={preview} />
+                    </div>
+
+                    {/* Button Change */}
+                    <p className="text-center mb-12">
+                        <Button deepBlack type="submit" customStyle={styles['update-btn']}>
+                            Update changes
+                        </Button>
+                    </p>
+                </form>
+            </CartBox>
         </div>
     );
 }

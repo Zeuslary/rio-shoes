@@ -9,7 +9,7 @@ const getAll = async (req, res) => {
     } catch (err) {
         console.error(`Error fetching product imports: ${err}`);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -38,7 +38,7 @@ const getById = async (req, res) => {
     } catch (err) {
         console.error('Find product import failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -79,7 +79,7 @@ const create = async (req, res) => {
     } catch (err) {
         console.error('Create product import failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -108,7 +108,7 @@ const deleteById = async (req, res) => {
     } catch (err) {
         console.error('Delete product import failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };

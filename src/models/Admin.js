@@ -20,4 +20,8 @@ const adminSchema = new Schema(
     { timestamps: true },
 );
 
+adminSchema.virtual('getFullName').get(function () {
+    return (this?.fullName?.firstName + ' ' + this?.fullName?.lastName).trim();
+});
+
 export default model('Admin', adminSchema);

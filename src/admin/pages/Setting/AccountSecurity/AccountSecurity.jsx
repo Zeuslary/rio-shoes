@@ -1,32 +1,41 @@
-import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { useCallback, useContext } from 'react';
+
+import { ProfileContext } from '~/components/ProfileProvider';
+
+import { api, backEndApi, patternValidate, toastError, toastSuccess } from '~/utils';
 
 import Button from '~/components/Button';
 import CartBox from '~/admin/components/CartBox';
 import styles from './AccountSecurity.module.scss';
 
-function AccountSecurity({ account }) {
+function AccountSecurity() {
     const {
         register,
         handleSubmit,
         watch,
         formState: { errors },
     } = useForm();
-    const [msgSubmit, setMsgSubmit] = useState('');
     const newPassword = watch('newPassword');
+    const { profile } = useContext(ProfileContext);
 
-    const handleUpdate = (data) => {
-        console.log('Update...', data);
+    const handleUpdate = useCallback(async (data) => {
         if (data.password === data.newPassword) {
-            setMsgSubmit('Old password and new password same');
-        } else if (data.password === account.password) {
-            console.log('Update successful!');
-        } else {
-            console.log('Not match...');
-            setMsgSubmit('Old password is incorrect');
+            toastError('New password must different with your password!');
+            return;
         }
-    };
+
+        try {
+            const result = await api.updatePassword(backEndApi.admin, profile._id, {
+                password: data.password,
+                newPassword: data.newPassword,
+            });
+
+            toastSuccess(result.message);
+        } catch (err) {
+            toastError(err.response?.data?.message || 'Change password failed!');
+        }
+    }, []);
 
     return (
         <div className={styles['wrapper']}>
@@ -40,59 +49,47 @@ function AccountSecurity({ account }) {
                         <h3 className="text-center">Change your password</h3>
 
                         {/* Password */}
-                        <label className={styles['label']} htmlFor="password">
+                        <label className="form-label" htmlFor="password">
                             Password:
                         </label>
                         <input
-                            className={clsx(styles['input'], errors.password && styles['invalid'])}
+                            className={errors.password ? 'form-input-invalid' : 'form-input'}
                             type="password"
                             id="password"
                             name="password"
                             {...register('password', {
                                 required: 'This field is required',
-                                minLength: {
-                                    value: 6,
-                                    message: 'Password must be at least 6 characters',
-                                },
+                                minLength: patternValidate.password,
                             })}
                         />
-                        <p className={styles['error-msg']}>
-                            {errors.password && errors.password.message}
-                        </p>
+                        <p className="form-msg-err">{errors.password && errors.password.message}</p>
 
                         {/* New Password */}
-                        <label className={styles['label']} htmlFor="newPassword">
+                        <label className="form-label" htmlFor="newPassword">
                             New Password:
                         </label>
                         <input
-                            className={clsx(
-                                styles['input'],
-                                errors.newPassword && styles['invalid'],
-                            )}
+                            className={errors.newPassword ? 'form-input-invalid' : 'form-input'}
                             type="password"
                             id="newPassword"
                             name="newPassword"
                             {...register('newPassword', {
                                 required: 'This field is required',
-                                minLength: {
-                                    value: 6,
-                                    message: 'Password must be at least 6 characters',
-                                },
+                                minLength: patternValidate.password,
                             })}
                         />
-                        <p className={styles['error-msg']}>
+                        <p className="form-msg-err">
                             {errors.newPassword && errors.newPassword.message}
                         </p>
 
                         {/* Confirm new password */}
-                        <label className={styles['label']} htmlFor="confirmNewPassword">
+                        <label className="form-label" htmlFor="confirmNewPassword">
                             Confirm new password:
                         </label>
                         <input
-                            className={clsx(
-                                styles['input'],
-                                errors.confirmNewPassword && styles['invalid'],
-                            )}
+                            className={
+                                errors.confirmNewPassword ? 'form-input-invalid' : 'form-input'
+                            }
                             type="password"
                             id="confirmNewPassword"
                             name="confirmNewPassword"
@@ -102,14 +99,12 @@ function AccountSecurity({ account }) {
                                     value === newPassword || 'Passwords do not match',
                             })}
                         />
-                        <p className={styles['error-msg']}>
+                        <p className="form-msg-err">
                             {errors.confirmNewPassword && errors.confirmNewPassword.message}
                         </p>
 
-                        <p className={styles['msg-submit']}>{msgSubmit}</p>
-
                         {/* Button Change */}
-                        <p className="text-center">
+                        <p className="text-center mt-12">
                             <Button deepBlack type="submit" customStyle={styles['update-btn']}>
                                 Change
                             </Button>

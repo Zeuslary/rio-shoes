@@ -1,9 +1,16 @@
 import _ from 'lodash';
 import mongoose from 'mongoose';
 
-import { Admin } from '../models/index.js';
-import { UPLOAD_FOLDERS } from '../constants/index.js';
 import deleteFileDiskStorage from '../utils/deleteFileDiskStorage.js';
+import { UPLOAD_FOLDERS } from '../constants/index.js';
+
+import { Admin } from '../models/index.js';
+
+const deleteFileJustUpload = (file) => {
+    if (file) {
+        deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.admin);
+    }
+};
 
 const getAll = async (req, res) => {
     try {
@@ -12,7 +19,7 @@ const getAll = async (req, res) => {
     } catch (err) {
         console.error(`Error fetching admins: ${err}`);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -39,7 +46,7 @@ const getById = async (req, res) => {
     } catch (err) {
         console.error('Error find data...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -83,7 +90,7 @@ const create = async (req, res) => {
     } catch (err) {
         console.error('Create admin failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -117,7 +124,7 @@ const deleteById = async (req, res) => {
     } catch (err) {
         console.error('Error delete admin...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -126,32 +133,56 @@ const updateById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        console.log('Req: ', req);
-        console.log('Body: ', req.body);
-        console.log('File: ', req.file);
+        // Delete field password
+        if (req.body?.password) delete req.body.password;
 
-        if (!mongoose.Types.ObjectId.isValid(id))
+        const avatarFile = req.file;
+
+        console.log('Body: ', req.body);
+        console.log('File: ', avatarFile);
+
+        if (req.body?.password) delete req.body.password;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            deleteFileJustUpload(avatarFile);
+
             return res.status(400).json({
                 message: 'Invalid Id',
                 data: id,
             });
+        }
+
+        if (!req.body) {
+            deleteFileJustUpload(avatarFile);
+
+            return res.status(400).json({
+                message: 'Empty body',
+                data: id,
+            });
+        }
 
         const originalAdmin = await Admin.findById(id);
-        if (!originalAdmin)
+        if (!originalAdmin) {
+            deleteFileJustUpload(avatarFile);
+
             return res.status(404).json({
                 message: 'Admin not found!',
             });
+        }
 
-        // Add update avatar into data
-        if (req.file) req.body.avatar = req.file.filename;
+        // Add avatar file into data
+        if (avatarFile) req.body.avatar = avatarFile.filename;
         console.log('Body after add avatar: ', req.body);
 
         const isChange = !_.isEqual(_.pick(originalAdmin, Object.keys(req.body)), { ...req.body });
-        if (!isChange)
+        if (!isChange) {
+            deleteFileJustUpload(avatarFile);
+
             return res.status(200).json({
                 message: 'Admin is not change!',
                 data: originalAdmin,
             });
+        }
 
         // option new = true to get document after modifier
         const updateAdmin = await Admin.findByIdAndUpdate(id, req.body, {
@@ -159,8 +190,13 @@ const updateById = async (req, res) => {
             runValidators: true,
         });
 
-        // After update, delete old img
-        if (originalAdmin.avatar) deleteFileDiskStorage(originalAdmin.avatar, UPLOAD_FOLDERS.admin);
+        // After update, if upload avatar -> delete old avatar
+        if (avatarFile) {
+            deleteFileDiskStorage(originalAdmin.avatar, UPLOAD_FOLDERS.admin);
+        }
+
+        // Delete field password in response
+        delete updateAdmin.password;
 
         return res.status(200).json({
             message: 'Update admin successfully!',
@@ -169,7 +205,61 @@ const updateById = async (req, res) => {
     } catch (err) {
         console.error('Error update admin...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
+const updatePassword = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { password, newPassword } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(id))
+            return res.status(400).json({
+                message: 'Invalid ID',
+                data: id,
+            });
+
+        if (!password || !newPassword)
+            return res.status(400).json({
+                message: 'Password and New password are required!',
+            });
+
+        const admin = await Admin.findById(id);
+
+        if (!admin)
+            return res.status(404).json({
+                message: 'Admin not found!',
+            });
+
+        if (admin.password != req.body.password)
+            return res.status(400).json({
+                message: 'Wrong password!',
+            });
+
+        admin.password = newPassword;
+
+        const saved = await admin.save();
+
+        console.log('Saved: ', saved);
+
+        // Delete password in res
+        delete saved._doc.password;
+
+        if (saved)
+            return res.status(200).json({
+                message: 'Update password successfully!',
+                data: saved,
+            });
+
+        return res.status(400).json({
+            message: 'Update password error!',
+        });
+    } catch (err) {
+        console.error('Update password failed...', err);
+        return res.status(500).json({
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -180,4 +270,5 @@ export default {
     create,
     deleteById,
     updateById,
+    updatePassword,
 };

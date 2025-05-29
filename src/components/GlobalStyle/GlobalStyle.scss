@@ -220,7 +220,8 @@ button {
     display: block;
 }
 
-.form-input {
+.form-input,
+.form-input-invalid {
     border: none;
     outline: none;
     width: 100%;

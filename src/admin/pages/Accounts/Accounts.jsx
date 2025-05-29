@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
+import { api, backEndApi, upperCaseFirstLetter, toastError } from '~/utils';
+
+import { ROLES } from '~/constants';
 
 import AccountAdd from './AccountAdd';
 import AccountList from './AccountList';
 import AccountViewDetail from './AccountViewDetail';
 import AccountEdit from './AccountEdit';
 
-import { toastError } from '~/utils/toast';
 import { ReturnIcon } from '~/assets/icons';
 import CartBox from '~/admin/components/CartBox';
 import Button from '~/components/Button';
@@ -19,9 +19,9 @@ function Accounts() {
     const [filterLastLogin, setFilterLastLogin] = useState('');
 
     const [admins, setAdmins] = useState([]);
-    const [mode, setMode] = useState('view');
     const [viewDetail, setViewDetail] = useState();
     const [adminEdit, setAdminEdit] = useState();
+    const [mode, setMode] = useState('view');
 
     useEffect(() => {
         const fetchingData = async () => {
@@ -54,13 +54,23 @@ function Accounts() {
         setMode('view');
     };
 
+    const handleOpenAdd = () => {
+        setAdminEdit();
+        setViewDetail();
+        setMode('add');
+    };
+
     return (
         <div className={styles['wrapper']}>
             <h2 className={styles['header']}>Account Admin</h2>
             <p className={styles['header-desc']}>{`${admins.length || 0} Accounts`} </p>
-            <Button deepBlack customStyle={styles['add-btn']} onClick={() => setMode('add')}>
-                Add new account admin
-            </Button>
+
+            {/* Button add */}
+            {mode !== 'add' && (
+                <Button deepBlack customStyle={styles['add-btn']} onClick={handleOpenAdd}>
+                    Add new account admin
+                </Button>
+            )}
 
             {/* Mode view*/}
             {mode === 'view' && (
@@ -76,8 +86,11 @@ function Accounts() {
                                     onChange={(e) => setFilterRole(e.target.value)}
                                 >
                                     <option value="">All Role</option>
-                                    <option value="admin">Admin</option>
-                                    {/* <option value="customer">Customer</option> */}
+                                    {ROLES.map((role) => (
+                                        <option key={role} value={role}>
+                                            {upperCaseFirstLetter(role)}
+                                        </option>
+                                    ))}
                                 </select>
 
                                 {/* Arrange follow last login */}

@@ -55,6 +55,10 @@ function AccountViewDetail({ viewDetail }) {
                         <span className="cell-title">Updated at:</span>
                         <span>{viewDetail.updatedAt && viewDetail.updatedAt.slice(0, 10)}</span>
                     </p>
+                    <p className="cell-item">
+                        <span className="cell-title">Last login:</span>
+                        <span>{viewDetail.lastLogin && viewDetail.lastLogin.slice(0, 10)}</span>
+                    </p>
                 </div>
             </CartBox>
         </div>

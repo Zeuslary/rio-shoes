@@ -29,10 +29,18 @@ const login = async (req, res) => {
                 data: req.body,
             });
 
+        // Update lastLogin timestamp
+        auth.lastLogin = new Date();
+        await auth.save();
+
         // Remove password from response
         auth.password = undefined;
 
+        // Add field getFullName
+        auth._doc.getFullName = auth.getFullName;
+
         // console.log('JWT: ', jwt);
+        // console.log('Auth: ', auth);
 
         // Generate JWT token
         //  jwt.sign(payload, secretKey, options)
@@ -57,7 +65,7 @@ const login = async (req, res) => {
     } catch (err) {
         console.error('Login admin failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };

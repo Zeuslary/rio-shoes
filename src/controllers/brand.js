@@ -41,7 +41,7 @@ const getById = async (req, res) => {
     } catch (err) {
         console.error('Find brand failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -88,7 +88,7 @@ const create = async (req, res) => {
     } catch (err) {
         console.error('Create brand failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -123,7 +123,7 @@ const deleteById = async (req, res) => {
     } catch (err) {
         console.error('Delete brand failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -192,7 +192,7 @@ const updateById = async (req, res) => {
     } catch (err) {
         console.error('Update brand failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };

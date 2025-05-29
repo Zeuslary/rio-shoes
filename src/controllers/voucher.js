@@ -11,7 +11,7 @@ const getAll = async (req, res) => {
     } catch (err) {
         console.error(`Error fetching Voucher: ${err}`);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -40,7 +40,7 @@ const getById = async (req, res) => {
     } catch (err) {
         console.error('Get voucher failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -75,7 +75,7 @@ const create = async (req, res) => {
     } catch (err) {
         console.error('Create voucher failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -104,7 +104,7 @@ const deleteById = async (req, res) => {
     } catch (err) {
         console.error('Delete voucher failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };

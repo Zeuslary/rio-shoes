@@ -1,26 +1,9 @@
 import { useState } from 'react';
 
 import Button from '~/components/Button';
-import images from '~/assets/images';
-import CartBox from '~/admin/components/CartBox';
 import AccountSetting from './AccountSetting';
 import AccountSecurity from './AccountSecurity';
 import styles from './Setting.module.scss';
-
-const account = {
-    id: 'U008',
-    avatar: images.zuri,
-    phone: 903727230,
-    email: 'rio@gmail.com',
-    username: 'admin',
-    password: '123123',
-    role: 'admin',
-    fullName: 'Admin Rio',
-    createdAt: '2025-01-30T11:30:00',
-    customerId: null,
-    lastLogin: '2025-05-09T10:10:00',
-    status: 'active',
-};
 
 function Setting() {
     const [setting, setSetting] = useState('account');
@@ -49,10 +32,10 @@ function Setting() {
 
                 <div className={styles['body']}>
                     {/* Account Setting */}
-                    {setting === 'account' && <AccountSetting account={account} />}
+                    {setting === 'account' && <AccountSetting />}
 
                     {/* Security */}
-                    {setting === 'security' && <AccountSecurity account={account} />}
+                    {setting === 'security' && <AccountSecurity />}
                 </div>
             </div>
         </div>

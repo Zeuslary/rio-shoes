@@ -1,14 +1,19 @@
 import clsx from 'clsx';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
+import {
+    api,
+    backEndApi,
+    patternValidate,
+    upperCaseFirstLetter,
+    flatObject,
+    toastError,
+    toastSuccess,
+} from '~/utils';
 
-import flatObject from '~/utils/flatObject';
-import { IMG_ADMIN_PATH } from '~/constants';
+import { IMG_ADMIN_PATH, ROLES, STATUSES } from '~/ constants';
 import Image from '~/components/Image';
-import { toastSuccess, toastError } from '~/utils/toast';
 import Button from '~/components/Button';
 import CartBox from '~/admin/components/CartBox';
 import styles from './AccountEdit.module.scss';
@@ -37,28 +42,28 @@ function AccountEdit({ adminEdit, setAdminEdit, setAdmins, setMode }) {
         },
     });
 
+    const [preview, setPreview] = useState(() => {
+        if (adminEdit.avatar) return IMG_ADMIN_PATH + adminEdit.avatar;
+
+        return '';
+    });
+
     const avatarFile = watch('avatar');
 
-    let preview = '';
-
-    if (typeof avatarFile === 'string') {
-        preview = IMG_ADMIN_PATH + avatarFile;
-    } else if (avatarFile.length > 0) {
-        preview = URL.createObjectURL(avatarFile[0]);
-    }
-
     useEffect(() => {
-        console.log('Prev: ', preview);
+        if (!avatarFile) return;
 
-        return () => {
-            // Clear temporary img to avoid memory leak
-            if (preview.startsWith('blob:')) URL.revokeObjectURL(preview);
-        };
-    }, [preview]);
+        if (preview && preview.startsWith('blob:')) {
+            URL.revokeObjectURL(preview);
+        }
+
+        if (avatarFile && avatarFile.length > 0 && avatarFile instanceof FileList) {
+            const url = URL.createObjectURL(avatarFile[0]);
+            setPreview(url);
+        }
+    }, [avatarFile]);
 
     const handleEdit = async (data) => {
-        console.log(data);
-
         try {
             const result = await api.putMultipart(
                 backEndApi.admin,
@@ -66,7 +71,6 @@ function AccountEdit({ adminEdit, setAdminEdit, setAdmins, setMode }) {
                 flatObject(data),
             );
 
-            console.log('Create admin success:', result);
             toastSuccess(result.message);
 
             // Save value just update into list account
@@ -78,11 +82,14 @@ function AccountEdit({ adminEdit, setAdminEdit, setAdmins, setMode }) {
             setMode('view');
         } catch (err) {
             console.error('Error add admin!', err);
-            toastError('Create admin error!');
+            toastError(err?.response?.data?.message || 'Create admin error!');
         }
     };
 
-    console.groupEnd();
+    const handleCancel = () => {
+        setAdminEdit();
+        setMode();
+    };
 
     return (
         <div className={styles['wrapper']}>
@@ -142,14 +149,11 @@ function AccountEdit({ adminEdit, setAdminEdit, setAdmins, setMode }) {
                                     errors.username && 'form-input-invalid',
                                 )}
                                 type="text"
-                                placeholder="Eg: Rio"
+                                placeholder="Enter your username"
                                 id="username"
                                 {...register('username', {
                                     required: 'This field is required',
-                                    minLength: {
-                                        value: 3,
-                                        message: 'This field at least 3 letters',
-                                    },
+                                    minLength: patternValidate.minLength3,
                                 })}
                             />
                             <p className="form-msg-err">
@@ -168,14 +172,11 @@ function AccountEdit({ adminEdit, setAdminEdit, setAdmins, setMode }) {
                                     errors.password && 'form-input-invalid',
                                 )}
                                 type="text"
-                                placeholder="Eg: Rio"
+                                placeholder="Enter your password"
                                 id="password"
                                 {...register('password', {
                                     required: 'This field is required',
-                                    minLength: {
-                                        value: 3,
-                                        message: 'This field at least 3 letters',
-                                    },
+                                    minLength: patternValidate.password,
                                 })}
                             />
                             <p className="form-msg-err">
@@ -194,10 +195,7 @@ function AccountEdit({ adminEdit, setAdminEdit, setAdmins, setMode }) {
                         placeholder="Eg: 0123456789"
                         id="phone"
                         {...register('phone', {
-                            pattern: {
-                                value: /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/,
-                                message: 'Phone is not valid',
-                            },
+                            pattern: patternValidate.phone,
                         })}
                     />
                     <p className="form-msg-err">{errors.phone && errors.phone.message}</p>
@@ -212,10 +210,7 @@ function AccountEdit({ adminEdit, setAdminEdit, setAdmins, setMode }) {
                         placeholder="Eg: rio@gmail.com"
                         id="email"
                         {...register('email', {
-                            pattern: {
-                                value: /^\S+@\S+\.\S+$/,
-                                message: 'Email is not valid',
-                            },
+                            pattern: patternValidate.email,
                         })}
                     />
                     <p className="form-msg-err">{errors.email && errors.email.message}</p>
@@ -241,8 +236,11 @@ function AccountEdit({ adminEdit, setAdminEdit, setAdmins, setMode }) {
                         Role
                     </label>
                     <select name="role" id="role" className="form-select" {...register('role')}>
-                        <option value="admin">Admin</option>
-                        <option value="superAdmin">SuperAdmin</option>
+                        {ROLES.map((role) => (
+                            <option key={role} value={role}>
+                                {upperCaseFirstLetter(role)}
+                            </option>
+                        ))}
                     </select>
 
                     {/* Status */}
@@ -255,9 +253,11 @@ function AccountEdit({ adminEdit, setAdminEdit, setAdmins, setMode }) {
                         className="form-select"
                         {...register('status')}
                     >
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="banned">Banned</option>
+                        {STATUSES.map((status) => (
+                            <option key={status} value={status}>
+                                {upperCaseFirstLetter(status)}
+                            </option>
+                        ))}
                     </select>
 
                     <div className={clsx('mt-24', 'text-center', 'mb-12')}>
@@ -265,7 +265,7 @@ function AccountEdit({ adminEdit, setAdminEdit, setAdmins, setMode }) {
                             type="button"
                             gray
                             customStyle={styles['cancel-btn']}
-                            onClick={() => setMode('view')}
+                            onClick={handleCancel}
                         >
                             Cancel
                         </Button>

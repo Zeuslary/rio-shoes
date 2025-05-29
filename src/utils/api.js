@@ -180,6 +180,24 @@ const putMultipart = async (path, id, data) => {
     }
 };
 
+const updatePassword = async (path, id, data) => {
+    try {
+        console.group('Changing password...');
+        console.log('Id: ', id);
+        console.log('Data: ', data);
+
+        const res = await instanceAxios.put(`${path}/${id}/change-password`, data);
+
+        console.log('Res: ', res);
+        console.groupEnd();
+
+        return res.data;
+    } catch (err) {
+        console.error('Update password failed...', err);
+        throw err;
+    }
+};
+
 export default {
     getAll,
     post,
@@ -187,4 +205,5 @@ export default {
     putById,
     postMultipart,
     putMultipart,
+    updatePassword,
 };

@@ -1,13 +1,17 @@
 import clsx from 'clsx';
 import { NavLink } from 'react-router';
+import { useNavigate } from 'react-router';
+import { useContext } from 'react';
+
+import { ProfileContext } from '~/components/ProfileProvider';
 
 import routes from '~/config/routes';
-import { storage } from '~/utils';
+import { storage, toastSuccess } from '~/utils';
 
+import { IMG_ADMIN_PATH } from '~/constants';
 import { UserIcon } from '~/assets/icons';
 import Image from '~/components/Image';
 import styles from './Sidebar.module.scss';
-import images from '~/assets/images';
 
 const adminLinks = [
     { id: 1, label: 'Dashboard', path: routes.adminDashboard, icon: <UserIcon /> },
@@ -26,7 +30,16 @@ const adminLinks = [
 ];
 
 function Sidebar() {
-    console.log('Token: ', storage.get('token'));
+    const navigate = useNavigate();
+
+    const { profile } = useContext(ProfileContext);
+
+    const handleLogOut = () => {
+        storage.remove('token');
+        storage.remove('profile');
+        toastSuccess('Log out successfully!');
+        navigate(routes.adminLogin);
+    };
 
     return (
         <div className={styles['wrapper']}>
@@ -37,8 +50,6 @@ function Sidebar() {
                     <NavLink
                         key={item.id}
                         to={item.path}
-                        // Fix error active /admin when on /admin/products
-                        end={item.path === routes.adminDashboard}
                         className={({ isActive }) =>
                             clsx(styles['nav-item'], isActive && styles['active'])
                         }
@@ -50,10 +61,18 @@ function Sidebar() {
             </div>
 
             <div className={styles['info']}>
-                <Image src={images.zuri} className={styles['info-avatar']} />
+                <Image src={IMG_ADMIN_PATH + profile?.avatar} className={styles['info-avatar']} />
                 <div className={styles['info-body']}>
-                    <h3 className={styles['info-name']}>Admin</h3>
-                    <p className={styles['info-contact']}>admin@rioshoes.com</p>
+                    <h3 className={styles['info-name']}>
+                        {(profile?.fullName?.firstName + ' ' + profile?.fullName?.lastName).trim()}
+                    </h3>
+                    <p className={styles['info-contact']}>{profile?.email}</p>
+                </div>
+
+                <div className={styles['sub-nav']}>
+                    <p className={styles['sub-nav-item']} onClick={handleLogOut}>
+                        Log out
+                    </p>
                 </div>
             </div>
         </div>

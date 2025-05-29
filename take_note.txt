@@ -202,7 +202,7 @@ payment
 2. Products
 - Need add field category and style is array
 3. Voucher
-- id, code, disountType, discountValue, minOrderValue, maxDiscountValue, maxDiscountValue, startDate, endDate, status, quantity
+- id, code, discountType, discountValue, minOrderValue, maxDiscountValue, maxDiscountValue, startDate, endDate, status, quantity
 
 ------------------------------
 database:
@@ -226,7 +226,7 @@ database:
 - productImport - CRUD
 - order - Backend - Make list success
 - dashboard - C - Just render
-
+- report
 
 --------- Some HTTP status -----------
 200: Ok
@@ -234,6 +234,7 @@ database:
 302: Found
 304: Not Modified -> Should use 200 to avoid error in axios
 400: Bad request
+401: Unauthorized
 404: Not found
 500: Internal server error
 
@@ -243,6 +244,14 @@ database:
 - Password not security
 - Validate img to save into server
 - Format input number of voucher: 20000 -> 20,000
+- Dashboard should calculator base on week/month/year.
+- Hash password use bcrypt.
+- When send data, if token expired -> back to login
+
+
+------ Step you are doing ---------------
+- Change routes from /admin/products into products
+28/5 - Continue make Sidebar logout.
 
 
 

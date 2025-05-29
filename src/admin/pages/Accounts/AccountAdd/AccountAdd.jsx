@@ -1,13 +1,20 @@
 import clsx from 'clsx';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
+import {
+    api,
+    backEndApi,
+    flatObject,
+    patternValidate,
+    toastError,
+    toastSuccess,
+    upperCaseFirstLetter,
+} from '~/utils/index.js';
 
-import flatObject from '~/utils/flatObject';
+import { ROLES, STATUSES } from '~/constants';
+
 import Image from '~/components/Image';
-import { toastSuccess, toastError } from '~/utils/toast';
 import Button from '~/components/Button';
 import CartBox from '~/admin/components/CartBox';
 import styles from './AccountAdd.module.scss';
@@ -33,18 +40,23 @@ function AccountAdd({ setAdmins, setMode }) {
             role: 'admin',
         },
     });
-    const avatarFile = watch('avatar')?.[0];
-    const preview = avatarFile ? URL.createObjectURL(avatarFile) : '';
+
+    const [preview, setPreview] = useState();
+    const avatarFile = watch('avatar');
+
+    console.log('preview', preview);
 
     useEffect(() => {
-        // console.log('err: ', errors);
-        // console.log('preview', preview);
+        if (!avatarFile) return;
 
-        return () => {
-            // Clear temporary img to avoid memory leak
+        if (preview) {
             URL.revokeObjectURL(preview);
-        };
-    });
+        }
+
+        const url = URL.createObjectURL(avatarFile[0]);
+
+        setPreview(url);
+    }, [avatarFile]);
 
     const handleAdd = async (data) => {
         console.log(data);
@@ -76,15 +88,17 @@ function AccountAdd({ setAdmins, setMode }) {
                                 First Name
                             </label>
                             <input
-                                className={clsx(
-                                    'form-input',
-                                    errors.fullName?.firstName && 'form-input-invalid',
-                                )}
+                                className={
+                                    errors?.fullName?.firstName
+                                        ? 'form-input-invalid'
+                                        : 'form-input'
+                                }
                                 type="text"
                                 placeholder="Eg: Rio"
                                 id="firstName"
                                 {...register('fullName.firstName', {
                                     required: 'This field is required',
+                                    minLength: patternValidate.minLength3,
                                 })}
                             />
                             <p className="form-msg-err">
@@ -107,7 +121,7 @@ function AccountAdd({ setAdmins, setMode }) {
                         </div>
                     </div>
 
-                    {/* User-Password */}
+                    {/* Account */}
                     <div className="row">
                         {/* Username */}
                         <div className="col-6">
@@ -115,19 +129,13 @@ function AccountAdd({ setAdmins, setMode }) {
                                 Username
                             </label>
                             <input
-                                className={clsx(
-                                    'form-input',
-                                    errors.username && 'form-input-invalid',
-                                )}
+                                className={errors?.username ? 'form-input-invalid' : 'form-input'}
                                 type="text"
-                                placeholder="Eg: Rio"
+                                placeholder="Enter your username"
                                 id="username"
                                 {...register('username', {
                                     required: 'This field is required',
-                                    minLength: {
-                                        value: 3,
-                                        message: 'This field at least 3 letters',
-                                    },
+                                    minLength: patternValidate.minLength3,
                                 })}
                             />
                             <p className="form-msg-err">
@@ -141,19 +149,13 @@ function AccountAdd({ setAdmins, setMode }) {
                                 Password
                             </label>
                             <input
-                                className={clsx(
-                                    'form-input',
-                                    errors.password && 'form-input-invalid',
-                                )}
+                                className={errors?.password ? 'form-input-invalid' : 'form-input'}
                                 type="text"
-                                placeholder="Eg: Rio"
+                                placeholder="Enter your password"
                                 id="password"
                                 {...register('password', {
                                     required: 'This field is required',
-                                    minLength: {
-                                        value: 3,
-                                        message: 'This field at least 3 letters',
-                                    },
+                                    minLength: patternValidate.password,
                                 })}
                             />
                             <p className="form-msg-err">
@@ -167,15 +169,12 @@ function AccountAdd({ setAdmins, setMode }) {
                         Phone
                     </label>
                     <input
-                        className={clsx('form-input', errors.phone && 'form-input-invalid')}
+                        className={errors.phone ? 'form-input-invalid' : 'form-input'}
                         type="text"
                         placeholder="Eg: 0123456789"
                         id="phone"
                         {...register('phone', {
-                            pattern: {
-                                value: /^(84|0[3|5|7|8|9])+([0-9]{8})\b$/,
-                                message: 'Phone is not valid',
-                            },
+                            pattern: patternValidate.phone,
                         })}
                     />
                     <p className="form-msg-err">{errors.phone && errors.phone.message}</p>
@@ -185,15 +184,12 @@ function AccountAdd({ setAdmins, setMode }) {
                         Email
                     </label>
                     <input
-                        className={clsx('form-input', errors.email && 'form-input-invalid')}
+                        className={errors.email ? 'form-input-invalid' : 'form-input'}
                         type="text"
                         placeholder="Eg: rio@gmail.com"
                         id="email"
                         {...register('email', {
-                            pattern: {
-                                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                                message: 'Email is not valid',
-                            },
+                            pattern: patternValidate.email,
                         })}
                     />
                     <p className="form-msg-err">{errors.email && errors.email.message}</p>
@@ -219,8 +215,9 @@ function AccountAdd({ setAdmins, setMode }) {
                         Role
                     </label>
                     <select name="role" id="role" className="form-select" {...register('role')}>
-                        <option value="admin">Admin</option>
-                        <option value="superAdmin">SuperAdmin</option>
+                        {ROLES.map((role) => (
+                            <option value={role}>{upperCaseFirstLetter(role)}</option>
+                        ))}
                     </select>
 
                     {/* Status */}
@@ -233,9 +230,11 @@ function AccountAdd({ setAdmins, setMode }) {
                         className="form-select"
                         {...register('status')}
                     >
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="banned">Banned</option>
+                        {STATUSES.map((status) => (
+                            <option key={status} value={status}>
+                                {upperCaseFirstLetter(status)}
+                            </option>
+                        ))}
                     </select>
 
                     <div className={clsx('mt-24', 'text-center', 'mb-12')}>
@@ -248,7 +247,7 @@ function AccountAdd({ setAdmins, setMode }) {
                             Cancel
                         </Button>
                         <Button deepBlack customStyle={styles['submit-btn']} type="submit">
-                            Add method
+                            Add account
                         </Button>
                     </div>
                 </form>

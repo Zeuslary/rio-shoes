@@ -51,9 +51,15 @@
 
 // Info
 .info {
+    position: relative;
     display: flex;
     align-items: center;
     margin: 8px 0;
+
+    &:hover .sub-nav {
+        display: block;
+        cursor: pointer;
+    }
 }
 
 .info-avatar {
@@ -79,4 +85,24 @@
 
 .active {
     background-color: #757575;
+}
+
+// Subnav of account
+.sub-nav {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--white-color);
+    color: var(--text-color);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+    display: none;
+}
+
+.sub-nav-item {
+    padding: 12px 24px;
+
+    &:hover {
+        background-color: var(--flash-white-color);
+    }
 }

@@ -14,7 +14,7 @@ const getAll = async (req, res) => {
     } catch (err) {
         console.error(`Error fetching Customers: ${err}`);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -43,7 +43,7 @@ const getById = async (req, res) => {
     } catch (err) {
         console.error('Get customer failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -118,7 +118,7 @@ const create = async (req, res) => {
     } catch (err) {
         console.error('Create customer failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -152,7 +152,7 @@ const deleteById = async (req, res) => {
     } catch (err) {
         console.error('Delete customer failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -217,7 +217,7 @@ const updateById = async (req, res) => {
     } catch (err) {
         console.error('Update customer failed...', err);
         return res.status(500).json({
-            message: 'Internal Server Error',
+            message: 'Internal Server Error!',
         });
     }
 };
