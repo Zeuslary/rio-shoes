@@ -13,7 +13,21 @@ const getAll = async (req, res) => {
     } catch (err) {
         console.error(`Error fetching products: ${err}`);
         return res.status(500).json({
-            message: 'Internal server error',
+            message: 'Internal Server Error',
+        });
+    }
+};
+
+const getAllMinimal = async (req, res) => {
+    try {
+        const products = await Product.find().select('name');
+
+        console.log('Product ', products);
+        return res.status(200).json(products);
+    } catch (err) {
+        console.error('Fetching data failed...', err);
+        return res.status(500).json({
+            message: 'Internal Server Error',
         });
     }
 };
@@ -44,7 +58,7 @@ const getById = async (req, res) => {
     } catch (err) {
         console.error('Get product failed...', err);
         return res.status(500).json({
-            message: 'Internal server error',
+            message: 'Internal Server Error',
         });
     }
 };
@@ -131,7 +145,7 @@ const create = async (req, res) => {
     } catch (err) {
         console.error('Create product failed...', err);
         return res.status(500).json({
-            message: 'Internal server error',
+            message: 'Internal Server Error',
         });
     }
 };
@@ -165,7 +179,7 @@ const deleteById = async (req, res) => {
     } catch (err) {
         console.error('Delete product failed...', err);
         return res.status(500).json({
-            message: 'Internal server error',
+            message: 'Internal Server Error',
         });
     }
 };
@@ -204,7 +218,10 @@ const updateById = async (req, res) => {
             });
         }
 
-        const isChange = !_.isEqual(_.pick(originalProduct, Object.keys(req.body)), req.body);
+        const isChange = !_.isEqual(
+            _.pick(originalProduct, Object.keys(req.body)),
+            req.body,
+        );
 
         if (!isChange && !files) {
             if (files) deleteFileStorage(files.image, files.galleryImages);
@@ -261,13 +278,14 @@ const updateById = async (req, res) => {
     } catch (err) {
         console.error('Update product failed...', err);
         return res.status(500).json({
-            message: 'Internal server error',
+            message: 'Internal Server Error',
         });
     }
 };
 
 export default {
     getAll,
+    getAllMinimal,
     getById,
     create,
     deleteById,

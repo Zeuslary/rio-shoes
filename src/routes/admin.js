@@ -11,8 +11,6 @@ router.use(verifyToken);
 router.get('/', adminController.getAll);
 router.get('/:id', adminController.getById);
 
-console.log('Upload: ', uploadStorage);
-
 // Save a file of field 'avatar'into local storage you configure
 router.post('/', uploadStorage.admins.single('avatar'), adminController.create);
 router.delete('/:id', adminController.deleteById);

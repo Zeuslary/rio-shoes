@@ -9,7 +9,7 @@ const getAll = async (req, res) => {
     } catch (err) {
         console.error(`Error fetching shippings: ${err}`);
         return res.status(500).json({
-            message: 'Internal server error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -25,18 +25,20 @@ const getById = async (req, res) => {
             });
 
         const shipping = await Shipping.findById(id);
+
         if (shipping)
             return res.status(200).json({
                 message: 'Find shipping success!',
                 data: shipping,
             });
+
         return res.status(404).json({
-            message: 'Shipping not found',
+            message: 'Shipping not found!',
         });
     } catch (err) {
         console.error('Error find data...', err);
         return res.status(500).json({
-            message: 'Internal server error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -53,14 +55,15 @@ const create = async (req, res) => {
         // Save to database
         const saved = await newShipping.save();
 
-        console.log('Save successfully!', saved);
-
-        // After save, return data just create.
-        return res.status(201).json(saved);
+        // After save, return data just create
+        return res.status(201).json({
+            message: 'Create shipping successfully!',
+            data: saved,
+        });
     } catch (err) {
-        console.error('Error create data...', err);
+        console.error('Create shipping failed...', err);
         return res.status(500).json({
-            message: 'Internal server error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -71,7 +74,7 @@ const deleteById = async (req, res) => {
 
         if (!mongoose.Types.ObjectId.isValid(id))
             return res.status(400).json({
-                message: 'Invalid id',
+                message: 'Invalid Id',
                 data: id,
             });
 
@@ -87,9 +90,9 @@ const deleteById = async (req, res) => {
             message: 'Shipping not found',
         });
     } catch (err) {
-        console.error('Delete error...', err);
+        console.error('Delete shipping failed...', err);
         return res.status(500).json({
-            message: 'Internal server error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -99,7 +102,7 @@ const updateById = async (req, res) => {
         const { id } = req.params;
         if (!req.body)
             return res.status(400).json({
-                message: 'Missing or empty request body',
+                message: 'Empty body',
             });
 
         if (!mongoose.Types.ObjectId.isValid(id))
@@ -112,18 +115,20 @@ const updateById = async (req, res) => {
         const originShipping = await Shipping.findById(id);
         if (!originShipping)
             return res.status(404).json({
-                message: 'Shipping not found',
+                message: 'Shipping not found!',
             });
 
         // Use pick to create a object with specific key.
         // _.pick(originShipping, Object.keys(req.body)): just get key-value same key with req.body
-        const isChange = !_.isEqual(_.pick(originShipping, Object.keys(req.body)), { ...req.body });
+        const isChange = !_.isEqual(_.pick(originShipping, Object.keys(req.body)), {
+            ...req.body,
+        });
 
         console.log('origin', originShipping);
 
         if (!isChange)
             return res.status(200).json({
-                message: 'Shipping not modifier',
+                message: 'Shipping not modifier!',
                 data: originShipping,
             });
 
@@ -140,9 +145,9 @@ const updateById = async (req, res) => {
             data: updateShipping,
         });
     } catch (err) {
-        console.error('Error update shipping...', err);
+        console.error('Update shipping failed...', err);
         return res.status(500).json({
-            message: 'Internal server error',
+            message: 'Internal Server Error!',
         });
     }
 };

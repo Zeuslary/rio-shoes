@@ -7,11 +7,12 @@ import { Payment } from '../models/index.js';
 const getAll = async (req, res) => {
     try {
         const payments = await Payment.find();
+
         return res.status(200).json(payments);
     } catch (err) {
         console.error(`Error fetching payments: ${err}`);
         return res.status(500).json({
-            message: 'Internal server error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -22,7 +23,7 @@ const getById = async (req, res) => {
 
         if (!mongoose.Types.ObjectId.isValid(id))
             return res.status(400).json({
-                message: 'Invalid payment ID format.',
+                message: 'Invalid ID',
             });
 
         const payment = await Payment.findById(id);
@@ -34,12 +35,12 @@ const getById = async (req, res) => {
             });
 
         return res.status(404).json({
-            message: 'Not found your payment!',
+            message: 'Payment not found!',
         });
     } catch (err) {
-        console.error('Error find payment: ', err);
+        console.error('Find payment failed...', err);
         return res.status(500).json({
-            message: 'Internal server error',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -50,13 +51,18 @@ const create = async (req, res) => {
     try {
         // Create payment from data user send
         const newPayment = new Payment(req.body);
+
         // Save into data
         const saved = await newPayment.save();
-        return res.status(201).json(saved);
+
+        return res.status(201).json({
+            message: 'Create payment successfully!',
+            data: saved,
+        });
     } catch (err) {
-        console.error('Error creating payment: ', err);
+        console.error('Create payment failed...', err);
         return res.status(500).json({
-            message: 'Failed to create payment!',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -64,18 +70,20 @@ const create = async (req, res) => {
 const deleteById = async (req, res) => {
     try {
         const paymentDelete = await Payment.findByIdAndDelete(req.params.id);
+
         if (paymentDelete)
             return res.status(200).json({
-                message: 'Payment deleted successfully!',
+                message: 'Payment delete successfully!',
                 data: paymentDelete,
             });
+
         return res.status(404).json({
             message: 'Payment not found!',
         });
     } catch (err) {
-        console.error('Error delete payment: ', err);
+        console.error('Delete payment failed...', err);
         return res.status(500).json({
-            message: 'Failed to delete payment!',
+            message: 'Internal Server Error!',
         });
     }
 };
@@ -86,7 +94,7 @@ const updateById = async (req, res) => {
 
         if (!mongoose.Types.ObjectId.isValid(id))
             return res.status(400).json({
-                message: 'Invalid payment ID format!',
+                message: 'Invalid ID!',
             });
 
         // Update
@@ -99,7 +107,7 @@ const updateById = async (req, res) => {
 
         if (updatePayment)
             return res.status(200).json({
-                message: 'Payment updated successfully!',
+                message: 'Payment update successfully!',
                 data: updatePayment,
             });
 
@@ -107,9 +115,9 @@ const updateById = async (req, res) => {
             message: 'Payment not found!',
         });
     } catch (err) {
-        console.error('Error update payment: ', err);
+        console.error('Update payment failed...', err);
         return res.status(500).json({
-            message: 'Failed to update payment!',
+            message: 'Internal Server Error!',
         });
     }
 };

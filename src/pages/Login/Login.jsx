@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import { Link } from 'react-router';
 import { useForm } from 'react-hook-form';
 
+import { patternValidate } from '~/utils';
+
 import Button from '~/components/Button';
 import routes from '~/config/routes';
 import styles from './Login.module.scss';
@@ -36,7 +38,7 @@ function Login() {
                         id="username"
                         placeholder="Enter your username"
                         {...register('username', {
-                            required: 'This field is required',
+                            required: patternValidate.required,
                             pattern: {
                                 value: /^[a-zA-Z0-9_]+$/,
                                 message: 'Username cannot contain spaces or special characters',
@@ -58,7 +60,7 @@ function Login() {
                         id="password"
                         placeholder="Enter your password"
                         {...register('password', {
-                            required: 'This field is required',
+                            required: patternValidate.required,
                             validate: (value) =>
                                 value === passwordFromApi || 'Password does not match',
                         })}

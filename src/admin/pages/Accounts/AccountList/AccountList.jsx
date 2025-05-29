@@ -1,12 +1,16 @@
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
+import {
+    api,
+    backEndApi,
+    styleStatus,
+    toastError,
+    toastSuccess,
+    upperCaseFirstLetter,
+} from '~/utils';
 
-import { toastSuccess, toastError } from '~/utils/toast';
 import { DeleteIcon, EditIcon, EyeIcon } from '~/assets/icons';
-import styleStatus from '~/utils/styleStatus';
 import styles from './AccountList.module.scss';
 
-function AccountList({ accounts, setAdmins, setMode, setViewDetail, setAdminEdit }) {
+function AccountList({ accounts, setAdmins, setViewDetail, setAdminEdit, setMode }) {
     // console.log('account: ', accounts);
 
     const handleDelete = async (account) => {
@@ -71,7 +75,7 @@ function AccountList({ accounts, setAdmins, setMode, setViewDetail, setAdminEdit
                                             : 'blue-color'
                                     }
                                 >
-                                    {account.role.slice(0, 1).toUpperCase() + account.role.slice(1)}
+                                    {upperCaseFirstLetter(account.role)}
                                 </span>
                             </td>
 
@@ -83,15 +87,18 @@ function AccountList({ accounts, setAdmins, setMode, setViewDetail, setAdminEdit
                             </td>
                             <td>
                                 <span className={styleStatus(account.status)}>
-                                    {account.status.slice(0, 1).toUpperCase() +
-                                        account.status.slice(1)}
+                                    {upperCaseFirstLetter(account.status)}
                                 </span>
                             </td>
                             <td>
-                                <span>{account.createdAt && account.createdAt.slice(0, 10)}</span>
+                                <span>
+                                    {account.createdAt && account.createdAt.slice(0, 10)}
+                                </span>
                             </td>
                             <td>
-                                <span>{account.lastLogin && account.lastLogin.slice(0, 10)}</span>
+                                <span>
+                                    {account.lastLogin && account.lastLogin.slice(0, 10)}
+                                </span>
                             </td>
                             <td>
                                 <button

@@ -1,13 +1,9 @@
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
+import { api, backEndApi, toastError, toastSuccess, formatCurrencyVN } from '~/utils';
 
-import { toastSuccess, toastError } from '~/utils/toast';
-import { DeleteIcon, EditIcon, EyeIcon } from '~/assets/icons';
-import formatCurrencyVN from '~/utils/formatCurrency';
+import { DeleteIcon, EditIcon } from '~/assets/icons';
 import styles from './ImportList.module.scss';
 
 function ImportList({
-    products,
     productImports,
     setProductImports,
     setProductImportEdit,
@@ -60,13 +56,7 @@ function ImportList({
                                 <span>{index + 1}</span>
                             </td>
                             <td>
-                                <span>
-                                    {
-                                        products.find(
-                                            (product) => product._id == productImport.productId,
-                                        )?.name
-                                    }
-                                </span>
+                                <span>{productImport.productId.name}</span>
                             </td>
                             <td>
                                 <span>{productImport.quantity}</span>

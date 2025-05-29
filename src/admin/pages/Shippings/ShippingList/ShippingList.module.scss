@@ -23,22 +23,6 @@
     }
 }
 
-.red-color,
-.green-color {
-    padding: 8px 12px;
-    border-radius: 4px;
-}
-
-.red-color {
-    color: var(--red-color);
-    background-color: #ff4d4d36;
-}
-
-.green-color {
-    color: var(--green-color);
-    background-color: #e8f5e9;
-}
-
 // Actions
 .btn {
     display: inline-flex;

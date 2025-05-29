@@ -5,7 +5,12 @@ import { Voucher } from '../models/index.js';
 
 const getAll = async (req, res) => {
     try {
-        const vouchers = await Voucher.find();
+        const vouchers = await Voucher.find().populate('createdBy', 'fullName');
+
+        // Add field createdByName
+        vouchers.forEach(
+            (voucher) => (voucher._doc.createdByName = voucher.createdBy?.getFullName),
+        );
 
         return res.status(200).json(vouchers);
     } catch (err) {
@@ -55,7 +60,7 @@ const create = async (req, res) => {
 
         if (!req.body.code || !req.body.discountValue || !req.body.endDate)
             return res.status(400).json({
-                message: 'Code, Discount value, End date is required',
+                message: 'Code, Discount value, End date are required',
             });
 
         const newVoucher = new Voucher(req.body);

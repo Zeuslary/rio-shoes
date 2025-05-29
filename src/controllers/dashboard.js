@@ -2,8 +2,6 @@ import { Order, Product, Customer } from '../models/index.js';
 
 const getDashboardData = async (req, res) => {
     try {
-        console.log('Fetching dashboard data...', req.body);
-
         const totalOrders = await Order.countDocuments();
         const totalProducts = await Product.countDocuments();
         const totalCustomers = await Customer.countDocuments();

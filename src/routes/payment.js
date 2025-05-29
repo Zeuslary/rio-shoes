@@ -1,10 +1,16 @@
 import express from 'express';
+
+import verifyToken from '../middlewares/verifyToken.js';
 import { paymentController } from '../controllers/index.js';
 
 const router = express.Router();
 
+// Public api
 router.get('/', paymentController.getAll);
 router.get('/:id', paymentController.getById);
+
+// Private api
+router.use(verifyToken);
 router.post('/', paymentController.create);
 
 // Whatever you name after the : becomes the key in req.params and you can use in controller

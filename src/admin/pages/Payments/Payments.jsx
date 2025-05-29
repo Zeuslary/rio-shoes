@@ -1,28 +1,30 @@
 import { useState, useEffect } from 'react';
 
-import Button from '~/components/Button';
-import { ReturnIcon } from '~/assets/icons';
-import CartBox from '~/admin/components/CartBox';
-import PaymentList from './PaymentList';
+import { api, backEndApi, toastError } from '~/utils';
+
 import PaymentAdd from './PaymentAdd';
 import PaymentEdit from './PaymentEdit';
-import api from '~/utils/api.js';
-import backEndApi from '~/utils/backendApi';
+import PaymentList from './PaymentList';
+
+import { ReturnIcon } from '~/assets/icons';
+import Button from '~/components/Button';
 import styles from './Payments.module.scss';
 
 function Payments() {
     const [payments, setPayments] = useState([]);
-    const [paymentAction, setPaymentAction] = useState('view');
+
+    const [mode, setMode] = useState('view');
     const [paymentEdit, setPaymentEdit] = useState();
 
+    // Fetch payment from backend
     useEffect(() => {
         const fetchingData = async () => {
-            // Fetch payment from backend
             try {
                 const data = await api.getAll(backEndApi.payment);
                 setPayments(data);
             } catch (err) {
                 console.error('Error fetching data!', err);
+                toastError('Fetching payment error!');
             }
         };
 
@@ -37,73 +39,56 @@ function Payments() {
         console.groupEnd();
     }, [payments, paymentEdit]);
 
+    const handleBack = () => {
+        setPaymentEdit();
+        setMode('view');
+    };
+
     return (
         <div className={styles['wrapper']}>
             <h2 className={styles['header']}>Payments</h2>
             <p className={styles['header-desc']}>{`${payments?.length} Payments`} </p>
 
-            {/* Button just appear in view and edit */}
-            {paymentAction !== 'add' && (
+            {/* Button add */}
+            {mode !== 'add' && (
                 <Button
                     deepBlack
                     customStyle={styles['add-btn']}
-                    onClick={() => setPaymentAction('add')}
+                    onClick={() => setMode('add')}
                 >
                     Add new payment
                 </Button>
             )}
 
-            <div className="mt-24">
-                {/* View payment */}
-                {paymentAction === 'view' && (
-                    <CartBox>
-                        <PaymentList
-                            payments={payments}
-                            setPayments={setPayments}
-                            setPaymentAction={setPaymentAction}
-                            setPaymentEdit={setPaymentEdit}
-                        />
-                    </CartBox>
-                )}
+            {/* View payment */}
+            {mode === 'view' && (
+                <PaymentList
+                    payments={payments}
+                    setPayments={setPayments}
+                    setPaymentEdit={setPaymentEdit}
+                    setMode={setMode}
+                />
+            )}
 
-                {/* Add payment */}
-                {paymentAction === 'add' && (
-                    <div>
-                        <Button
-                            leftIcon={<ReturnIcon />}
-                            gray
-                            onClick={() => setPaymentAction('view')}
-                        >
-                            Back
-                        </Button>
+            {/* Button back */}
+            {mode !== 'view' && (
+                <Button leftIcon={<ReturnIcon />} gray onClick={handleBack}>
+                    Back
+                </Button>
+            )}
 
-                        <PaymentAdd setPayments={setPayments} setPaymentAction={setPaymentAction} />
-                    </div>
-                )}
+            {/* Mode add */}
+            {mode === 'add' && <PaymentAdd setPayments={setPayments} setMode={setMode} />}
 
-                {/* Edit payment */}
-                {paymentAction === 'edit' && (
-                    <div>
-                        <Button
-                            leftIcon={<ReturnIcon />}
-                            gray
-                            onClick={() => {
-                                setPaymentEdit();
-                                setPaymentAction('view');
-                            }}
-                        >
-                            Back
-                        </Button>
-
-                        <PaymentEdit
-                            paymentEdit={paymentEdit}
-                            setPaymentEdit={setPaymentEdit}
-                            setPayments={setPayments}
-                            setPaymentAction={setPaymentAction}
-                        />
-                    </div>
-                )}
-            </div>
+            {/* Mode edit */}
+            {mode === 'edit' && (
+                <PaymentEdit
+                    paymentEdit={paymentEdit}
+                    setPaymentEdit={setPaymentEdit}
+                    setPayments={setPayments}
+                    setMode={setMode}
+                />
+            )}
         </div>
     );
 }

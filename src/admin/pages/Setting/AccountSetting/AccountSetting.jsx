@@ -100,7 +100,7 @@ function AccountSetting() {
                                 placeholder="Eg: Rio"
                                 id="firstName"
                                 {...register('fullName.firstName', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                 })}
                             />
                             <p className="form-msg-err">
@@ -135,7 +135,7 @@ function AccountSetting() {
                                 id="email"
                                 name="email"
                                 {...register('email', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     pattern: patternValidate.email,
                                 })}
                             />
@@ -153,7 +153,7 @@ function AccountSetting() {
                                 id="phone"
                                 name="phone"
                                 {...register('phone', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     pattern: patternValidate.phone,
                                 })}
                             />

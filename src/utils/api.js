@@ -23,6 +23,19 @@ instanceAxios.interceptors.request.use((config) => {
     return config;
 });
 
+const getById = async (path, id) => {
+    try {
+        const res = await instanceAxios.get(`${path}/${id}`);
+        console.group('Get by id ', path);
+        console.log('Id: ', id);
+        console.log('Result: ', res);
+        console.groupEnd();
+        return res.data;
+    } catch (err) {
+        console.error('Get data by Id failed...', err);
+    }
+};
+
 const getAll = async (path) => {
     try {
         const res = await instanceAxios.get(path);
@@ -199,6 +212,7 @@ const updatePassword = async (path, id, data) => {
 };
 
 export default {
+    getById,
     getAll,
     post,
     deleteById,

@@ -49,15 +49,21 @@ function AccountViewDetail({ viewDetail }) {
                     </p>
                     <p className="cell-item">
                         <span className="cell-title">Created at:</span>
-                        <span>{viewDetail.createdAt && viewDetail.createdAt.slice(0, 10)}</span>
+                        <span>
+                            {viewDetail.createdAt && viewDetail.createdAt.slice(0, 10)}
+                        </span>
                     </p>
                     <p className="cell-item">
                         <span className="cell-title">Updated at:</span>
-                        <span>{viewDetail.updatedAt && viewDetail.updatedAt.slice(0, 10)}</span>
+                        <span>
+                            {viewDetail.updatedAt && viewDetail.updatedAt.slice(0, 10)}
+                        </span>
                     </p>
                     <p className="cell-item">
                         <span className="cell-title">Last login:</span>
-                        <span>{viewDetail.lastLogin && viewDetail.lastLogin.slice(0, 10)}</span>
+                        <span>
+                            {viewDetail.lastLogin && viewDetail.lastLogin.slice(0, 10)}
+                        </span>
                     </p>
                 </div>
             </CartBox>

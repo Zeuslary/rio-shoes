@@ -247,12 +247,27 @@ database:
 - Dashboard should calculator base on week/month/year.
 - Hash password use bcrypt.
 - When send data, if token expired -> back to login
-
+- format yyyy/mm/dd into dd/mm/yyyy
+- Trim value when send 
+- When change file and not choice, data file not as preview -> Need fix
+- When add any field, last img blob still not clear .
+- Just login can be pass verifyToken -> all user just have account will be change info as admin -> Need fix
 
 ------ Step you are doing ---------------
 - Change routes from /admin/products into products
-28/5 - Continue make Sidebar logout.
+28/5 - Continue make Sidebar logout - Done
+29/5 - Continue auth for backend api (Just done dashboard, admin) -> Continue check admin 
+ + voucher add, view, list, edit -> Done -> be done -> just public getById
+ + import add, update -> Done -> Be done -> add or update -> reflect into quantity of product -> all required auth
+ + shipping add, list, edit -> Done -> BE -> Done -> Just public getById
+ + payment add, update, delete -> Done -> BE: public getAll and getById
+ + brand add, update, delete -> Done -> Be: public getAll and getById
+ + admin add, update, view, delete -> Done -> Be: all required auth -> add, delete avatar base on action, add have field check username unique
 
+30/5 - Required
+ + customer
+ + order
+ + product
 
 
 ------------- Note --------------

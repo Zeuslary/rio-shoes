@@ -53,19 +53,39 @@ const getById = async (req, res) => {
 
 const create = async (req, res) => {
     try {
-        console.log('Req: ', req);
         console.log('body', req.body);
-        console.log('file', req.file); // Get file from request user.
+        const avatarFile = req.file;
 
-        if (!req.body)
+        console.log('Avatar: ', req.file);
+
+        if (!req.body) {
+            deleteFileJustUpload(avatarFile);
+
             return res.status(400).json({
                 message: 'Empty body',
             });
+        }
 
-        if (!req.body.username || !req.body.password)
+        if (!req.body.username || !req.body.password) {
+            deleteFileJustUpload(avatarFile);
+
             return res.status(400).json({
                 message: 'username and password is required',
             });
+        }
+
+        // Check username is unique
+        const existUsername = await Admin.findOne({
+            username: req.body.username,
+        });
+
+        if (existUsername) {
+            deleteFileJustUpload(avatarFile);
+
+            return res.status(200).json({
+                message: 'Username is already exist!',
+            });
+        }
 
         // Add avatar path to the body before saving
         if (req.file) {
@@ -83,6 +103,9 @@ const create = async (req, res) => {
                 message: 'Create admin successfully!',
                 data: newAdmin,
             });
+
+        // If failed -> delete file just upload
+        deleteFileJustUpload(avatarFile);
 
         return res.status(400).json({
             message: 'Error create admin!',
@@ -141,8 +164,6 @@ const updateById = async (req, res) => {
         console.log('Body: ', req.body);
         console.log('File: ', avatarFile);
 
-        if (req.body?.password) delete req.body.password;
-
         if (!mongoose.Types.ObjectId.isValid(id)) {
             deleteFileJustUpload(avatarFile);
 
@@ -172,9 +193,12 @@ const updateById = async (req, res) => {
 
         // Add avatar file into data
         if (avatarFile) req.body.avatar = avatarFile.filename;
+
         console.log('Body after add avatar: ', req.body);
 
-        const isChange = !_.isEqual(_.pick(originalAdmin, Object.keys(req.body)), { ...req.body });
+        const isChange = !_.isEqual(_.pick(originalAdmin, Object.keys(req.body)), {
+            ...req.body,
+        });
         if (!isChange) {
             deleteFileJustUpload(avatarFile);
 

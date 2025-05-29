@@ -1,14 +1,16 @@
 import _ from 'lodash';
 import mongoose from 'mongoose';
 
+import deleteFileDiskStorage from '../utils/deleteFileDiskStorage.js';
 import { UPLOAD_FOLDERS } from '../constants/index.js';
 import { Brand } from '../models/index.js';
-import deleteFileDiskStorage from '../utils/deleteFileDiskStorage.js';
 
 const getAll = async (req, res) => {
     try {
         const brands = await Brand.find();
-        return res.status(200).json(brands); // send status code is 200 and the data base on json format
+
+        // send status code is 200 and the data base on json format
+        return res.status(200).json(brands);
     } catch (err) {
         console.error(`Error fetching brands: ${err}`);
         return res.status(500).json({
@@ -46,20 +48,27 @@ const getById = async (req, res) => {
     }
 };
 
+const deleteFileJustUpload = (file) => {
+    if (file) {
+        deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.brand);
+    }
+};
+
 const create = async (req, res) => {
     try {
-        const file = req.file; // Get a file client upload
-        console.log('File: ', file);
+        const logoFile = req.file; // Get a file client upload
+        console.log('File: ', logoFile);
 
         if (!req.body) {
-            if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.brand);
+            deleteFileJustUpload(logoFile);
+
             return res.status(400).json({
                 message: 'Empty body!',
             });
         }
 
         if (!req.body.name || !req.body.slug) {
-            if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.brand);
+            deleteFileJustUpload(logoFile);
 
             return res.status(400).json({
                 message: 'Name and slug is required',
@@ -67,7 +76,7 @@ const create = async (req, res) => {
         }
 
         // Add logo into body
-        if (file) req.body.logo = file.filename;
+        if (logoFile) req.body.logo = logoFile.filename;
 
         const newBrand = new Brand(req.body);
 
@@ -81,6 +90,9 @@ const create = async (req, res) => {
                 message: 'Create brand successfully!',
                 data: newBrand,
             });
+
+        // Create error -> delete file just upload
+        deleteFileJustUpload(logoFile);
 
         return res.status(400).json({
             message: 'Create brand error!',
@@ -114,7 +126,8 @@ const deleteById = async (req, res) => {
             });
 
         // Delete file logo
-        if (brandDelete.logo) deleteFileDiskStorage(brandDelete.logo, UPLOAD_FOLDERS.brand);
+        if (brandDelete.logo)
+            deleteFileDiskStorage(brandDelete.logo, UPLOAD_FOLDERS.brand);
 
         return res.status(200).json({
             message: 'Delete brand successfully!',
@@ -132,12 +145,12 @@ const updateById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const file = req.file;
-        console.log('File: ', file);
+        const logoFile = req.file;
+        console.log('File: ', logoFile);
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
-            // If exist file client upload -> delete
-            if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.brand);
+            // If exist logoFile client upload -> delete
+            deleteFileJustUpload(logoFile);
 
             return res.status(400).json({
                 message: 'Invalid ID',
@@ -146,8 +159,8 @@ const updateById = async (req, res) => {
         }
 
         if (!req.body) {
-            // If exist file client upload -> delete
-            if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.brand);
+            // If exist logoFile client upload -> delete
+            deleteFileJustUpload(logoFile);
 
             return res.status(400).json({
                 message: 'Body is empty!',
@@ -155,20 +168,22 @@ const updateById = async (req, res) => {
         }
 
         // Add logo into body
-        if (file) req.body.logo = file.filename;
+        if (logoFile) req.body.logo = logoFile.filename;
 
         // Get original data
         const originalBrand = await Brand.findById(id);
 
         // Check original data and new data is same or not
-        const isChange = !_.isEqual(_.pick(originalBrand, Object.keys(req.body)), { ...req.body });
+        const isChange = !_.isEqual(_.pick(originalBrand, Object.keys(req.body)), {
+            ...req.body,
+        });
 
         if (!isChange) {
-            // If exist file -> delete
-            if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.brand);
+            // If exist logoFile -> delete
+            deleteFileJustUpload(logoFile);
 
             return res.status(200).json({
-                message: 'Brand not modifier',
+                message: 'Brand not modifier!',
                 data: originalBrand,
             });
         }
@@ -178,11 +193,8 @@ const updateById = async (req, res) => {
             runValidators: true,
         });
 
-        console.log('Original: ', originalBrand);
-        console.log('Original logo: ', originalBrand.logo);
-
-        // Delete old file logo
-        if (file && originalBrand.logo)
+        // Delete old logoFile logo
+        if (logoFile && originalBrand.logo)
             deleteFileDiskStorage(originalBrand.logo, UPLOAD_FOLDERS.brand);
 
         return res.status(200).json({

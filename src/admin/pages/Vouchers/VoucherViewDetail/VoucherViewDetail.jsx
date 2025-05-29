@@ -1,11 +1,9 @@
-import { IMG_ADMIN_PATH } from '~/constants';
-import Image from '~/components/Image';
+import { formatCurrencyVN } from '~/utils';
+
 import CartBox from '~/admin/components/CartBox';
 import styles from './VoucherViewDetail.module.scss';
 
 function VoucherViewDetail({ viewDetail }) {
-    console.log('View ', viewDetail);
-
     return (
         <div className={styles['wrapper']}>
             <CartBox>
@@ -34,17 +32,17 @@ function VoucherViewDetail({ viewDetail }) {
 
                     <p className="cell-item">
                         <span className="cell-title">Discount value:</span>
-                        <span>{viewDetail.discountValue}</span>
+                        <span>{formatCurrencyVN(viewDetail.discountValue)}</span>
                     </p>
 
                     <p className="cell-item">
                         <span className="cell-title">Min order:</span>
-                        <span>{viewDetail?.minOrder}</span>
+                        <span>{formatCurrencyVN(viewDetail?.minOrder)}</span>
                     </p>
 
                     <p className="cell-item">
                         <span className="cell-title">Max discount value:</span>
-                        <span>{viewDetail?.maxDiscountValue}</span>
+                        <span>{formatCurrencyVN(viewDetail?.maxDiscountValue)}</span>
                     </p>
 
                     <p className="cell-item">
@@ -70,6 +68,11 @@ function VoucherViewDetail({ viewDetail }) {
                     <p className="cell-item">
                         <span className="cell-title">Status:</span>
                         <span>{viewDetail.status}</span>
+                    </p>
+
+                    <p className="cell-item">
+                        <span className="cell-title">CreatedBy:</span>
+                        <span>{viewDetail?.createdByName}</span>
                     </p>
                 </div>
             </CartBox>

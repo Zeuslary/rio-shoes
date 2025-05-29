@@ -6,6 +6,7 @@ const backEndApi = {
     voucher: '/voucher',
     customer: '/customer',
     product: '/product',
+    productMinimal: '/product/minimal',
     productImports: '/product-import',
     order: '/order',
     dashboard: '/dashboard',

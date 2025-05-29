@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { patternValidate } from '~/utils';
+
 import api from '~/utils/api';
 import backEndApi from '~/utils/backendApi';
 
@@ -129,7 +131,7 @@ function CustomerEdit({ customerEdit, setCustomerEdit, setCustomers, setMode, e 
                                 placeholder="Eg: Rio"
                                 id="firstName"
                                 {...register('fullName.firstName', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     minLength: {
                                         value: 2,
                                         message: 'First name must be at least 2 characters',
@@ -152,7 +154,7 @@ function CustomerEdit({ customerEdit, setCustomerEdit, setCustomers, setMode, e 
                                 placeholder="Eg: Lander"
                                 id="lastName"
                                 {...register('fullName.lastName', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     minLength: {
                                         value: 2,
                                         message: 'Last name must be at least 2 characters',
@@ -225,7 +227,7 @@ function CustomerEdit({ customerEdit, setCustomerEdit, setCustomers, setMode, e 
                                 type="text"
                                 placeholder="Enter your phone number"
                                 {...register('phone', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     pattern: {
                                         value: /^(84|0[3|5|7|8|9])+([0-9]{8})\b$/,
                                         message: 'Invalid phone number',
@@ -262,7 +264,7 @@ function CustomerEdit({ customerEdit, setCustomerEdit, setCustomers, setMode, e 
                                 name="city"
                                 id="city"
                                 {...register('address.city', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     validate: (value) =>
                                         value !== 'default-value' || 'Please select this field',
                                 })}
@@ -288,7 +290,7 @@ function CustomerEdit({ customerEdit, setCustomerEdit, setCustomers, setMode, e 
                                 name="district"
                                 id="district"
                                 {...register('address.district', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     validate: (value) =>
                                         value !== 'default-value' || 'Please select this field',
                                 })}
@@ -314,7 +316,7 @@ function CustomerEdit({ customerEdit, setCustomerEdit, setCustomers, setMode, e 
                                 name="ward"
                                 id="ward"
                                 {...register('address.ward', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     validate: (value) =>
                                         value !== 'default-value' || 'Please select this field',
                                 })}
@@ -346,7 +348,7 @@ function CustomerEdit({ customerEdit, setCustomerEdit, setCustomers, setMode, e 
                                 type="text"
                                 placeholder="House Number, Street Name"
                                 {...register('address.houseNumber', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                 })}
                             />
                             <p className="form-msg-err">

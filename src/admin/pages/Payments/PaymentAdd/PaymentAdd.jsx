@@ -1,19 +1,14 @@
-import clsx from 'clsx';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import api from '~/utils/api';
-import { toastSuccess, toastError } from '~/utils/toast';
-import backEndApi from '~/utils/backendApi';
+import { api, backEndApi, patternValidate, toastSuccess, toastError } from '~/utils';
+import { STATUSES } from '~/constants';
+
+import { SelectGroup, CartBox } from '~/admin/components';
 import Button from '~/components/Button';
-import CartBox from '~/admin/components/CartBox';
 import styles from './PaymentAdd.module.scss';
 
-function PaymentAdd({ setPayments, setPaymentAction }) {
-    const {
-        register,
-        formState: { errors },
-        handleSubmit,
-    } = useForm({
+function PaymentAdd({ setPayments, setMode }) {
+    const methods = useForm({
         defaultValues: {
             code: '',
             name: '',
@@ -22,18 +17,21 @@ function PaymentAdd({ setPayments, setPaymentAction }) {
         },
     });
 
+    const {
+        register,
+        formState: { errors },
+        handleSubmit,
+    } = methods;
+
     const handleAddPayment = async (data) => {
-        console.log(data);
         try {
             const result = await api.post(backEndApi.payment, data);
-            if (result) {
-                console.log('Create payment success:', result);
-                toastSuccess('Create payment successfully!');
-                setPayments((prev) => [...prev, result]);
-                setPaymentAction('view');
-            }
+
+            toastSuccess(result.message);
+            setPayments((prev) => [...prev, result.data]);
+            setMode('view');
         } catch (err) {
-            console.error('Error add payment!', err);
+            console.error('Add payment failed...', err);
             toastError('Create payment error!');
         }
     };
@@ -43,76 +41,96 @@ function PaymentAdd({ setPayments, setPaymentAction }) {
             <CartBox>
                 <h2 className={styles['header']}>Add payment method</h2>
 
-                <form action="" onSubmit={handleSubmit(handleAddPayment)}>
-                    <label className="form-label" htmlFor="code">
-                        Payment Code
-                    </label>
-                    <input
-                        className={clsx('form-input', errors.code && 'form-input-invalid')}
-                        type="text"
-                        placeholder="Eg: cod"
-                        id="code"
-                        {...register('code', {
-                            required: 'This field is required',
-                        })}
-                    />
-                    <p className="form-msg-err">{errors.code && errors.code.message}</p>
+                <FormProvider {...methods}>
+                    <form action="" onSubmit={handleSubmit(handleAddPayment)}>
+                        {/* Code */}
+                        <div>
+                            <label className="form-label" htmlFor="code">
+                                Payment Code
+                            </label>
+                            <input
+                                className={
+                                    errors.code ? 'form-input-invalid' : 'form-input'
+                                }
+                                type="text"
+                                placeholder="Eg: cod"
+                                id="code"
+                                {...register('code', {
+                                    required: patternValidate.required,
+                                    minLength: patternValidate.minLength3,
+                                })}
+                            />
+                            <p className="form-msg-err">
+                                {errors.code && errors.code.message}
+                            </p>
+                        </div>
 
-                    <label className="form-label" htmlFor="name">
-                        Payment Name
-                    </label>
-                    <input
-                        className={clsx('form-input', errors.name && 'form-input-invalid')}
-                        type="text"
-                        placeholder="Eg: Cash on Delivery"
-                        id="name"
-                        {...register('name', {
-                            required: 'This field is required',
-                        })}
-                    />
-                    <p className="form-msg-err">{errors.name && errors.name.message}</p>
+                        {/* Payment Name */}
+                        <div>
+                            <label className="form-label" htmlFor="name">
+                                Payment Name
+                            </label>
+                            <input
+                                className={
+                                    errors.name ? 'form-input-invalid' : 'form-input'
+                                }
+                                type="text"
+                                placeholder="Eg: Cash on Delivery"
+                                id="name"
+                                {...register('name', {
+                                    required: patternValidate.required,
+                                })}
+                            />
+                            <p className="form-msg-err">
+                                {errors.name && errors.name.message}
+                            </p>
+                        </div>
 
-                    <label className="form-label" htmlFor="description">
-                        Description
-                    </label>
-                    <textarea
-                        rows={5}
-                        spellCheck={false}
-                        className="form-input"
-                        type="text"
-                        placeholder="Eg: Customer pays when the order is delivered."
-                        id="description"
-                        {...register('description')}
-                    />
+                        {/* Description */}
+                        <div>
+                            <label className="form-label" htmlFor="description">
+                                Description
+                            </label>
+                            <textarea
+                                rows={5}
+                                spellCheck={false}
+                                className="form-input"
+                                type="text"
+                                placeholder="Eg: Customer pays when the order is delivered."
+                                id="description"
+                                {...register('description')}
+                            />
+                        </div>
 
-                    <label className="form-label" htmlFor="status">
-                        Status
-                    </label>
-                    <select
-                        name="status"
-                        id="status"
-                        className="form-select"
-                        {...register('status')}
-                    >
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="banned">Banned</option>
-                    </select>
+                        {/* Status */}
+                        <div>
+                            <label className="form-label" htmlFor="status">
+                                Status
+                            </label>
 
-                    <div className={styles['actions']}>
-                        <Button
-                            type="button"
-                            gray
-                            customStyle={styles['cancel-btn']}
-                            onClick={() => setPaymentAction('view')}
-                        >
-                            Cancel
-                        </Button>
-                        <Button deepBlack customStyle={styles['submit-btn']} type="submit">
-                            Add method
-                        </Button>
-                    </div>
-                </form>
+                            <SelectGroup nameRegister="status" options={STATUSES} />
+                        </div>
+
+                        <div className={styles['actions']}>
+                            <Button
+                                type="button"
+                                gray
+                                customStyle={styles['cancel-btn']}
+                                onClick={() => setMode('view')}
+                            >
+                                Cancel
+                            </Button>
+
+                            <Button
+                                deepBlack
+                                customStyle={styles['submit-btn']}
+                                type="submit"
+                            >
+                                Add method
+                            </Button>
+                        </div>
+                    </form>
+                </FormProvider>
             </CartBox>
         </div>
     );

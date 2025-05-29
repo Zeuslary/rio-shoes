@@ -37,6 +37,19 @@ function Accounts() {
         fetchingData();
     }, []);
 
+    useEffect(() => {
+        console.group('Changing...');
+
+        console.log('filterRole: ', filterRole);
+        console.log('filterLastLogin: ', filterLastLogin);
+        console.log('admins: ', admins);
+        console.log('viewDetail: ', viewDetail);
+        console.log('adminEdit: ', adminEdit);
+        console.log('mode: ', mode);
+
+        console.groupEnd();
+    }, [filterRole, filterLastLogin, admins, viewDetail, adminEdit, mode]);
+
     // Filter accounts
     const accounts = admins
         .sort((accA, accB) => {

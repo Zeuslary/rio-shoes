@@ -2,16 +2,21 @@ import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
+import {
+    api,
+    backEndApi,
+    flatObject,
+    convertAddress,
+    patternValidate,
+    toastError,
+    toastSuccess,
+} from '~/utils';
+
 import provincesApi from '~/utils/provinces';
 
-import { toastSuccess, toastError } from '~/utils/toast';
-import flatObject from '~/utils/flatObject';
 import Image from '~/components/Image';
 import Button from '~/components/Button';
 import CartBox from '~/admin/components/CartBox';
-import convertAddress from '~/utils/convertAddress';
 import styles from './CustomerAdd.module.scss';
 
 function CustomerAdd({ setCustomers, setMode }) {
@@ -130,7 +135,11 @@ function CustomerAdd({ setCustomers, setMode }) {
             <CartBox>
                 <h2 className={styles['header']}>Add customer</h2>
 
-                <form action="" onSubmit={handleSubmit(handleAdd)} encType="multipart/form-data">
+                <form
+                    action=""
+                    onSubmit={handleSubmit(handleAdd)}
+                    encType="multipart/form-data"
+                >
                     {/* Fullname */}
                     <div className="row">
                         {/* First name */}
@@ -144,15 +153,17 @@ function CustomerAdd({ setCustomers, setMode }) {
                                 placeholder="Eg: Rio"
                                 id="firstName"
                                 {...register('fullName.firstName', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     minLength: {
                                         value: 2,
-                                        message: 'First name must be at least 2 characters',
+                                        message:
+                                            'First name must be at least 2 characters',
                                     },
                                 })}
                             />
                             <p className="form-msg-err">
-                                {errors.fullName?.firstName && errors.fullName.firstName.message}
+                                {errors.fullName?.firstName &&
+                                    errors.fullName.firstName.message}
                             </p>
                         </div>
 
@@ -167,15 +178,17 @@ function CustomerAdd({ setCustomers, setMode }) {
                                 placeholder="Eg: Lander"
                                 id="lastName"
                                 {...register('fullName.lastName', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     minLength: {
                                         value: 2,
-                                        message: 'Last name must be at least 2 characters',
+                                        message:
+                                            'Last name must be at least 2 characters',
                                     },
                                 })}
                             />
                             <p className="form-msg-err">
-                                {errors.fullName?.lastName && errors.fullName.lastName.message}
+                                {errors.fullName?.lastName &&
+                                    errors.fullName.lastName.message}
                             </p>
                         </div>
                     </div>
@@ -240,14 +253,16 @@ function CustomerAdd({ setCustomers, setMode }) {
                                 type="text"
                                 placeholder="Enter your phone number"
                                 {...register('phone', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     pattern: {
                                         value: /^(84|0[3|5|7|8|9])+([0-9]{8})\b$/,
                                         message: 'Invalid phone number',
                                     },
                                 })}
                             />
-                            <p className="form-msg-err">{errors.phone && errors.phone.message}</p>
+                            <p className="form-msg-err">
+                                {errors.phone && errors.phone.message}
+                            </p>
                         </div>
 
                         <div className="col-6">
@@ -261,7 +276,9 @@ function CustomerAdd({ setCustomers, setMode }) {
                                 placeholder="Enter your email address"
                                 {...register('email')}
                             />
-                            <p className="form-msg-err">{errors.email && errors.email.message}</p>
+                            <p className="form-msg-err">
+                                {errors.email && errors.email.message}
+                            </p>
                         </div>
                     </div>
 
@@ -277,7 +294,7 @@ function CustomerAdd({ setCustomers, setMode }) {
                                 control={control}
                                 name="address.city"
                                 rules={{
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     validate: (value) =>
                                         value !== 'default' || 'Please select this field',
                                 }}
@@ -317,7 +334,7 @@ function CustomerAdd({ setCustomers, setMode }) {
                                 className="form-select"
                                 name="address.district"
                                 rules={{
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     validate: (value) =>
                                         value !== 'default' || 'Please select this field',
                                 }}
@@ -336,7 +353,10 @@ function CustomerAdd({ setCustomers, setMode }) {
                                             Select District
                                         </option>
                                         {districts.map((district) => (
-                                            <option key={district.code} value={district.code}>
+                                            <option
+                                                key={district.code}
+                                                value={district.code}
+                                            >
                                                 {district.name}
                                             </option>
                                         ))}
@@ -345,7 +365,8 @@ function CustomerAdd({ setCustomers, setMode }) {
                             />
 
                             <p className="form-msg-err">
-                                {errors.address?.district && errors.address?.district.message}
+                                {errors.address?.district &&
+                                    errors.address?.district.message}
                             </p>
                         </div>
 
@@ -356,7 +377,7 @@ function CustomerAdd({ setCustomers, setMode }) {
                                 control={control}
                                 name={'address.ward'}
                                 rules={{
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     validate: (value) =>
                                         value !== 'default' || 'Please select this field',
                                 }}
@@ -397,11 +418,12 @@ function CustomerAdd({ setCustomers, setMode }) {
                                 type="text"
                                 placeholder="House Number, Street Name"
                                 {...register('address.houseNumber', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                 })}
                             />
                             <p className="form-msg-err">
-                                {errors.address?.houseNumber && errors.address?.houseNumber.message}
+                                {errors.address?.houseNumber &&
+                                    errors.address?.houseNumber.message}
                             </p>
                         </div>
                     </div>
@@ -448,7 +470,11 @@ function CustomerAdd({ setCustomers, setMode }) {
                         >
                             Cancel
                         </Button>
-                        <Button deepBlack customStyle={styles['submit-btn']} type="submit">
+                        <Button
+                            deepBlack
+                            customStyle={styles['submit-btn']}
+                            type="submit"
+                        >
                             Add customer
                         </Button>
                     </div>

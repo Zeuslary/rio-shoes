@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
+import { patternValidate } from '~/utils';
+
 import api from '~/utils/api';
 import backEndApi from '~/utils/backendApi';
 import provincesApi from '~/utils/provinces';
@@ -277,7 +279,7 @@ function OrderEdit({ orderEdit, setOrderEdit, setMode, setOrders }) {
                                         type="text"
                                         placeholder="House Number, Street Name"
                                         {...register('address.houseNumber', {
-                                            required: 'This field is required',
+                                            required: patternValidate.required,
                                         })}
                                     />
                                     <p className="form-msg-err">
@@ -296,7 +298,7 @@ function OrderEdit({ orderEdit, setOrderEdit, setMode, setOrders }) {
                                         control={control}
                                         name="address.city"
                                         rules={{
-                                            required: 'This field is required',
+                                            required: patternValidate.required,
                                             validate: (value) =>
                                                 value !== 'default' || 'Please select this field',
                                         }}
@@ -337,7 +339,7 @@ function OrderEdit({ orderEdit, setOrderEdit, setMode, setOrders }) {
                                         className="form-select"
                                         name="address.district"
                                         rules={{
-                                            required: 'This field is required',
+                                            required: patternValidate.required,
                                             validate: (value) =>
                                                 value !== 'default' || 'Please select this field',
                                         }}
@@ -381,7 +383,7 @@ function OrderEdit({ orderEdit, setOrderEdit, setMode, setOrders }) {
                                         control={control}
                                         name={'address.ward'}
                                         rules={{
-                                            required: 'This field is required',
+                                            required: patternValidate.required,
                                             validate: (value) =>
                                                 value !== 'default' || 'Please select this field',
                                         }}

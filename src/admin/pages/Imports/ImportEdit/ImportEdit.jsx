@@ -1,17 +1,20 @@
 import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
+import {
+    api,
+    backEndApi,
+    flatObject,
+    patternValidate,
+    toastError,
+    toastSuccess,
+} from '~/utils';
 
-import { toastSuccess, toastError } from '~/utils/toast';
-import flatObject from '~/utils/flatObject';
+import { CartBox } from '~/admin/components';
 import Button from '~/components/Button';
-import CartBox from '~/admin/components/CartBox';
 import styles from './ImportEdit.module.scss';
 
 function ImportEdit({
-    products,
     productImportEdit,
     setProductImportEdit,
     setProductImports,
@@ -23,7 +26,7 @@ function ImportEdit({
         handleSubmit,
     } = useForm({
         defaultValues: {
-            productId: productImportEdit.productId,
+            productId: productImportEdit.productId._id,
             price: productImportEdit.price,
             quantity: productImportEdit.quantity,
             importDate: productImportEdit.importDate.slice(0, 10),
@@ -31,8 +34,6 @@ function ImportEdit({
     });
 
     const handleEdit = async (data) => {
-        console.log('Editing...');
-
         try {
             const result = await api.putById(
                 backEndApi.productImports,
@@ -42,8 +43,11 @@ function ImportEdit({
 
             toastSuccess(result.message);
             setProductImports((prev) =>
-                prev.map((item) => (item._id === productImportEdit._id ? result.data : item)),
+                prev.map((item) =>
+                    item._id === productImportEdit._id ? result.data : item,
+                ),
             );
+
             setProductImportEdit();
             setMode('view');
         } catch (err) {
@@ -68,28 +72,7 @@ function ImportEdit({
                         <label className="form-label" htmlFor="productId">
                             Product Name
                         </label>
-                        <select
-                            className="form-input"
-                            name="productId"
-                            id="productId"
-                            {...register('productId', {
-                                validate: (value) =>
-                                    (value && value !== 'default') || 'You must select this field',
-                            })}
-                        >
-                            <option value="default" disabled>
-                                Select product name
-                            </option>
-                            {products.map((product) => (
-                                <option
-                                    key={product._id}
-                                    value={product._id}
-                                >{`${product.name} - ${product._id}`}</option>
-                            ))}
-                        </select>
-                        <p className="form-msg-err">
-                            {errors.productId && errors.productId.message}
-                        </p>
+                        <p className="form-input">{`${productImportEdit.productId.name} - ${productImportEdit.productId._id}`}</p>
                     </div>
 
                     <div className="row">
@@ -104,12 +87,14 @@ function ImportEdit({
                                 placeholder="Eg: 20000"
                                 id="price"
                                 {...register('price', {
-                                    required: 'This field is required',
-                                    min: 0,
-                                    valueAsNumber: true,
+                                    required: patternValidate.required,
+                                    min: patternValidate.min1,
+                                    valueAsNumber: patternValidate.mustNumber,
                                 })}
                             />
-                            <p className="form-msg-err">{errors.price && errors.price.message}</p>
+                            <p className="form-msg-err">
+                                {errors.price && errors.price.message}
+                            </p>
                         </div>
 
                         {/* Quantity */}
@@ -123,9 +108,9 @@ function ImportEdit({
                                 placeholder="Eg: 20000"
                                 id="quantity"
                                 {...register('quantity', {
-                                    required: 'This field is required',
-                                    min: 1,
-                                    valueAsNumber: true,
+                                    required: patternValidate.required,
+                                    min: patternValidate.min1,
+                                    valueAsNumber: patternValidate.mustNumber,
                                 })}
                             />
                             <p className="form-msg-err">
@@ -143,7 +128,7 @@ function ImportEdit({
                                 type="date"
                                 id="importDate"
                                 {...register('importDate', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     valueAsDate: true,
                                 })}
                             />
@@ -162,7 +147,11 @@ function ImportEdit({
                         >
                             Cancel
                         </Button>
-                        <Button deepBlack customStyle={styles['submit-btn']} type="submit">
+                        <Button
+                            deepBlack
+                            customStyle={styles['submit-btn']}
+                            type="submit"
+                        >
                             Update Product Import
                         </Button>
                     </div>

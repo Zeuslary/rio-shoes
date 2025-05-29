@@ -58,7 +58,7 @@ function AccountSecurity() {
                             id="password"
                             name="password"
                             {...register('password', {
-                                required: 'This field is required',
+                                required: patternValidate.required,
                                 minLength: patternValidate.password,
                             })}
                         />
@@ -74,7 +74,7 @@ function AccountSecurity() {
                             id="newPassword"
                             name="newPassword"
                             {...register('newPassword', {
-                                required: 'This field is required',
+                                required: patternValidate.required,
                                 minLength: patternValidate.password,
                             })}
                         />
@@ -94,7 +94,7 @@ function AccountSecurity() {
                             id="confirmNewPassword"
                             name="confirmNewPassword"
                             {...register('confirmNewPassword', {
-                                required: 'This field is required',
+                                required: patternValidate.required,
                                 validate: (value) =>
                                     value === newPassword || 'Passwords do not match',
                             })}

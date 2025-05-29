@@ -1,35 +1,42 @@
-import { toastSuccess, toastError } from '~/utils/toast';
+import {
+    api,
+    backEndApi,
+    styleStatus,
+    toastSuccess,
+    toastError,
+    upperCaseFirstLetter,
+} from '~/utils';
 
-import styleStatus from '~/utils/styleStatus';
-import api from '~/utils/api.js';
-import backEndApi from '~/utils/backendApi';
 import { DeleteIcon, EditIcon } from '~/assets/icons';
+import { CartBox } from '~/admin/components';
 import styles from './PaymentList.module.scss';
 
-function PaymentList({ payments, setPayments, setPaymentAction, setPaymentEdit }) {
+function PaymentList({ payments, setPayments, setPaymentEdit, setMode }) {
     const handleDelete = async (id) => {
         try {
             const deletePayment = await api.deleteById(backEndApi.payment, id);
 
-            if (deletePayment) {
-                console.log('Delete successful!', deletePayment);
-                setPayments((prev) => prev.filter((payment) => payment._id !== id));
-                toastSuccess('Delete successfully!');
-            }
+            setPayments((prev) => prev.filter((payment) => payment._id !== id));
+            toastSuccess(deletePayment.message);
         } catch (err) {
-            console.error('Delete error!', err);
-            toastError('Delete failed!');
+            console.error('Delete payment failed...', err);
+            toastError('Delete payment error!');
         }
     };
 
+    const handleEdit = (payment) => {
+        setPaymentEdit(payment);
+        setMode('edit');
+    };
+
     return (
-        <div className={styles['wrapper']}>
+        <CartBox>
             <table className={styles['table']}>
                 {/* Header */}
                 <thead>
                     <tr>
                         <th>Code</th>
-                        <th>Method Name</th>
+                        <th>Name</th>
                         <th>Description</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -52,17 +59,13 @@ function PaymentList({ payments, setPayments, setPaymentAction, setPaymentEdit }
 
                             <td>
                                 <span className={styleStatus(payment.status)}>
-                                    {payment.status.slice(0, 1).toUpperCase() +
-                                        payment.status.slice(1)}
+                                    {upperCaseFirstLetter(payment.status)}
                                 </span>
                             </td>
                             <td>
                                 <button
                                     className={styles['btn']}
-                                    onClick={() => {
-                                        setPaymentEdit(payment);
-                                        setPaymentAction('edit');
-                                    }}
+                                    onClick={() => handleEdit(payment)}
                                 >
                                     <EditIcon />
                                 </button>
@@ -77,7 +80,7 @@ function PaymentList({ payments, setPayments, setPaymentAction, setPaymentEdit }
                     ))}
                 </tbody>
             </table>
-        </div>
+        </CartBox>
     );
 }
 

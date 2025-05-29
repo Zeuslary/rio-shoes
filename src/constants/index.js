@@ -15,3 +15,6 @@ export const IMG_CUSTOMER_PATH = `${FRONT_END_URL}/${UPLOAD_FOLDERS.customer}/`;
 
 export const STATUSES = ['active', 'inactive', 'banned'];
 export const ROLES = ['admin', 'super admin'];
+export const STATUSES_VOUCHER = ['active', 'scheduled', 'expired'];
+export const DISCOUNT_TYPES = ['fixed', 'percent'];
+export const ARRANGE_TYPES = ['descending', 'ascending'];

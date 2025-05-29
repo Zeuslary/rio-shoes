@@ -85,7 +85,7 @@ function Login() {
                         id="username"
                         placeholder="Enter your username"
                         {...register('username', {
-                            required: 'This field is required',
+                            required: patternValidate.required,
                             pattern: patternValidate.alphaNumUnderscoreOnly,
                         })}
                     />
@@ -102,7 +102,7 @@ function Login() {
                         id="password"
                         placeholder="Enter your password"
                         {...register('password', {
-                            required: 'This field is required',
+                            required: patternValidate.required,
                             minLength: patternValidate.password,
                         })}
                     />

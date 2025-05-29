@@ -1,16 +1,27 @@
 import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
+import { useContext, useEffect, useState } from 'react';
 
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
+import { ProfileContext } from '~/components/ProfileProvider';
 
-import { toastSuccess, toastError } from '~/utils/toast';
-import flatObject from '~/utils/flatObject';
+import {
+    api,
+    backEndApi,
+    patternValidate,
+    flatObject,
+    toastError,
+    toastSuccess,
+} from '~/utils';
+
+import { CartBox } from '~/admin/components';
+
 import Button from '~/components/Button';
-import CartBox from '~/admin/components/CartBox';
 import styles from './ImportAdd.module.scss';
 
-function ImportAdd({ products, setProductImports, setMode }) {
+function ImportAdd({ setProductImports, setMode }) {
+    const [products, setProducts] = useState([]);
+    const { profile } = useContext(ProfileContext);
+
     const {
         register,
         formState: { errors },
@@ -21,17 +32,40 @@ function ImportAdd({ products, setProductImports, setMode }) {
             price: '',
             quantity: '',
             importDate: new Date().toISOString().slice(0, 10),
+            createdBy: profile._id,
         },
     });
 
+    useEffect(() => {
+        const fetchingData = async () => {
+            try {
+                const res = await api.getAll(backEndApi.productMinimal);
+
+                setProducts(res);
+            } catch (err) {
+                toastError(err?.response?.data?.message || 'Fetching products error!');
+            }
+        };
+
+        fetchingData();
+    }, []);
+
     const handleAdd = async (data) => {
-        console.log('Adding...', data);
         try {
             const result = await api.post(backEndApi.productImports, flatObject(data));
 
-            console.log('Create product import successfully!', result);
             toastSuccess(result.message);
-            setProductImports((prev) => [...prev, result.data]);
+
+            // Add name inside productId
+            const productId = products.find((product) => product._id === data.productId);
+
+            setProductImports((prev) => [
+                ...prev,
+                {
+                    ...result.data,
+                    productId,
+                },
+            ]);
             setMode('view');
         } catch (err) {
             console.error('Add product import failed...', err);
@@ -59,7 +93,9 @@ function ImportAdd({ products, setProductImports, setMode }) {
                                     value !== 'default' || 'You must select this field',
                             })}
                         >
-                            <option value="default">Select product name</option>
+                            <option value="default" disabled>
+                                Select product name
+                            </option>
                             {products.map((product) => (
                                 <option
                                     key={product._id}
@@ -84,12 +120,14 @@ function ImportAdd({ products, setProductImports, setMode }) {
                                 placeholder="Eg: 20000"
                                 id="price"
                                 {...register('price', {
-                                    required: 'This field is required',
-                                    min: 0,
-                                    valueAsNumber: true,
+                                    required: patternValidate.required,
+                                    min: patternValidate.min1,
+                                    valueAsNumber: patternValidate.mustNumber,
                                 })}
                             />
-                            <p className="form-msg-err">{errors.price && errors.price.message}</p>
+                            <p className="form-msg-err">
+                                {errors.price && errors.price.message}
+                            </p>
                         </div>
 
                         {/* Quantity */}
@@ -103,9 +141,9 @@ function ImportAdd({ products, setProductImports, setMode }) {
                                 placeholder="Eg: 20000"
                                 id="quantity"
                                 {...register('quantity', {
-                                    required: 'This field is required',
-                                    min: 1,
-                                    valueAsNumber: true,
+                                    required: patternValidate.required,
+                                    min: patternValidate.min1,
+                                    valueAsNumber: patternValidate.mustNumber,
                                 })}
                             />
                             <p className="form-msg-err">
@@ -123,7 +161,7 @@ function ImportAdd({ products, setProductImports, setMode }) {
                                 type="date"
                                 id="importDate"
                                 {...register('importDate', {
-                                    required: 'This field is required',
+                                    required: patternValidate.required,
                                     valueAsDate: true,
                                 })}
                             />
@@ -142,7 +180,11 @@ function ImportAdd({ products, setProductImports, setMode }) {
                         >
                             Cancel
                         </Button>
-                        <Button deepBlack customStyle={styles['submit-btn']} type="submit">
+                        <Button
+                            deepBlack
+                            customStyle={styles['submit-btn']}
+                            type="submit"
+                        >
                             Add Product Import
                         </Button>
                     </div>

@@ -1,3 +1,8 @@
+const required = {
+    value: true,
+    message: 'This field is required',
+};
+
 const email = {
     value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
     message: 'Email is not valid',
@@ -24,10 +29,29 @@ const password = {
     message: 'Password must be at least 6 characters',
 };
 
+const min0 = {
+    value: 0,
+    message: 'Value must be greater than or equal to 0',
+};
+
+const min1 = {
+    value: 1,
+    message: 'Value must be greater than or equal to 1',
+};
+
+const mustNumber = {
+    value: true,
+    message: 'This field must be number',
+};
+
 export default {
+    required,
     email,
     phone,
     alphaNumUnderscoreOnly,
     password,
     minLength3,
+    min0,
+    min1,
+    mustNumber,
 };

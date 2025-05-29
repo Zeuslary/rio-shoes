@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import { Link } from 'react-router';
 import { useForm } from 'react-hook-form';
 
+import { patternValidate } from '~/utils';
+
 import Button from '~/components/Button';
 import routes from '~/config/routes';
 import styles from './Register.module.scss';
@@ -35,7 +37,7 @@ function Register() {
                         id="username"
                         placeholder="Enter your username"
                         {...register('username', {
-                            required: 'This field is required',
+                            required: patternValidate.required,
                             minLength: {
                                 value: 3,
                                 message: 'Username must be at least 3 characters',
@@ -65,7 +67,7 @@ function Register() {
                         id="password"
                         placeholder="Enter your password"
                         {...register('password', {
-                            required: 'This field is required',
+                            required: patternValidate.required,
                             minLength: {
                                 value: 6,
                                 message: 'Password must be at least 6 characters',
@@ -87,7 +89,7 @@ function Register() {
                         id="confirm-password"
                         placeholder="Confirm your password"
                         {...register('confirmPassword', {
-                            required: 'This field is required',
+                            required: patternValidate.required,
                             validate: (value) =>
                                 value === watch('password') || 'Your passwords do no match',
                         })}

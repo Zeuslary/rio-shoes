@@ -1,22 +1,20 @@
 import { useEffect, useState } from 'react';
 
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
+import { api, backEndApi, toastError } from '~/utils';
 
 import BrandAdd from './BrandAdd';
 import BrandList from './BrandList';
 import BrandEdit from './BrandEdit';
 
-import { toastError } from '~/utils/toast';
 import { ReturnIcon } from '~/assets/icons';
-import CartBox from '~/admin/components/CartBox';
 import Button from '~/components/Button';
 import styles from './Brands.module.scss';
 
 function Brands() {
     const [brands, setBrands] = useState([]);
-    const [mode, setMode] = useState('view');
+
     const [brandEdit, setBrandEdit] = useState();
+    const [mode, setMode] = useState('view');
 
     useEffect(() => {
         const fetchingData = async () => {
@@ -37,26 +35,31 @@ function Brands() {
         setMode('view');
     };
 
+    const handleOpenAdd = () => {
+        setBrandEdit();
+        setMode('add');
+    };
+
     return (
         <div className={styles['wrapper']}>
             <h2 className={styles['header']}>Brands</h2>
             <p className={styles['header-desc']}>{`${brands.length || 0} Brands`} </p>
-            <Button deepBlack customStyle={styles['add-btn']} onClick={() => setMode('add')}>
-                Add new brand
-            </Button>
+
+            {/* Button add */}
+            {mode !== 'add' && (
+                <Button deepBlack customStyle={styles['add-btn']} onClick={handleOpenAdd}>
+                    Add new brand
+                </Button>
+            )}
 
             {/* Mode view*/}
             {mode === 'view' && (
-                <div className="mt-24">
-                    <CartBox>
-                        <BrandList
-                            brands={brands}
-                            setBrands={setBrands}
-                            setMode={setMode}
-                            setBrandEdit={setBrandEdit}
-                        />
-                    </CartBox>
-                </div>
+                <BrandList
+                    brands={brands}
+                    setBrands={setBrands}
+                    setMode={setMode}
+                    setBrandEdit={setBrandEdit}
+                />
             )}
 
             {/* Back to view */}

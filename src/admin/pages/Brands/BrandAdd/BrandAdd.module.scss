@@ -4,7 +4,7 @@
 }
 
 .header {
-    margin: 24px 0 16px;
+    margin: 12px 0;
     font-size: 2.2rem;
     text-align: center;
     text-transform: uppercase;
@@ -15,10 +15,11 @@
 }
 
 .logo {
-    --edge: 70px;
+    --edge: 90px;
     width: var(--edge);
     height: var(--edge);
-    align-self: center;
+
     border-radius: 50%;
-    margin-right: 12px;
+    margin: 24px auto;
+    display: block;
 }

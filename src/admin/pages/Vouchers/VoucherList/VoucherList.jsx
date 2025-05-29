@@ -1,9 +1,13 @@
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
+import {
+    api,
+    backEndApi,
+    toastError,
+    toastSuccess,
+    formatCurrencyVN,
+    upperCaseFirstLetter,
+} from '~/utils';
 
-import { toastSuccess, toastError } from '~/utils/toast';
 import { DeleteIcon, EditIcon, EyeIcon } from '~/assets/icons';
-import formatCurrencyVN from '~/utils/formatCurrency';
 import styles from './VoucherList.module.scss';
 
 function VoucherList({ vouchers, setVouchers, setMode, setViewDetail, setVoucherEdit }) {
@@ -13,14 +17,13 @@ function VoucherList({ vouchers, setVouchers, setMode, setViewDetail, setVoucher
     };
 
     const handleDelete = async (voucher) => {
-        console.log('Deleting...', voucher);
         try {
             const deleteVoucher = await api.deleteById(backEndApi.voucher, voucher._id);
 
-            console.log('Delete: ', deleteVoucher);
-
             toastSuccess(deleteVoucher.message);
-            setVouchers((prev) => prev.filter((voucher) => voucher._id !== deleteVoucher.data._id));
+            setVouchers((prev) =>
+                prev.filter((voucher) => voucher._id !== deleteVoucher.data._id),
+            );
         } catch (err) {
             console.error('Delete voucher failed...', err);
             toastError('Delete voucher error');
@@ -91,13 +94,10 @@ function VoucherList({ vouchers, setVouchers, setMode, setViewDetail, setVoucher
                                             ? 'green-color'
                                             : voucher.status === 'scheduled'
                                             ? 'orange-color'
-                                            : voucher.status === 'expired'
-                                            ? 'red-color'
-                                            : 'blue-color'
+                                            : 'red-color'
                                     }
                                 >
-                                    {voucher.status.slice(0, 1).toUpperCase() +
-                                        voucher.status.slice(1)}
+                                    {upperCaseFirstLetter(voucher.status)}
                                 </span>
                             </td>
                             <td>

@@ -1,38 +1,30 @@
 import { useEffect, useState } from 'react';
 
-import api from '~/utils/api.js';
-import backEndApi from '~/utils/backendApi';
+import { api, backEndApi, toastError } from '~/utils';
 
 import ImportList from './ImportList';
 import ImportAdd from './ImportAdd';
 import ImportEdit from './ImportEdit';
 
-import { toastError } from '~/utils/toast';
+import { CartBox } from '~/admin/components';
 import { ReturnIcon } from '~/assets/icons';
-import CartBox from '~/admin/components/CartBox';
 import Button from '~/components/Button';
 import styles from './Imports.module.scss';
 
 function Imports() {
     const [productImports, setProductImports] = useState([]);
-    const [products, setProducts] = useState([]);
-    const [sortImportDate, setSortImportDate] = useState('');
 
     const [mode, setMode] = useState('view');
+    const [sortImportDate, setSortImportDate] = useState('');
     const [productImportEdit, setProductImportEdit] = useState();
 
-    // Fetching product imports and products
+    // Fetching product imports
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const data = await api.getAll(backEndApi.productImports);
 
-                console.log('Fetching data successfully!', data);
-
                 setProductImports(data);
-
-                const dataProd = await api.getAll(backEndApi.product);
-                setProducts(dataProd);
             } catch (err) {
                 console.error('Fetching vouchers failed...', err);
                 toastError('Fetching data error!');
@@ -44,13 +36,12 @@ function Imports() {
 
     useEffect(() => {
         console.group('Value');
-        console.log('products: ', products);
         console.log('productImports: ', productImports);
         console.log('sortImportDate: ', sortImportDate);
         console.log('productImportEdit: ', productImportEdit);
         console.log('mode: ', mode);
         console.groupEnd();
-    }, [productImports, sortImportDate, mode, products, productImportEdit]);
+    }, [productImports, sortImportDate, mode, productImportEdit]);
 
     // Arrange base on import date
     const sortData = productImports.sort((importA, importB) => {
@@ -75,7 +66,9 @@ function Imports() {
     return (
         <div className={styles['wrapper']}>
             <h2 className={styles['header']}>Imports</h2>
-            <p className={styles['header-desc']}>{`${productImports.length || 0} Imports`} </p>
+            <p className={styles['header-desc']}>
+                {`${productImports.length || 0} Imports`}{' '}
+            </p>
             {mode !== 'add' && (
                 <Button deepBlack customStyle={styles['add-btn']} onClick={handleOpenAdd}>
                     Add new product import
@@ -120,7 +113,6 @@ function Imports() {
                     <div className={styles['list']}>
                         <CartBox>
                             <ImportList
-                                products={products}
                                 productImports={sortData}
                                 setProductImports={setProductImports}
                                 setProductImportEdit={setProductImportEdit}
@@ -140,17 +132,12 @@ function Imports() {
 
             {/* Mode: add */}
             {mode === 'add' && (
-                <ImportAdd
-                    products={products}
-                    setProductImports={setProductImports}
-                    setMode={setMode}
-                />
+                <ImportAdd setProductImports={setProductImports} setMode={setMode} />
             )}
 
             {/* Mode: edit */}
             {mode === 'edit' && (
                 <ImportEdit
-                    products={products}
                     productImportEdit={productImportEdit}
                     setProductImportEdit={setProductImportEdit}
                     setProductImports={setProductImports}

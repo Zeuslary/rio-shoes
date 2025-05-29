@@ -1,18 +1,23 @@
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
-import { toastSuccess, toastError } from '~/utils/toast';
+import {
+    api,
+    backEndApi,
+    formatCurrencyVN,
+    styleStatus,
+    toastError,
+    toastSuccess,
+    upperCaseFirstLetter,
+} from '~/utils';
 
-import styleStatus from '~/utils/styleStatus';
-import formatCurrencyVN from '~/utils/formatCurrency';
 import { DeleteIcon, EditIcon } from '~/assets/icons';
 import styles from './ShippingList.module.scss';
 
 function ShippingList({ shippings, setShippings, setMode, setShippingEdit }) {
     const handleDelete = async (id) => {
         try {
-            await api.deleteById(backEndApi.shipping, id);
+            const result = await api.deleteById(backEndApi.shipping, id);
+
             setShippings((prev) => prev.filter((shipping) => shipping._id !== id));
-            toastSuccess('Delete shipping successfully!');
+            toastSuccess(result.message);
         } catch (err) {
             console.error('Delete shipping failed...', err);
             toastError('Delete shipping failed, please check again!');
@@ -44,10 +49,7 @@ function ShippingList({ shippings, setShippings, setMode, setShippingEdit }) {
                     {shippings.map((shipping) => (
                         <tr key={shipping._id}>
                             <td>
-                                <span>
-                                    {shipping.name.slice(0, 1).toUpperCase() +
-                                        shipping.name.slice(1)}
-                                </span>
+                                <span>{upperCaseFirstLetter(shipping.name)}</span>
                             </td>
                             <td>
                                 <span>{shipping.description}</span>
@@ -61,8 +63,7 @@ function ShippingList({ shippings, setShippings, setMode, setShippingEdit }) {
 
                             <td>
                                 <span className={styleStatus(shipping.status)}>
-                                    {shipping.status.slice(0, 1).toUpperCase() +
-                                        shipping.status.slice(1)}
+                                    {upperCaseFirstLetter(shipping.status)}
                                 </span>
                             </td>
                             <td>

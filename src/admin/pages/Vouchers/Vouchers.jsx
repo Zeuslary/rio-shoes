@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
 
-import api from '~/utils/api.js';
-import backEndApi from '~/utils/backendApi';
+import { api, backEndApi, toastError, upperCaseFirstLetter } from '~/utils';
+import { ARRANGE_TYPES, DISCOUNT_TYPES, STATUSES_VOUCHER } from '~/constants';
 
+import VoucherList from './VoucherList';
 import VoucherViewDetail from './VoucherViewDetail';
 import VoucherAdd from './VoucherAdd';
 import VoucherEdit from './VoucherEdit';
 
-import { toastError } from '~/utils/toast';
 import { ReturnIcon } from '~/assets/icons';
 import CartBox from '~/admin/components/CartBox';
 import Button from '~/components/Button';
-import VoucherList from './VoucherList';
 import styles from './Vouchers.module.scss';
 
 function Vouchers() {
@@ -23,8 +22,6 @@ function Vouchers() {
     const [mode, setMode] = useState('view');
     const [viewDetail, setViewDetail] = useState();
     const [voucherEdit, setVoucherEdit] = useState();
-
-    const statuses = ['active', 'scheduled', 'expired'];
 
     useEffect(() => {
         const fetchData = async () => {
@@ -48,8 +45,9 @@ function Vouchers() {
         console.log('vouchers: ', vouchers);
         console.log('mode: ', mode);
         console.log('viewDetail: ', viewDetail);
+        console.log('voucherEdit: ', voucherEdit);
         console.groupEnd();
-    }, [filterStatus, filterDiscountType, sortQuantity, vouchers, mode, viewDetail]);
+    }, [filterStatus, filterDiscountType, sortQuantity, vouchers, mode, viewDetail, voucherEdit]);
 
     // Filter vouchers
     const vouchersFilter = vouchers
@@ -60,14 +58,21 @@ function Vouchers() {
             filterDiscountType ? voucher.discountType === filterDiscountType : true,
         )
         .sort((voucherA, voucherB) => {
-            if (sortQuantity === 'asc') return voucherA.quantity - voucherB.quantity;
-            if (sortQuantity === 'desc') return voucherB.quantity - voucherA.quantity;
+            if (sortQuantity === 'ascending') return voucherA.quantity - voucherB.quantity;
+            if (sortQuantity === 'descending') return voucherB.quantity - voucherA.quantity;
             return 0; // No sorting if nothing is selected
         });
 
     const handleBack = () => {
         setViewDetail();
+        setVoucherEdit();
         setMode('view');
+    };
+
+    const handleOpenAdd = () => {
+        setViewDetail();
+        setVoucherEdit();
+        setMode('add');
     };
 
     return (
@@ -75,7 +80,7 @@ function Vouchers() {
             <h2 className={styles['header']}>Vouchers</h2>
             <p className={styles['header-desc']}>{`${vouchers.length || 0} Vouchers`} </p>
             {mode !== 'add' && (
-                <Button deepBlack customStyle={styles['add-btn']} onClick={() => setMode('add')}>
+                <Button deepBlack customStyle={styles['add-btn']} onClick={handleOpenAdd}>
                     Add new voucher
                 </Button>
             )}
@@ -93,10 +98,9 @@ function Vouchers() {
                                     onChange={(e) => setFilterStatus(e.target.value)}
                                 >
                                     <option value="">All Status</option>
-                                    {statuses.map((status) => (
+                                    {STATUSES_VOUCHER.map((status) => (
                                         <option key={status} value={status}>
-                                            Status:{' '}
-                                            {status.slice(0, 1).toUpperCase() + status.slice(1)}
+                                            {`Status: ${upperCaseFirstLetter(status)}`}
                                         </option>
                                     ))}
                                 </select>
@@ -108,8 +112,12 @@ function Vouchers() {
                                     onChange={(e) => setFilterDiscountType(e.target.value)}
                                 >
                                     <option value="">All Discount type</option>
-                                    <option value="fixed">Type: Fixed</option>
-                                    <option value="percent">Type: Percent</option>
+                                    {DISCOUNT_TYPES.map((type) => (
+                                        <option
+                                            key={type}
+                                            value={type}
+                                        >{`Type: ${upperCaseFirstLetter(type)}`}</option>
+                                    ))}
                                 </select>
 
                                 {/* Arrange follow quantity */}
@@ -121,8 +129,12 @@ function Vouchers() {
                                     <option value="" disabled hidden>
                                         Arrange quantity
                                     </option>
-                                    <option value="desc">Quantity Descending</option>
-                                    <option value="asc">Quantity Ascending</option>
+                                    {ARRANGE_TYPES.map((type) => (
+                                        <option
+                                            key={type}
+                                            value={type}
+                                        >{`Quantity: ${upperCaseFirstLetter(type)}`}</option>
+                                    ))}
                                 </select>
                             </div>
 

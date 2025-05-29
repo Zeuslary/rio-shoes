@@ -1,7 +1,6 @@
-import { useFormContext } from 'react-hook-form';
 import clsx from 'clsx';
-
-import styles from './CheckboxGroup.module.scss';
+import { useFormContext } from 'react-hook-form';
+import { upperCaseFirstLetter } from '~/utils';
 
 function CheckboxGroup({ label, nameRegister, options = [], required }) {
     const {
@@ -22,13 +21,18 @@ function CheckboxGroup({ label, nameRegister, options = [], required }) {
                             required: required,
                         })}
                     />
-                    <label className="form-label-checkbox" htmlFor={`${nameRegister}-${option}`}>
-                        {option.slice(0, 1).toUpperCase() + option.slice(1)}
+                    <label
+                        className="form-label-checkbox"
+                        htmlFor={`${nameRegister}-${option}`}
+                    >
+                        {upperCaseFirstLetter(option)}
                     </label>
                 </div>
             ))}
 
-            <p className="form-msg-err">{errors[nameRegister] && errors[nameRegister].message}</p>
+            <p className="form-msg-err">
+                {errors[nameRegister] && errors[nameRegister].message}
+            </p>
         </div>
     );
 }
