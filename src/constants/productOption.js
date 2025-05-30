@@ -1,6 +1,6 @@
 // Some default select
-export const categories = ['shoes', 'sneakers', 'sandals', 'boots', 'slippers', 'accessories'];
-export const types = [
+const categories = ['shoes', 'sneakers', 'sandals', 'boots', 'slippers', 'accessories'];
+const types = [
     'sport',
     'lifestyle',
     'casual',
@@ -10,7 +10,7 @@ export const types = [
     'running',
     'walking',
 ];
-export const designs = [
+const designs = [
     'classic',
     'sporty',
     'elegant',
@@ -20,8 +20,8 @@ export const designs = [
     'futuristic',
     'artistic',
 ];
-export const stylesProduct = ['low-top', 'mid-top', 'high-top', 'modern'];
-export const materials = [
+const stylesProduct = ['low-top', 'mid-top', 'high-top', 'modern'];
+const materials = [
     'leather',
     'canvas',
     'mesh',
@@ -31,11 +31,11 @@ export const materials = [
     'suede',
     'nylon',
 ];
-export const genders = ['male', 'female', 'unisex', 'kids'];
-export const statuses = ['active', 'inactive', 'banned'];
-export const tags = ['hot', 'new', 'sale', 'best-seller', 'limited-edition', 'exclusive'];
-export const fakeHots = ['true', 'false'];
-export const sizes = [
+const genders = ['male', 'female', 'unisex', 'kids'];
+const statuses = ['active', 'inactive', 'banned'];
+const tags = ['hot', 'new', 'sale', 'best-seller', 'limited-edition', 'exclusive'];
+const fakeHots = ['true', 'false'];
+const sizes = [
     '35',
     '35.5',
     '36',
@@ -59,3 +59,35 @@ export const sizes = [
     '45',
     '45.5',
 ];
+
+const colors = [
+    'black',
+    'white',
+    'gray',
+    'navy',
+    'red',
+    'blue',
+    'brown',
+    'beige',
+    'green',
+    'yellow',
+    'pink',
+    'orange',
+    'purple',
+    'cream',
+    'olive',
+];
+
+export default {
+    categories,
+    types,
+    designs,
+    stylesProduct,
+    materials,
+    genders,
+    statuses,
+    tags,
+    fakeHots,
+    sizes,
+    colors,
+};

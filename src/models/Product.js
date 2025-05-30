@@ -41,7 +41,11 @@ const productSchema = new Schema(
         galleryImages: [String],
         tag: [String],
         fakeHot: Boolean, // Desc: Sometime you want to fake that this product is hot
-        status: { type: String, enum: ['active', 'inactive', 'banned'], default: 'active' },
+        status: {
+            type: String,
+            enum: ['active', 'inactive', 'banned'],
+            default: 'active',
+        },
         feature: String, // Eg: Lightweight, Durable
         gender: String,
         createdBy: { type: Types.ObjectId, ref: 'Admin' },

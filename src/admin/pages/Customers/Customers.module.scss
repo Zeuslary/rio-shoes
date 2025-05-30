@@ -21,12 +21,18 @@
 }
 
 // Filter left
+.filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -6px;
+}
+
 .filter-select {
     min-width: 168px;
     border-radius: 4px;
     padding: 8px;
     cursor: pointer;
-    margin: 0 12px 12px;
+    margin: 6px;
 
     appearance: base-select;
 
@@ -35,7 +41,7 @@
     }
 }
 
-// Filter right
+// Search
 .search {
     display: flex;
     height: 36px;
@@ -52,9 +58,4 @@
 .search-btn {
     height: 100%;
     margin-left: 12px;
-}
-
-// Order list
-.order-list {
-    margin-top: 24px;
 }

@@ -1,16 +1,25 @@
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
-
-import { toastError, toastSuccess } from '~/utils/toast';
-import formatCurrencyVN from '~/utils/formatCurrency';
+import {
+    api,
+    backEndApi,
+    formatCurrencyVN,
+    styleStatus,
+    toastError,
+    toastSuccess,
+} from '~/utils';
 
 import { IMG_CUSTOMER_PATH } from '~/constants';
 import { DeleteIcon, EditIcon, EyeIcon } from '~/assets/icons';
+import { CartBox } from '~/admin/components';
 import Image from '~/components/Image';
-import styleStatus from '~/utils/styleStatus';
 import styles from './CustomerList.module.scss';
 
-function CustomerList({ customers, setCustomers, setViewDetail, setCustomerEdit, setMode }) {
+function CustomerList({
+    customers,
+    setCustomers,
+    setViewDetail,
+    setCustomerEdit,
+    setMode,
+}) {
     const handleViewDetail = (customers) => {
         setViewDetail(customers);
         setMode('view-detail');
@@ -18,7 +27,10 @@ function CustomerList({ customers, setCustomers, setViewDetail, setCustomerEdit,
 
     const handleDelete = async (customer) => {
         try {
-            const deleteCustomer = await api.deleteById(backEndApi.customer, customer._id);
+            const deleteCustomer = await api.deleteById(
+                backEndApi.customer,
+                customer._id,
+            );
 
             console.log('Deleting customer successfully!', deleteCustomer);
             setCustomers((prev) =>
@@ -38,7 +50,7 @@ function CustomerList({ customers, setCustomers, setViewDetail, setCustomerEdit,
     };
 
     return (
-        <div className={styles['wrapper']}>
+        <CartBox>
             <table className={styles['table']}>
                 {/* Header */}
                 <thead>
@@ -126,7 +138,7 @@ function CustomerList({ customers, setCustomers, setViewDetail, setCustomerEdit,
                     ))}
                 </tbody>
             </table>
-        </div>
+        </CartBox>
     );
 }
 

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
+import { api, backEndApi, uniqueObjectFromArray, upperCaseFirstLetter } from '~/utils';
 
 import ProductList from './ProductList';
 import ProductViewDetail from './ProductViewDetail';
@@ -11,7 +10,6 @@ import ProductEdit from './ProductEdit';
 import { ReturnIcon } from '~/assets/icons';
 import CartBox from '~/admin/components/CartBox';
 import Button from '~/components/Button';
-import Pagination from '~/components/Pagination';
 import styles from './Products.module.scss';
 
 function Products() {
@@ -28,11 +26,10 @@ function Products() {
         const fetchProducts = async () => {
             try {
                 const res = await api.getAll(backEndApi.product);
-                console.log('Fetching products successfully!');
 
-                const resBrands = await api.getAll(backEndApi.brand);
-
-                setBrands(resBrands);
+                // BrandId: {_id, name} -> get brandIdArr to get unique brand
+                const brandIdArr = res.map((product) => product.brandId);
+                setBrands(uniqueObjectFromArray(brandIdArr));
 
                 setProducts(res);
             } catch (err) {
@@ -45,7 +42,7 @@ function Products() {
 
     // Filter products
     const items = products.filter((item) => {
-        if (filter) return item.brandId === filter._id;
+        if (filter) return item.brandId._id === filter;
 
         return item;
     });
@@ -64,16 +61,25 @@ function Products() {
         console.log('edit product: ', productEdit);
         console.log('Filter: ', filter);
         console.log('Brands: ', brands);
+        console.log('products: ', products);
         console.groupEnd();
-    }, [mode, productViewDetail, productEdit, filter, brands]);
+    }, [mode, productViewDetail, productEdit, filter, brands, products]);
 
     return (
         <div className={styles['wrapper']}>
             <h2 className={styles['header']}>Products</h2>
             <p className={styles['header-desc']}>{`${products.length || 0} products`} </p>
-            <Button deepBlack customStyle={styles['add-btn']} onClick={() => setMode('add')}>
-                Add new product
-            </Button>
+
+            {/* Button add */}
+            {mode !== 'add' && (
+                <Button
+                    deepBlack
+                    customStyle={styles['add-btn']}
+                    onClick={() => setMode('add')}
+                >
+                    Add new product
+                </Button>
+            )}
 
             {/* Mode: view */}
             {mode === 'view' && (
@@ -83,24 +89,27 @@ function Products() {
                         <div className="space-between">
                             <div className={styles['filters']}>
                                 <Button
-                                    customStyle={styles[!filter ? 'active-brand-btn' : 'brand-btn']}
+                                    customStyle={
+                                        styles[!filter ? 'active-brand-btn' : 'brand-btn']
+                                    }
                                     onClick={() => setFilter('')}
                                 >
                                     All product
                                 </Button>
+
                                 {brands.map((brand) => (
                                     <Button
                                         key={brand._id}
                                         customStyle={
                                             styles[
-                                                filter.name === brand.name
+                                                filter === brand._id
                                                     ? 'active-brand-btn'
                                                     : 'brand-btn'
                                             ]
                                         }
-                                        onClick={() => setFilter(brand)}
+                                        onClick={() => setFilter(brand._id)}
                                     >
-                                        {brand.name}
+                                        {upperCaseFirstLetter(brand.name)}
                                     </Button>
                                 ))}
                             </div>
@@ -119,21 +128,18 @@ function Products() {
                     </CartBox>
 
                     <div className="mt-24">
-                        <CartBox>
-                            <ProductList
-                                products={items}
-                                setProducts={setProducts}
-                                brands={brands}
-                                setMode={setMode}
-                                setProductViewDetail={setProductViewDetail}
-                                setProductEdit={setProductEdit}
-                            />
-                        </CartBox>
+                        <ProductList
+                            products={items}
+                            setProducts={setProducts}
+                            setProductViewDetail={setProductViewDetail}
+                            setProductEdit={setProductEdit}
+                            setMode={setMode}
+                        />
                     </div>
                 </div>
             )}
 
-            {/* Button Back into Mode view */}
+            {/* Button Back  */}
             {mode !== 'view' && (
                 <Button leftIcon={<ReturnIcon />} gray onClick={handleBack}>
                     Back
@@ -142,7 +148,10 @@ function Products() {
 
             {/* Mode: view-detail */}
             {mode === 'view-detail' && (
-                <ProductViewDetail productViewDetail={productViewDetail} brands={brands} />
+                <ProductViewDetail
+                    productViewDetail={productViewDetail}
+                    brands={brands}
+                />
             )}
 
             {/* Mode: add */}

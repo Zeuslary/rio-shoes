@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
 
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
+import { api, backEndApi, toastError, upperCaseFirstLetter } from '~/utils';
 
 import CustomerViewDetail from './CustomerViewDetail';
 import CustomerAdd from './CustomerAdd';
 import CustomerEdit from './CustomerEdit';
+import CustomerList from './CustomerList';
 
-import { toastError } from '~/utils/toast';
+import { STATUSES } from '~/constants';
 import { ReturnIcon } from '~/assets/icons';
 import CartBox from '~/admin/components/CartBox';
 import Button from '~/components/Button';
-import CustomerList from './CustomerList';
 import styles from './Customers.module.scss';
 
 function Customers() {
@@ -20,12 +19,10 @@ function Customers() {
     const [arrangeOrderCount, setArrangeOrderCount] = useState('default');
     const [arrangeTotalSpent, setArrangeTotalSpent] = useState('default');
 
-    const [customers, setCustomers] = useState([]);
     const [mode, setMode] = useState('view');
+    const [customers, setCustomers] = useState([]);
     const [viewDetail, setViewDetail] = useState();
     const [customerEdit, setCustomerEdit] = useState();
-
-    const statuses = ['active', 'inactive', 'banned'];
 
     useEffect(() => {
         const fetchingData = async () => {
@@ -33,14 +30,22 @@ function Customers() {
                 const data = await api.getAll(backEndApi.customer);
 
                 setCustomers(data);
-                console.log('Fetching customers successfully!');
             } catch (err) {
                 console.error('Fetching customers failed...', err);
-                toastError('Fetching customers error!');
+                toastError(err?.response?.data?.message || 'Fetching customers error!');
             }
         };
         fetchingData();
     }, []);
+
+    useEffect(() => {
+        console.group('Filter');
+        console.log('Filter status: ', filterStatus);
+        console.log('Filter created: ', arrangeCreatedDate);
+        console.log('Filter orders: ', arrangeOrderCount);
+        console.log('Filter total spent: ', arrangeTotalSpent);
+        console.groupEnd();
+    }, [filterStatus, arrangeCreatedDate, arrangeOrderCount, arrangeTotalSpent]);
 
     // Filter and arrange customers
     const customersFilter = customers
@@ -114,15 +119,6 @@ function Customers() {
         setArrangeTotalSpent(e.target.value);
     };
 
-    useEffect(() => {
-        console.group('Filter');
-        console.log('Filter status: ', filterStatus);
-        console.log('Filter created: ', arrangeCreatedDate);
-        console.log('Filter orders: ', arrangeOrderCount);
-        console.log('Filter total spent: ', arrangeTotalSpent);
-        console.groupEnd();
-    }, [filterStatus, arrangeCreatedDate, arrangeOrderCount, arrangeTotalSpent]);
-
     return (
         <div className={styles['wrapper']}>
             <h2 className={styles['header']}>Customers</h2>
@@ -141,7 +137,7 @@ function Customers() {
                     {/* Filters, Arrange follow condition */}
                     <CartBox>
                         <div className="space-between">
-                            <div>
+                            <div className={styles['filter-group']}>
                                 {/* Filter follow Status */}
                                 <select
                                     className={styles['filter-select']}
@@ -150,9 +146,9 @@ function Customers() {
                                 >
                                     <option value="all">All Status</option>
 
-                                    {statuses.map((status) => (
+                                    {STATUSES.map((status) => (
                                         <option key={status} value={status}>
-                                            {status.slice(0, 1).toUpperCase() + status.slice(1)}
+                                            {upperCaseFirstLetter(status)}
                                         </option>
                                     ))}
                                 </select>
@@ -166,6 +162,7 @@ function Customers() {
                                     <option value="default" disabled>
                                         Arrange Created Date
                                     </option>
+
                                     <option value="desc">Created Newest</option>
                                     <option value="asc">Created Oldest</option>
                                 </select>
@@ -179,6 +176,7 @@ function Customers() {
                                     <option value="default" disabled>
                                         Arrange Orders
                                     </option>
+
                                     <option value="desc">Orders Desc</option>
                                     <option value="asc">Orders Asc</option>
                                 </select>
@@ -192,6 +190,7 @@ function Customers() {
                                     <option value="default" disabled>
                                         Arrange Total Spent
                                     </option>
+
                                     <option value="desc">Total Spent Desc</option>
                                     <option value="asc">Total Spent Asc</option>
                                 </select>
@@ -212,16 +211,14 @@ function Customers() {
                     </CartBox>
 
                     {/* Order list */}
-                    <div className={styles['order-list']}>
-                        <CartBox>
-                            <CustomerList
-                                customers={customersFilter}
-                                setCustomers={setCustomers}
-                                setViewDetail={setViewDetail}
-                                setCustomerEdit={setCustomerEdit}
-                                setMode={setMode}
-                            />
-                        </CartBox>
+                    <div className="mt-12">
+                        <CustomerList
+                            customers={customersFilter}
+                            setCustomers={setCustomers}
+                            setViewDetail={setViewDetail}
+                            setCustomerEdit={setCustomerEdit}
+                            setMode={setMode}
+                        />
                     </div>
                 </div>
             )}
@@ -237,7 +234,9 @@ function Customers() {
             {mode === 'view-detail' && <CustomerViewDetail viewDetail={viewDetail} />}
 
             {/* Mode: add */}
-            {mode === 'add' && <CustomerAdd setCustomers={setCustomers} setMode={setMode} />}
+            {mode === 'add' && (
+                <CustomerAdd setCustomers={setCustomers} setMode={setMode} />
+            )}
 
             {/* Mode: edit */}
             {mode === 'edit' && (

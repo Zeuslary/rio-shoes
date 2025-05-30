@@ -44,6 +44,8 @@ const mustNumber = {
     message: 'This field must be number',
 };
 
+const mustSelect = (value) => value !== 'default' || 'Please select this field';
+
 export default {
     required,
     email,
@@ -54,4 +56,5 @@ export default {
     min0,
     min1,
     mustNumber,
+    mustSelect,
 };

@@ -1,5 +1,6 @@
-import formatCurrencyVN from '~/utils/formatCurrency';
+import { formatCurrencyVN } from '~/utils';
 import { IMG_PRODUCT_PATH } from '~/constants';
+
 import Image from '~/components/Image';
 import CartBox from '~/admin/components/CartBox';
 import styles from './ProductViewDetail.module.scss';
@@ -39,7 +40,8 @@ function ProductViewDetail({ productViewDetail, brands }) {
                                 <span>
                                     {
                                         brands.find(
-                                            (brand) => brand._id === productViewDetail.brandId,
+                                            (brand) =>
+                                                brand._id === productViewDetail.brandId,
                                         ).name
                                     }
                                 </span>
@@ -54,11 +56,15 @@ function ProductViewDetail({ productViewDetail, brands }) {
                             </p>
                             <p className="cell-item">
                                 <span className="cell-title">Original Price:</span>
-                                <span>{formatCurrencyVN(productViewDetail?.originalPrice)}</span>
+                                <span>
+                                    {formatCurrencyVN(productViewDetail?.originalPrice)}
+                                </span>
                             </p>
                             <p className="cell-item">
                                 <span className="cell-title">New Price:</span>
-                                <span>{formatCurrencyVN(productViewDetail?.newPrice)}</span>
+                                <span>
+                                    {formatCurrencyVN(productViewDetail?.newPrice)}
+                                </span>
                             </p>
                             <p className="cell-item">
                                 <span className="cell-title">Gender:</span>

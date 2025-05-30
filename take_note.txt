@@ -251,7 +251,11 @@ database:
 - Trim value when send 
 - When change file and not choice, data file not as preview -> Need fix
 - When add any field, last img blob still not clear .
-- Just login can be pass verifyToken -> all user just have account will be change info as admin -> Need fix
+- Just login can be pass verifyToken -> all user just have account will be change info as admin -> Need fix.
+- Think about update product, when you not change gallery image, what happen?
+- Need make pagination, add pagination into api
+
+
 
 ------ Step you are doing ---------------
 - Change routes from /admin/products into products
@@ -265,9 +269,9 @@ database:
  + admin add, update, view, delete -> Done -> Be: all required auth -> add, delete avatar base on action, add have field check username unique
 
 30/5 - Required
- + customer
+ + customer: add - customer add username need unique
  + order
- + product
+ + product: product add, view, list, delete -> Done -> BE: public: getAdd, getAllMinimal, getById
 
 
 ------------- Note --------------

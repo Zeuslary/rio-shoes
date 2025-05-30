@@ -122,7 +122,7 @@ const postMultipart = async (path, data) => {
             }
         }
 
-        console.group('FormData send to server');
+        console.group('FormData send to server!');
         for (const key of formData.entries()) {
             console.log(key);
         }

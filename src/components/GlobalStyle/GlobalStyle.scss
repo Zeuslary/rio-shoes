@@ -212,6 +212,14 @@ button {
     text-align: center;
 }
 
+.text-red {
+    color: var(--red-color);
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
 // Form global
 .form-label {
     font-weight: 600;

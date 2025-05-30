@@ -18,3 +18,5 @@ export const ROLES = ['admin', 'super admin'];
 export const STATUSES_VOUCHER = ['active', 'scheduled', 'expired'];
 export const DISCOUNT_TYPES = ['fixed', 'percent'];
 export const ARRANGE_TYPES = ['descending', 'ascending'];
+
+export { default as productOption } from './productOption.js';
