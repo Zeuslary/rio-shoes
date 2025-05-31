@@ -1,12 +1,11 @@
-import formatCurrencyVN from '~/utils/formatCurrency';
+import { formatCurrencyVN } from '~/utils';
 
 import CartItemSummary from '../CartItemSummary';
-import CartBox from '~/admin/components/CartBox';
+
+import { CartBox } from '~/admin/components';
 import styles from './OrderDetail.module.scss';
 
 function OrderDetail({ orderDetail }) {
-    console.log('View ', orderDetail);
-
     return (
         <div className={styles['wrapper']}>
             <h2 className={styles['header']}>View Order detail</h2>
@@ -51,25 +50,48 @@ function OrderDetail({ orderDetail }) {
                         <CartBox>
                             <h2 className={styles['section-title']}>Order Status</h2>
                             <p className={styles['info-item']}>
-                                <span className={styles['info-title-longer']}>Status</span>
+                                <span className={styles['info-title-longer']}>
+                                    Status
+                                </span>
                                 <span>{orderDetail.status}</span>
                             </p>
                             <p className={styles['info-item']}>
-                                <span className={styles['info-title-longer']}>Shipping Date</span>
-                                <span>{orderDetail.statusDate?.shipping?.slice(0, 10)}</span>
+                                <span className={styles['info-title-longer']}>
+                                    Shipping Date
+                                </span>
+                                <span>
+                                    {orderDetail.statusDate?.shipping?.slice(0, 10)}
+                                </span>
                             </p>
                             <p className={styles['info-item']}>
-                                <span className={styles['info-title-longer']}>Delivery Date</span>
-                                <span>{orderDetail.statusDate?.delivery?.slice(0, 10)}</span>
+                                <span className={styles['info-title-longer']}>
+                                    Delivery Date
+                                </span>
+                                <span>
+                                    {orderDetail.statusDate?.delivery?.slice(0, 10)}
+                                </span>
                             </p>
                             <p className={styles['info-item']}>
-                                <span className={styles['info-title-longer']}>Completed Date</span>
-                                <span>{orderDetail.statusDate?.complete?.slice(0, 10)}</span>
+                                <span className={styles['info-title-longer']}>
+                                    Completed Date
+                                </span>
+                                <span>
+                                    {orderDetail.statusDate?.complete?.slice(0, 10)}
+                                </span>
+                            </p>
+                            <p className={styles['info-item']}>
+                                <span className={styles['info-title-longer']}>
+                                    Cancelled Date
+                                </span>
+                                <span>
+                                    {orderDetail.statusDate?.cancelled?.slice(0, 10)}
+                                </span>
                             </p>
                         </CartBox>
                     </div>
                 </div>
 
+                {/* Order detail */}
                 <div className="col-6">
                     <CartBox>
                         <h2 className={styles['section-title']}>Order detail</h2>
@@ -85,19 +107,27 @@ function OrderDetail({ orderDetail }) {
                         <div className={styles['summary']}>
                             <p>
                                 <span>Subtotal</span>
-                                <span>{formatCurrencyVN(orderDetail.summary.subtotal)}</span>
+                                <span>
+                                    {formatCurrencyVN(orderDetail.summary.subtotal)}
+                                </span>
                             </p>
                             <p>
                                 <span>Shipping</span>
-                                <span>{formatCurrencyVN(orderDetail.summary.shippingFee)}</span>
+                                <span>
+                                    {formatCurrencyVN(orderDetail.summary.shippingFee)}
+                                </span>
                             </p>
                             <p>
                                 <span>Discount</span>
-                                <span>-{formatCurrencyVN(orderDetail.summary.discount)}</span>
+                                <span>
+                                    -{formatCurrencyVN(orderDetail.summary.discount)}
+                                </span>
                             </p>
                             <p className={styles['total']}>
                                 <strong>Total</strong>
-                                <strong>{formatCurrencyVN(orderDetail.summary.total)}</strong>
+                                <strong>
+                                    {formatCurrencyVN(orderDetail.summary.total)}
+                                </strong>
                             </p>
                         </div>
                     </CartBox>

@@ -1,11 +1,11 @@
 import { IMG_CUSTOMER_PATH } from '~/constants';
-import Image from '~/components/Image';
-import CartBox from '~/admin/components/CartBox';
+import { formatCurrencyVN, upperCaseFirstLetter } from '~/utils';
+
+import { Image } from '~/components';
+import { CartBox } from '~/admin/components';
 import styles from './CustomerViewDetail.module.scss';
 
 function CustomerViewDetail({ viewDetail }) {
-    console.log('View ', viewDetail);
-
     return (
         <div className={styles['wrapper']}>
             <CartBox>
@@ -23,8 +23,8 @@ function CustomerViewDetail({ viewDetail }) {
                     </p>
                     <p className="cell-item">
                         <span className="cell-title">FullName:</span>
-                        <span>{`${viewDetail.fullName?.firstName} ${viewDetail.fullName?.lastName}`}</span>
-                    </p>{' '}
+                        <span>{viewDetail.getFullName}</span>
+                    </p>
                     <p className="cell-item">
                         <span className="cell-title">Username:</span>
                         <span>{viewDetail?.username}</span>
@@ -52,7 +52,8 @@ function CustomerViewDetail({ viewDetail }) {
                     <p className="cell-item">
                         <span className="cell-title">Date of birth:</span>
                         <span>
-                            {viewDetail?.dateOfBirth && viewDetail?.dateOfBirth.slice(0, 10)}
+                            {viewDetail?.dateOfBirth &&
+                                viewDetail?.dateOfBirth.slice(0, 10)}
                         </span>
                     </p>
                     <p className="cell-item">
@@ -61,29 +62,36 @@ function CustomerViewDetail({ viewDetail }) {
                     </p>
                     <p className="cell-item">
                         <span className="cell-title">Total Spent:</span>
-                        <span>{viewDetail.totalSpent}</span>
+                        <span>{formatCurrencyVN(viewDetail.totalSpent)}</span>
                     </p>
                     <p className="cell-item">
                         <span className="cell-title">Last Login:</span>
-                        <span>{viewDetail.lastLogin && viewDetail.lastLogin.slice(0, 10)}</span>
+                        <span>
+                            {viewDetail.lastLogin && viewDetail.lastLogin.slice(0, 10)}
+                        </span>
                     </p>
                     <p className="cell-item">
                         <span className="cell-title">Last Order:</span>
                         <span>
-                            {viewDetail.lastOrderDate && viewDetail.lastOrderDate.slice(0, 10)}
+                            {viewDetail.lastOrderDate &&
+                                viewDetail.lastOrderDate.slice(0, 10)}
                         </span>
                     </p>
                     <p className="cell-item">
                         <span className="cell-title">Status:</span>
-                        <span>{viewDetail.status}</span>
+                        <span>{upperCaseFirstLetter(viewDetail.status)}</span>
                     </p>
                     <p className="cell-item">
                         <span className="cell-title">Created at:</span>
-                        <span>{viewDetail.createdAt && viewDetail.createdAt.slice(0, 10)}</span>
+                        <span>
+                            {viewDetail.createdAt && viewDetail.createdAt.slice(0, 10)}
+                        </span>
                     </p>
                     <p className="cell-item">
                         <span className="cell-title">Updated at:</span>
-                        <span>{viewDetail.updatedAt && viewDetail.updatedAt.slice(0, 10)}</span>
+                        <span>
+                            {viewDetail.updatedAt && viewDetail.updatedAt.slice(0, 10)}
+                        </span>
                     </p>
                 </div>
             </CartBox>

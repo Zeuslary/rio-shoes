@@ -9,10 +9,14 @@ import styles from './AddressForm.module.scss';
 function AddressForm() {
     const {
         register,
+        watch,
         setValue,
         formState: { errors },
         control,
     } = useFormContext();
+    // If you not pass any value for watch, it will get all register from FormProvide
+    //  it means that it contain {address, fullName, ...}
+    const address = watch('address');
 
     const [cities, setCities] = useState([]);
     const [districts, setDistricts] = useState([]);
@@ -20,21 +24,43 @@ function AddressForm() {
 
     // Handle load cities
     useEffect(() => {
-        // Handle get provinces
-        const handleGetProvinces = async () => {
+        const handleLoadInitialAddress = async () => {
             try {
-                const result = await provincesApi.getProvinces();
+                // Load cities
+                const cityList = await provincesApi.getProvinces();
+                setCities(cityList);
 
-                setCities(result);
-                setValue('address.district', 'default');
-                setValue('address.ward', 'default');
+                // Load district if exist
+                const citySelect = cityList.find((city) => city.name == address.city);
+                if (!citySelect) {
+                    setValue('address.district', 'default');
+                    setValue('address.ward', 'default');
+                    return;
+                }
+
+                const districtList = await provincesApi.getDistricts(citySelect.code);
+                setDistricts(districtList);
+
+                // Load wards if exist
+                const districtSelect = districtList.find(
+                    (district) => district.name == address.district,
+                );
+
+                if (!districtList) {
+                    setValue('address.ward', 'default');
+                    return;
+                }
+
+                const wardList = await provincesApi.getWards(districtSelect.code);
+
+                setWards(wardList);
             } catch (err) {
                 console.error('Fetching provinces failed...', err);
-                toastError('Fetching cities error!');
+                toastError('Fetching initial province error!');
             }
         };
 
-        handleGetProvinces();
+        handleLoadInitialAddress();
     }, []);
 
     const handleChangeCity = useCallback(async (e) => {

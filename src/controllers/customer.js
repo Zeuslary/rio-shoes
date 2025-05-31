@@ -6,6 +6,10 @@ import nestObject from '../utils/nestObject.js';
 import deleteFileDiskStorage from '../utils/deleteFileDiskStorage.js';
 import { Customer } from '../models/index.js';
 
+const deleteFileJustUpload = (file) => {
+    if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.customer);
+};
+
 const getAll = async (req, res) => {
     try {
         const customers = await Customer.find();
@@ -69,16 +73,22 @@ const create = async (req, res) => {
         req.body = nestObject(req.body);
 
         if (!req.body) {
-            if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.customer);
+            deleteFileJustUpload(file);
+
             return res.status(400).json({
                 message: 'Empty body',
             });
         }
 
+        // Handle unique username
         if (req.body.username) {
-            const existingCustomer = await Customer.findOne({ username: req.body.username });
+            const existingCustomer = await Customer.findOne({
+                username: req.body.username,
+            });
+
             if (existingCustomer) {
-                if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.customer);
+                deleteFileJustUpload(file);
+
                 return res.status(400).json({
                     message: 'Username already exists',
                     data: req.body.username,
@@ -87,9 +97,10 @@ const create = async (req, res) => {
         }
 
         if (!isValidBody(req.body)) {
-            if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.customer);
+            deleteFileJustUpload(file);
             return res.status(400).json({
-                message: 'First name, last name, phone, city, district, ward is required!',
+                message:
+                    'First name, last name, phone, city, district, ward is required!',
                 data: req.body,
             });
         }
@@ -110,7 +121,7 @@ const create = async (req, res) => {
                 data: newCustomer,
             });
 
-        if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.customer);
+        deleteFileJustUpload(file);
 
         return res.status(400).json({
             message: 'Create customer error',
@@ -163,7 +174,7 @@ const updateById = async (req, res) => {
         const file = req.file;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
-            if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.customer);
+            deleteFileJustUpload(file);
             return res.status(400).json({
                 message: 'Invalid ID',
                 data: id,
@@ -171,7 +182,7 @@ const updateById = async (req, res) => {
         }
 
         if (!req.body) {
-            if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.customer);
+            deleteFileJustUpload(file);
 
             return res.status(400).json({
                 message: 'Empty body',
@@ -183,7 +194,7 @@ const updateById = async (req, res) => {
         const originalCustomer = await Customer.findById(id);
 
         if (!originalCustomer) {
-            if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.customer);
+            deleteFileJustUpload(file);
             return res.status(404).json({
                 message: 'Voucher not found',
                 data: id,
@@ -195,7 +206,7 @@ const updateById = async (req, res) => {
         });
 
         if (!isChange) {
-            if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.customer);
+            deleteFileJustUpload(file);
             return res.status(200).json({
                 message: 'Voucher not modifier!',
                 data: originalCustomer,

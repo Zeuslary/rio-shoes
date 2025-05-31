@@ -269,10 +269,13 @@ database:
  + admin add, update, view, delete -> Done -> Be: all required auth -> add, delete avatar base on action, add have field check username unique
 
 30/5 - Required
- + customer: add - customer add username need unique
- + order
+ + customer: add - customer add username need unique -> Done 
  + product: product add, view, list, delete -> Done -> BE: public: getAdd, getAllMinimal, getById
 
+
+31/5
+ + customer: view, edit, delete -> Done -> BE: public all api -> update, view detail done
+ + order: done edit
 
 ------------- Note --------------
 - Regax phone vn: /^(84|0[3|5|7|8|9])+([0-9]{8})\b$/

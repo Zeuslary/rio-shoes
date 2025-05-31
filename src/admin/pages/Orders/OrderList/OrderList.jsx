@@ -1,32 +1,32 @@
-import clsx from 'clsx';
-
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
-
-import { toastSuccess, toastError } from '~/utils/toast';
+import {
+    api,
+    backEndApi,
+    upperCaseFirstLetter,
+    toastError,
+    toastSuccess,
+    formatCurrencyVN,
+} from '~/utils';
 
 import { DeleteIcon, EditIcon, EyeIcon } from '~/assets/icons';
 import styles from './OrderList.module.scss';
 
 function OrderList({ orders, setOrders, setOrderDetail, setOrderEdit, setMode }) {
     const handleViewDetail = (order) => {
-        console.log('View...');
         setOrderDetail(order);
         setMode('view-detail');
     };
 
     const handleDelete = async (order) => {
-        console.log('Deleting...', order);
         try {
             const deleteOrder = await api.deleteById(backEndApi.order, order._id);
-
-            console.log('Delete order response:', deleteOrder);
 
             if (deleteOrder) {
                 toastSuccess(deleteOrder.message);
 
                 // Remove the deleted order from the list
-                setOrders((prev) => prev.filter((order) => order._id !== deleteOrder.data._id));
+                setOrders((prev) =>
+                    prev.filter((order) => order._id !== deleteOrder.data._id),
+                );
             }
         } catch (err) {
             console.error('Deleting order failed...', err);
@@ -65,7 +65,9 @@ function OrderList({ orders, setOrders, setOrderDetail, setOrderEdit, setMode })
                                 <span className={styles['cell-value']}>{index + 1}</span>
                             </td>
                             <td>
-                                <span className={styles['cell-value']}>{order.customerName}</span>
+                                <span className={styles['cell-value']}>
+                                    {order.customerName}
+                                </span>
                             </td>
                             <td>
                                 <span className={styles['cell-value']}>
@@ -78,31 +80,32 @@ function OrderList({ orders, setOrders, setOrderDetail, setOrderEdit, setMode })
                                 </span>
                             </td>
                             <td>
-                                <span className={styles['cell-value']}>{order.items.length}</span>
+                                <span className={styles['cell-value']}>
+                                    {order.items.length}
+                                </span>
                             </td>
                             <td>
                                 <span className={styles['cell-value']}>
-                                    <strong> ${order.summary.total}</strong>
+                                    <strong>
+                                        {formatCurrencyVN(order.summary.total)}
+                                    </strong>
                                 </span>
                             </td>
                             <td>
                                 <span
-                                    className={clsx(
-                                        styles['cell-value'],
-                                        styles[
-                                            order.status === 'pending'
-                                                ? 'yellow-color'
-                                                : order.status === 'shipping'
-                                                ? 'orange-color'
-                                                : order.status === 'delivered'
-                                                ? 'blue-color'
-                                                : order.status === 'completed'
-                                                ? 'green-color'
-                                                : 'red-color'
-                                        ],
-                                    )}
+                                    className={
+                                        order.status === 'pending'
+                                            ? 'yellow-color'
+                                            : order.status === 'shipping'
+                                            ? 'orange-color'
+                                            : order.status === 'delivered'
+                                            ? 'blue-color'
+                                            : order.status === 'completed'
+                                            ? 'green-color'
+                                            : 'red-color'
+                                    }
                                 >
-                                    {order.status.slice(0, 1).toUpperCase() + order.status.slice(1)}
+                                    {upperCaseFirstLetter(order.status)}
                                 </span>
                             </td>
 
@@ -113,7 +116,10 @@ function OrderList({ orders, setOrders, setOrderDetail, setOrderEdit, setMode })
                                 >
                                     <EyeIcon />
                                 </button>
-                                <button className={styles['btn']} onClick={() => handleEdit(order)}>
+                                <button
+                                    className={styles['btn']}
+                                    onClick={() => handleEdit(order)}
+                                >
                                     <EditIcon />
                                 </button>
                                 <button

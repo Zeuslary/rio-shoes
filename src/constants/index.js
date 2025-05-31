@@ -19,4 +19,12 @@ export const STATUSES_VOUCHER = ['active', 'scheduled', 'expired'];
 export const DISCOUNT_TYPES = ['fixed', 'percent'];
 export const ARRANGE_TYPES = ['descending', 'ascending'];
 
+export const ORDER_STATUSES = [
+    'pending',
+    'shipping',
+    'delivered',
+    'completed',
+    'cancelled',
+];
+
 export { default as productOption } from './productOption.js';

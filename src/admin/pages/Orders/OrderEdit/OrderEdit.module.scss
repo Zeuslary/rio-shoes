@@ -12,15 +12,13 @@
     margin-right: 12px;
 }
 
-.avatar {
-    --edge: 70px;
-    width: var(--edge);
-    height: var(--edge);
-    align-self: center;
-    border-radius: 50%;
-    margin-right: 12px;
+.status-title {
+    font-weight: 600;
+    font-size: 1.6rem;
+    margin-right: 8px;
 }
 
+// Section common
 .section-title {
     margin-top: 12px;
     text-align: center;
@@ -31,14 +29,6 @@
     text-align: center;
     font-size: 1.4rem;
     color: #999;
-}
-
-.address {
-    font-weight: bolder;
-    margin-top: 12px;
-    display: block;
-    margin-bottom: -10px;
-    color: #333;
 }
 
 // Summary order

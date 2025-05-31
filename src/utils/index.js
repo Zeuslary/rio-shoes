@@ -10,6 +10,7 @@ export { default as nestObject } from './nestObject.js';
 export { default as removeDuplicateOfObject } from './removeDuplicateOfObject.js';
 export { default as isSameValueObject } from './isSameValueObject.js';
 export { default as uniqueObjectFromArray } from './uniqueObjectFromArray.js';
+export { default as isDateString } from './isDateString.js';
 
 // Util format data
 export { default as formatCurrencyVN } from './formatCurrency.js';

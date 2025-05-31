@@ -1,3 +1,5 @@
+import isDateString from './isDateString';
+
 // Return a object key-value after flat
 const flatObject = (data, parentKey = '') => {
     const result = {};
@@ -6,18 +8,19 @@ const flatObject = (data, parentKey = '') => {
         const value = data[key];
         const fullKey = parentKey ? `${parentKey}.${key}` : key;
 
+        // Format date into ISOString with value is a string
+        // Format date into ISOString (value is created from new Date)
+        if (value instanceof Date || isDateString(value)) {
+            result[fullKey] = new Date(value).toISOString();
+        }
+
         // Handle when key-value is normal
-        if (
+        else if (
             typeof value !== 'object' ||
             Array.isArray(value) ||
             value instanceof FileList
         ) {
             result[fullKey] = value;
-        }
-
-        // Format date into ISOString
-        else if (value instanceof Date) {
-            result[fullKey] = new Date(value).toISOString();
         }
 
         // Handle when key-value is nest object

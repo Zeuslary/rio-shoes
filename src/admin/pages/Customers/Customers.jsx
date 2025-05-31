@@ -9,8 +9,9 @@ import CustomerList from './CustomerList';
 
 import { STATUSES } from '~/constants';
 import { ReturnIcon } from '~/assets/icons';
-import CartBox from '~/admin/components/CartBox';
-import Button from '~/components/Button';
+
+import { CartBox } from '~/admin/components';
+import { Button } from '~/components';
 import styles from './Customers.module.scss';
 
 function Customers() {
@@ -44,8 +45,22 @@ function Customers() {
         console.log('Filter created: ', arrangeCreatedDate);
         console.log('Filter orders: ', arrangeOrderCount);
         console.log('Filter total spent: ', arrangeTotalSpent);
+        console.log('mode: ', mode);
+        console.log('customers: ', customers);
+        console.log('viewDetail: ', viewDetail);
+        console.log('customerEdit: ', customerEdit);
+
         console.groupEnd();
-    }, [filterStatus, arrangeCreatedDate, arrangeOrderCount, arrangeTotalSpent]);
+    }, [
+        filterStatus,
+        arrangeCreatedDate,
+        arrangeOrderCount,
+        arrangeTotalSpent,
+        mode,
+        customers,
+        viewDetail,
+        customerEdit,
+    ]);
 
     // Filter and arrange customers
     const customersFilter = customers

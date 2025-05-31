@@ -5,12 +5,13 @@ import {
     styleStatus,
     toastError,
     toastSuccess,
+    upperCaseFirstLetter,
 } from '~/utils';
 
 import { IMG_CUSTOMER_PATH } from '~/constants';
 import { DeleteIcon, EditIcon, EyeIcon } from '~/assets/icons';
 import { CartBox } from '~/admin/components';
-import Image from '~/components/Image';
+import { Image } from '~/components';
 import styles from './CustomerList.module.scss';
 
 function CustomerList({
@@ -32,7 +33,6 @@ function CustomerList({
                 customer._id,
             );
 
-            console.log('Deleting customer successfully!', deleteCustomer);
             setCustomers((prev) =>
                 prev.filter((customer) => customer._id !== deleteCustomer.data._id),
             );
@@ -78,7 +78,7 @@ function CustomerList({
                                     />
                                     <div className={styles['customer-detail']}>
                                         <h5 className={styles['customer-name']}>
-                                            {`${customer?.fullName?.firstName} ${customer?.fullName?.lastName}`}
+                                            {customer.getFullName}
                                         </h5>
                                         <p>
                                             <strong>ID:</strong> {customer._id}
@@ -109,8 +109,7 @@ function CustomerList({
                             </td>
                             <td>
                                 <span className={styleStatus(customer.status)}>
-                                    {customer.status.slice(0, 1).toUpperCase() +
-                                        customer.status.slice(1)}
+                                    {upperCaseFirstLetter(customer.status)}
                                 </span>
                             </td>
 

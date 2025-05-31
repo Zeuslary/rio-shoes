@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+
+import nestObject from '../utils/nestObject.js';
 import { Order } from '../models/index.js';
 
 const getAll = async (req, res) => {
@@ -122,7 +124,16 @@ const updateById = async (req, res) => {
                 message: 'Empty body',
             });
 
-        const updateOrder = await Order.findByIdAndUpdate(id, req.body, {
+        const data = nestObject(req.body);
+
+        // Handle status base on status date
+        if (data?.statusDate?.cancelled) data.status = 'cancelled';
+        else if (data?.statusDate?.completed) data.status = 'completed';
+        else if (data?.statusDate?.delivered) data.status = 'delivered';
+        else if (data?.statusDate?.shipping) data.status = 'shipping';
+        else data.status = 'pending';
+
+        const updateOrder = await Order.findByIdAndUpdate(id, data, {
             new: true,
             runValidators: true,
         }).populate('customerId', 'fullName email phone');
@@ -132,7 +143,7 @@ const updateById = async (req, res) => {
             updateOrder._doc.customerName = updateOrder.customerId?.getFullName;
             updateOrder._doc.addressDetail = updateOrder?.getAddressDetail;
 
-            console.log('Body: ', req.body);
+            console.log('Body: ', data);
 
             console.log('Update order: ', updateOrder);
 
@@ -144,7 +155,7 @@ const updateById = async (req, res) => {
 
         return res.status(400).json({
             message: 'Update order error',
-            data: req.body,
+            data: data,
         });
     } catch (err) {
         console.error('Update order failed...', err);

@@ -16,9 +16,10 @@
 }
 
 .avatar {
-    margin: 12px 0 12px;
     --edge: 100px;
     width: var(--edge);
     height: var(--edge);
+
+    margin: 12px 0 12px;
     border-radius: 50%;
 }

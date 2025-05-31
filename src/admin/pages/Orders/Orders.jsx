@@ -1,24 +1,20 @@
 import { useEffect, useState } from 'react';
 
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
+import { api, backEndApi, toastError, upperCaseFirstLetter } from '~/utils';
+import { ORDER_STATUSES } from '~/constants';
 
 import OrderList from './OrderList';
 import OrderDetail from './OrderDetail';
 import OrderEdit from './OrderEdit';
 
-import { toastError } from '~/utils/toast';
+import { CartBox } from '~/admin/components';
+import { Button, Pagination } from '~/components';
 import { ReturnIcon } from '~/assets/icons';
-import Pagination from '~/components/Pagination';
-import CartBox from '~/admin/components/CartBox';
-import Button from '~/components/Button';
 import styles from './Orders.module.scss';
 
 function Orders() {
     const [filterStatus, setFilterStatus] = useState('all');
     const [sortCreatedDate, setSortCreatedDate] = useState('');
-
-    const statuses = ['pending', 'shipping', 'delivered', 'completed', 'cancelled'];
 
     const [orders, setOrders] = useState([]);
 
@@ -55,7 +51,8 @@ function Orders() {
 
             if (sortCreatedDate === 'asc') return dateA - dateB;
             else if (sortCreatedDate === 'desc') return dateB - dateA;
-            else return 0;
+
+            return 0;
         })
         .filter((order) => {
             if (filterStatus === 'all') return order;
@@ -94,9 +91,9 @@ function Orders() {
                                 >
                                     <option value="all">All Status</option>
 
-                                    {statuses.map((status) => (
+                                    {ORDER_STATUSES.map((status) => (
                                         <option key={status} value={status}>
-                                            {status.slice(0, 1).toUpperCase() + status.slice(1)}
+                                            {upperCaseFirstLetter(status)}
                                         </option>
                                     ))}
                                 </select>
@@ -108,10 +105,11 @@ function Orders() {
                                     onChange={(e) => setSortCreatedDate(e.target.value)}
                                 >
                                     <option value="" disabled hidden>
-                                        Arrange
+                                        Order
                                     </option>
-                                    <option value="desc">Newest</option>
-                                    <option value="asc">Oldest</option>
+
+                                    <option value="desc">Order Newest</option>
+                                    <option value="asc">Order Oldest</option>
                                 </select>
                             </div>
 
