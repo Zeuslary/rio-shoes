@@ -9,3 +9,4 @@ export { default as voucherRouters } from './voucher.js';
 export { default as orderRouters } from './order.js';
 export { default as dashboardRouters } from './dashboard.js';
 export { default as adminAccountRouters } from './adminAccount.js';
+export { default as flashSaleRouters } from './flash-sale.js';

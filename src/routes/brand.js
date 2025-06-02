@@ -11,6 +11,8 @@ const router = express.Router();
 // Public api
 router.get('/', brandController.getAll);
 
+router.get('/minimal', brandController.getAllMinimal);
+
 router.get('/:id', brandController.getById);
 
 // Private api

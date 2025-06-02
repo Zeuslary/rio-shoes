@@ -10,6 +10,8 @@ router.get('/', productController.getAll);
 
 router.get('/minimal', productController.getAllMinimal);
 
+router.get('/new', productController.getNewProducts);
+
 router.get('/:id', productController.getById);
 
 // Private api

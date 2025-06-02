@@ -16,6 +16,7 @@ import {
     orderRouters,
     dashboardRouters,
     adminAccountRouters,
+    flashSaleRouters,
 } from './routes/index.js';
 
 // Get global variable from file .env
@@ -83,6 +84,9 @@ app.use('/api/dashboard', dashboardRouters);
 
 // Make router for admin login
 app.use('/api/admin-login', adminAccountRouters);
+
+// Make router for flash-sale
+app.use('/api/flash-sale', flashSaleRouters);
 
 // -------- END ROUTER ---------
 

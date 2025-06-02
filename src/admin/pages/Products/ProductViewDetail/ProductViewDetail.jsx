@@ -41,7 +41,8 @@ function ProductViewDetail({ productViewDetail, brands }) {
                                     {
                                         brands.find(
                                             (brand) =>
-                                                brand._id === productViewDetail.brandId,
+                                                brand._id ===
+                                                productViewDetail.brandId._id,
                                         ).name
                                     }
                                 </span>

@@ -1,15 +1,35 @@
+import { useEffect, useState } from 'react';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 
-import styles from './FlashSale.module.scss';
+import { api, backEndApi, toastError } from '~/utils';
+
 import { ChevronLeftIcon, ChevronRightIcon } from '~/assets/icons';
-import dataProducts from '~/data/fakeApiProducts';
 import ProductCart from '~/components/ProductCart';
+import styles from './FlashSale.module.scss';
 
 function FlashSale() {
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchingData = async () => {
+            try {
+                const res = await api.getAll(backEndApi.flashSale);
+
+                setProducts(res.data);
+            } catch (err) {
+                console.error('Fetching data for flash sale failed...', err);
+                toastError('Fetching data for flash sale error!');
+            }
+        };
+
+        fetchingData();
+    }, []);
+
     return (
         <div className={styles['wrapper']}>
             {/* Navigation of slider show */}
@@ -32,11 +52,14 @@ function FlashSale() {
                             nextEl: `.${styles['next-btn']}`,
                             prevEl: `.${styles['prev-btn']}`,
                         }}
-                        loop={true}
+                        loop={products.length > 0}
                         modules={[Navigation]}
                     >
-                        {dataProducts.map((item, index) => (
-                            <SwiperSlide key={item.id || index} className={styles['product-item']}>
+                        {products.map((item, index) => (
+                            <SwiperSlide
+                                key={item.id || index}
+                                className={styles['product-item']}
+                            >
                                 <ProductCart item={item} />
                             </SwiperSlide>
                         ))}

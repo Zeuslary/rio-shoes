@@ -27,6 +27,8 @@
     --edge: 80px;
     width: var(--edge);
     height: var(--edge);
+
+    object-fit: contain;
 }
 
 // Actions

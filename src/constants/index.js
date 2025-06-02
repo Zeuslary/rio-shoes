@@ -27,4 +27,6 @@ export const ORDER_STATUSES = [
     'cancelled',
 ];
 
+export const FILTER_PRODUCTS = ['All Products', 'Adidas', 'Nike', 'Puma'];
+
 export { default as productOption } from './productOption.js';

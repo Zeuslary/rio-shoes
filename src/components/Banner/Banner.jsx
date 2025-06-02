@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay, A11y } from 'swiper/modules';
 import 'swiper/scss';
@@ -9,7 +10,6 @@ import 'swiper/scss/pagination';
 import styles from './Banner.module.scss';
 import Image from '~/components/Image';
 import images from '~/assets/images';
-import { Link } from 'react-router';
 
 function Banner() {
     return (

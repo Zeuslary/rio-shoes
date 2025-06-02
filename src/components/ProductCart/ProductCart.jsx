@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
-import Button from '~/components/Button';
-import Image from '~/components/Image';
+import { formatCurrencyVN, upperCaseFirstLetter } from '~/utils';
+import { IMG_PRODUCT_PATH } from '~/constants';
+
+import { Button, Image } from '~/components';
 import styles from './ProductCart.module.scss';
 
-function ProductCart({ item, saleOff }) {
+function ProductCart({ item }) {
     // Handle add product to cart
     const handleAddProduct = (e) => {
         e.preventDefault();
@@ -16,21 +18,29 @@ function ProductCart({ item, saleOff }) {
         <Link to="/product">
             <div className={styles['wrapper']}>
                 <div className={styles['img']}>
-                    <Image src={item.image} />
+                    <Image src={IMG_PRODUCT_PATH + item.image} />
 
-                    <Button superSmall red rounder customStyle={styles['label']}>
-                        New
-                    </Button>
+                    {item.tag && item.tag.length > 0 && (
+                        <Button superSmall red rounder customStyle={styles['label']}>
+                            {item.tag[0]}
+                        </Button>
+                    )}
                 </div>
 
                 <div className={styles['body']}>
                     <h4 className={styles['name']}>{item.name}</h4>
 
-                    {!saleOff && <p className={styles['style']}>{item.style}</p>}
+                    <p className={styles['style']}>
+                        {upperCaseFirstLetter(item.type?.[0])}
+                    </p>
 
                     <span className={styles['price']}>
-                        <span className={styles['new-price']}>${item.newPrice}</span>
-                        <span className={styles['old-price']}>${item.originalPrice}</span>
+                        <span className={styles['new-price']}>
+                            {formatCurrencyVN(item.newPrice)}
+                        </span>
+                        <span className={styles['old-price']}>
+                            {formatCurrencyVN(item.originalPrice)}
+                        </span>
                     </span>
                     <Button
                         onClick={handleAddProduct}

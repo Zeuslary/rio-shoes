@@ -19,6 +19,23 @@ const getAll = async (req, res) => {
     }
 };
 
+const getAllMinimal = async (req, res) => {
+    try {
+        const brands = await Brand.find().select('name slug logo');
+
+        return res.status(200).json({
+            message: 'Fetching minimal brands successfully!',
+            data: brands,
+        });
+    } catch (err) {
+        console.error('Fetching minimal brands failed...', err);
+
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
 const getById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -211,6 +228,7 @@ const updateById = async (req, res) => {
 
 export default {
     getAll,
+    getAllMinimal,
     getById,
     create,
     deleteById,

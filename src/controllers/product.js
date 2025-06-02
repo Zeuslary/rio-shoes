@@ -32,6 +32,49 @@ const getAllMinimal = async (req, res) => {
     }
 };
 
+const getNewProducts = async (req, res) => {
+    try {
+        const { page = 1 } = req.query;
+        const limit = 8;
+        const skip = (page - 1) * limit;
+
+        // List products
+        const products = await Product.find({
+            status: 'active',
+            stock: { $gt: 0 },
+        })
+            .sort({
+                createdAt: -1, //desc
+            })
+            .skip(skip) //Skip number of document
+            .limit(limit)
+            .populate('brandId', 'name');
+
+        console.log('New Products: ', products);
+
+        // Total product
+        const totalProducts = await Product.countDocuments({
+            status: 'active',
+            stock: { $gt: 0 },
+        });
+
+        // Calculator how many page
+        const lastPage = Math.ceil(totalProducts / limit); // ceil: rounded up
+
+        return res.status(200).json({
+            message: 'Fetching new products successfully!',
+            data: products,
+            currentPage: page,
+            lastPage,
+        });
+    } catch (err) {
+        console.error('Fetching new products failed...', err);
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
 const getById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -305,6 +348,7 @@ const updateById = async (req, res) => {
 export default {
     getAll,
     getAllMinimal,
+    getNewProducts,
     getById,
     create,
     deleteById,

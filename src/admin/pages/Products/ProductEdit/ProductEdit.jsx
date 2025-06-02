@@ -79,7 +79,7 @@ function ProductEdit({ setProducts, brands, productEdit, setProductEdit, setMode
         // Not exist img -> out
         if (!imageFile) return;
 
-        if (imageFile instanceof FileList) {
+        if (imageFile.length > 0 && imageFile instanceof FileList) {
             url = URL.createObjectURL(imageFile[0]);
             setPreview(url);
         }

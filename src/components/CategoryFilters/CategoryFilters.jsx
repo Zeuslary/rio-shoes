@@ -1,20 +1,23 @@
 import PropTypes from 'prop-types';
 
+import { upperCaseFirstLetter } from '~/utils';
+import { Button } from '~/components';
 import styles from './CategoryFilters.module.scss';
-import Button from '../Button';
 
-function CategoryFilters({ filters, currentFilter, setCurrentFilter }) {
+function CategoryFilters({ filters, filter, setFilter }) {
     return (
         <div className={styles['filters']}>
             {filters.map((filterName, index) => (
                 <Button
                     key={index}
                     customStyle={
-                        styles[currentFilter === filterName ? 'filter-item-action' : 'filter-item']
+                        styles[
+                            filter === filterName ? 'filter-item-action' : 'filter-item'
+                        ]
                     }
-                    onClick={() => setCurrentFilter(filterName)}
+                    onClick={() => setFilter(filterName)}
                 >
-                    {filterName}
+                    {upperCaseFirstLetter(filterName)}
                 </Button>
             ))}
         </div>

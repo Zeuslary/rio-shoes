@@ -12,6 +12,10 @@ const backEndApi = {
     dashboard: '/dashboard',
 
     adminLogin: '/admin-login',
+
+    flashSale: '/flash-sale',
+    newProducts: '/product/new',
+    brandMinimal: '/brand/minimal',
 };
 
 export default backEndApi;

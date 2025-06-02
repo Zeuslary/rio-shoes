@@ -1,17 +1,14 @@
 import { useState } from 'react';
 
-import styles from './Products.module.scss';
-import Banner from '~/components/Banner';
-import ProductCart from '~/components/ProductCart';
-import Pagination from '~/components/Pagination';
-import CategoryFilters from '~/components/CategoryFilters';
-import SortBy from '~/components/SortBy';
+import { Banner, ProductCart, CategoryFilters, SortBy, Pagination } from '~/components';
 import dataProducts from '~/data/fakeApiProducts';
+import { productOption } from '~/constants';
+import styles from './Products.module.scss';
 
 const filters = ['All Products', 'New Arrivals', 'Adidas', 'Nike', 'Puma'];
 
 function Products() {
-    const [currentFilter, setCurrentFilter] = useState(filters[0]);
+    const [currentFilter, setCurrentFilter] = useState();
 
     return (
         <>
@@ -22,7 +19,7 @@ function Products() {
                     {/* Navigation to display list product */}
                     <div className={styles['navigation']}>
                         <CategoryFilters
-                            filters={filters}
+                            filters={productOption.categories}
                             currentFilter={currentFilter}
                             setCurrentFilter={setCurrentFilter}
                         />
