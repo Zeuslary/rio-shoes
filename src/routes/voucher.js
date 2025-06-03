@@ -5,6 +5,10 @@ import verifyToken from '../middlewares/verifyToken.js';
 const router = express.Router();
 
 // Public router
+
+// GET /api/vouchers/check?code=FREESHIP
+router.get('/check', voucherController.getByCode);
+
 router.get('/:id', voucherController.getById);
 
 // Private router, required token for router below

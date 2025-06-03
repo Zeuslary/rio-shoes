@@ -13,7 +13,7 @@ import {
     toastInfo,
     patternValidate,
 } from '~/utils';
-import { ProfileContext } from '~/components/ProfileProvider';
+import { ProviderContext } from '~/components/Provider';
 import { IMG_ADMIN_PATH } from '~/constants';
 
 import Button from '~/components/Button';
@@ -22,7 +22,7 @@ import CartBox from '~/admin/components/CartBox';
 import styles from './AccountSetting.module.scss';
 
 function AccountSetting() {
-    const { profile, setProfile } = useContext(ProfileContext);
+    const { profile, setProfile } = useContext(ProviderContext);
     const {
         register,
         handleSubmit,
@@ -69,7 +69,11 @@ function AccountSetting() {
         }
 
         try {
-            const result = await api.putMultipart(backEndApi.admin, profile._id, flatObject(data));
+            const result = await api.putMultipart(
+                backEndApi.admin,
+                profile._id,
+                flatObject(data),
+            );
             storage.save('profile', result.data);
             setProfile(result.data);
             toastSuccess(result.message);
@@ -104,7 +108,8 @@ function AccountSetting() {
                                 })}
                             />
                             <p className="form-msg-err">
-                                {errors.fullName?.firstName && errors.fullName.firstName.message}
+                                {errors.fullName?.firstName &&
+                                    errors.fullName.firstName.message}
                             </p>
                         </div>
 
@@ -130,7 +135,9 @@ function AccountSetting() {
                                 Email:
                             </label>
                             <input
-                                className={errors.email ? 'form-input-invalid' : 'form-input'}
+                                className={
+                                    errors.email ? 'form-input-invalid' : 'form-input'
+                                }
                                 type="email"
                                 id="email"
                                 name="email"
@@ -139,7 +146,9 @@ function AccountSetting() {
                                     pattern: patternValidate.email,
                                 })}
                             />
-                            <p className="form-msg-err">{errors.email && errors.email.message}</p>
+                            <p className="form-msg-err">
+                                {errors.email && errors.email.message}
+                            </p>
                         </div>
 
                         {/* Phone */}
@@ -148,7 +157,9 @@ function AccountSetting() {
                                 Phone:
                             </label>
                             <input
-                                className={errors.phone ? 'form-input-invalid' : 'form-input'}
+                                className={
+                                    errors.phone ? 'form-input-invalid' : 'form-input'
+                                }
                                 type="phone"
                                 id="phone"
                                 name="phone"
@@ -157,7 +168,9 @@ function AccountSetting() {
                                     pattern: patternValidate.phone,
                                 })}
                             />
-                            <p className="form-msg-err">{errors.phone && errors.phone.message}</p>
+                            <p className="form-msg-err">
+                                {errors.phone && errors.phone.message}
+                            </p>
                         </div>
                     </div>
 
@@ -179,7 +192,11 @@ function AccountSetting() {
 
                     {/* Button Change */}
                     <p className="text-center mb-12">
-                        <Button deepBlack type="submit" customStyle={styles['update-btn']}>
+                        <Button
+                            deepBlack
+                            type="submit"
+                            customStyle={styles['update-btn']}
+                        >
                             Update changes
                         </Button>
                     </p>

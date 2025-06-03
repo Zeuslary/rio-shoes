@@ -1,7 +1,7 @@
 const get = (key) => {
     const value = localStorage.getItem(key);
 
-    return value ? JSON.parse(value) : '';
+    return value ? JSON.parse(value) : localStorage.setItem(key, '');
 };
 
 const save = (key, value) => {

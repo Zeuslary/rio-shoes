@@ -3,7 +3,7 @@ import { NavLink } from 'react-router';
 import { useNavigate } from 'react-router';
 import { useContext } from 'react';
 
-import { ProfileContext } from '~/components/ProfileProvider';
+import { ProviderContext } from '~/components/Provider';
 
 import routes from '~/config/routes';
 import { storage, toastSuccess } from '~/utils';
@@ -32,7 +32,7 @@ const adminLinks = [
 function Sidebar() {
     const navigate = useNavigate();
 
-    const { profile } = useContext(ProfileContext);
+    const { profile } = useContext(ProviderContext);
 
     const handleLogOut = () => {
         storage.remove('token');
@@ -61,10 +61,17 @@ function Sidebar() {
             </div>
 
             <div className={styles['info']}>
-                <Image src={IMG_ADMIN_PATH + profile?.avatar} className={styles['info-avatar']} />
+                <Image
+                    src={IMG_ADMIN_PATH + profile?.avatar}
+                    className={styles['info-avatar']}
+                />
                 <div className={styles['info-body']}>
                     <h3 className={styles['info-name']}>
-                        {(profile?.fullName?.firstName + ' ' + profile?.fullName?.lastName).trim()}
+                        {(
+                            profile?.fullName?.firstName +
+                            ' ' +
+                            profile?.fullName?.lastName
+                        ).trim()}
                     </h3>
                     <p className={styles['info-contact']}>{profile?.email}</p>
                 </div>

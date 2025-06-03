@@ -21,6 +21,38 @@ const getAll = async (req, res) => {
     }
 };
 
+const getByCode = async (req, res) => {
+    try {
+        const { code } = req.query;
+
+        if (!code) return res.status(400).json({ message: 'Missing voucher code' });
+
+        const now = new Date();
+
+        const voucher = await Voucher.findOne({
+            code,
+            status: 'active',
+            endDate: { $gt: now },
+            $expr: { $lt: ['$usedCount', '$quantity'] },
+        });
+
+        if (!voucher)
+            return res.status(404).json({
+                message: 'Voucher not found or expired',
+            });
+
+        return res.status(200).json({
+            message: 'Get voucher successfully!',
+            data: voucher,
+        });
+    } catch (err) {
+        console.error(`Error fetching Voucher: ${err}`);
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
 const getById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -170,6 +202,7 @@ const updateById = async (req, res) => {
 
 export default {
     getAll,
+    getByCode,
     getById,
     create,
     deleteById,

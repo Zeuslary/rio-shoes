@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useContext } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { ProfileContext } from '~/components/ProfileProvider';
+import { ProviderContext } from '~/components/Provider';
 
 import {
     api,
@@ -19,7 +19,7 @@ import Button from '~/components/Button';
 import styles from './VoucherAdd.module.scss';
 
 function VoucherAdd({ setVouchers, setMode }) {
-    const { profile } = useContext(ProfileContext);
+    const { profile } = useContext(ProviderContext);
     const methods = useForm({
         defaultValues: {
             code: '',

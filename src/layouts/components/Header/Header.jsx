@@ -1,31 +1,33 @@
 import clsx from 'clsx';
 import { Link, NavLink } from 'react-router';
 import Tippy from '@tippyjs/react/headless';
+import { useContext } from 'react';
 
-import styles from './Header.module.scss';
-import Image from '~/components/Image';
-import images from '~/assets/images';
-import { CartIcon, SearchIcon } from '~/assets/icons';
-import Button from '~/components/Button';
-import CartItem from './CartItem';
 import routes from '~/config/routes';
+import { formatCurrencyVN } from '~/utils';
 
-const cartList = [
-    {
-        id: 1,
-        name: 'Nike Air Max',
-        price: 89,
-        quantity: 1,
-    },
-    {
-        id: 2,
-        name: 'Nike Air Max2',
-        price: 89,
-        quantity: 1,
-    },
+import { ProviderContext } from '~/components/Provider';
+
+import { Image, Button } from '~/components';
+import { CartIcon, SearchIcon } from '~/assets/icons';
+import images from '~/assets/images';
+import CartItem from './CartItem';
+import styles from './Header.module.scss';
+
+const navItems = [
+    { label: 'Home', path: routes.home },
+    { label: 'Products', path: routes.product, exact: true },
+    { label: 'Order Tracking', path: routes.orderTracking },
+    { label: 'Contact', path: routes.contact },
 ];
 
 function Header() {
+    const { cartList } = useContext(ProviderContext);
+    const total = cartList.reduce(
+        (total, item) => (total += item.quantity * item.newPrice),
+        0,
+    );
+
     return (
         <div className={clsx(styles['wrapper'])}>
             <div className="grid wide">
@@ -34,54 +36,21 @@ function Header() {
                     <Image className={styles['logo']} src={images.logo} alt="RioShoes" />
 
                     <nav className={styles['nav-list']}>
-                        <NavLink
-                            className={({ isActive }) =>
-                                clsx([styles['nav-item'], isActive && styles['active']])
-                            }
-                            to={routes.home}
-                        >
-                            Home
-                        </NavLink>
-                        <NavLink
-                            className={({ isActive }) =>
-                                clsx([styles['nav-item'], isActive && styles['active']])
-                            }
-                            to={routes.adidas}
-                        >
-                            Adidas
-                        </NavLink>
-                        <NavLink
-                            className={({ isActive }) =>
-                                clsx([styles['nav-item'], isActive && styles['active']])
-                            }
-                            to={routes.nike}
-                        >
-                            Nike
-                        </NavLink>
-                        <NavLink
-                            className={({ isActive }) =>
-                                clsx([styles['nav-item'], isActive && styles['active']])
-                            }
-                            to={routes.puma}
-                        >
-                            Puma
-                        </NavLink>
-                        <NavLink
-                            className={({ isActive }) =>
-                                clsx([styles['nav-item'], isActive && styles['active']])
-                            }
-                            to={routes.orderTracking}
-                        >
-                            Order Tracking
-                        </NavLink>
-                        <NavLink
-                            className={({ isActive }) =>
-                                clsx([styles['nav-item'], isActive && styles['active']])
-                            }
-                            to={routes.contact}
-                        >
-                            Contact
-                        </NavLink>
+                        {navItems.map((item) => (
+                            <NavLink
+                                key={item.path}
+                                to={item.path}
+                                end={item.exact} // Fix error highline products when at product detail
+                                className={({ isActive }) =>
+                                    clsx([
+                                        styles['nav-item'],
+                                        isActive && styles['active'],
+                                    ])
+                                }
+                            >
+                                {item.label}
+                            </NavLink>
+                        ))}
                     </nav>
 
                     <div className={styles['nav-right']}>
@@ -110,50 +79,91 @@ function Header() {
                                     <div className="box" tabIndex="-1" {...attrs}>
                                         <div className={styles['cart-wrapper']}>
                                             {/* Empty */}
-                                            {/* <div className={styles['cart-empty']}>
-                                            <Image src={images.emptyCart} width="140" height="140" />
-                                            <span>Your cart is empty</span>
-                                        </div> */}
+                                            {cartList.length === 0 && (
+                                                <div className={styles['cart-empty']}>
+                                                    <Image
+                                                        src={images.emptyCart}
+                                                        width="140"
+                                                        height="140"
+                                                    />
+                                                    <span>Your cart is empty</span>
+                                                </div>
+                                            )}
 
                                             {/* Have Products */}
-                                            <div className={styles['cart-products']}>
-                                                <h6 className={styles['cart-title']}>Cart</h6>
+                                            {cartList.length > 0 && (
+                                                <div className={styles['cart-products']}>
+                                                    <h6 className={styles['cart-title']}>
+                                                        Cart
+                                                    </h6>
 
-                                                <div className={styles['cart-list']}>
-                                                    {cartList.map((item) => (
-                                                        <CartItem key={item.id} item={item} />
-                                                    ))}
-                                                </div>
+                                                    {/* List product */}
+                                                    <div className={styles['cart-list']}>
+                                                        {cartList.map((item) => (
+                                                            <CartItem
+                                                                key={item._id}
+                                                                item={item}
+                                                            />
+                                                        ))}
+                                                    </div>
 
-                                                <div className={styles['cart-footer']}>
-                                                    <p className={styles['cart-total']}>
-                                                        <strong>Total:</strong>
-                                                        <strong>$189.98</strong>
-                                                    </p>
-                                                    <p className={styles['cart-actions']}>
-                                                        <Button
-                                                            small
-                                                            customStyle={styles['view-cart-btn']}
+                                                    {/* Summary */}
+                                                    <div
+                                                        className={styles['cart-footer']}
+                                                    >
+                                                        <p
+                                                            className={
+                                                                styles['cart-total']
+                                                            }
                                                         >
-                                                            View cart
-                                                        </Button>
-                                                        <Button
-                                                            small
-                                                            deepBlack
-                                                            customStyle={styles['checkout-btn']}
+                                                            <strong>Total:</strong>
+                                                            <strong>
+                                                                {formatCurrencyVN(total)}
+                                                            </strong>
+                                                        </p>
+
+                                                        <p
+                                                            className={
+                                                                styles['cart-actions']
+                                                            }
                                                         >
-                                                            Checkout
-                                                        </Button>
-                                                    </p>
+                                                            <Button
+                                                                small
+                                                                to={routes.cart}
+                                                                customStyle={
+                                                                    styles[
+                                                                        'view-cart-btn'
+                                                                    ]
+                                                                }
+                                                            >
+                                                                View cart
+                                                            </Button>
+
+                                                            <Button
+                                                                small
+                                                                to={routes.checkout}
+                                                                deepBlack
+                                                                customStyle={
+                                                                    styles['checkout-btn']
+                                                                }
+                                                            >
+                                                                Checkout
+                                                            </Button>
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            )}
                                         </div>
                                     </div>
                                 )}
                             >
                                 <Link to={routes.cart} className={styles['cart-icon']}>
                                     <CartIcon />
-                                    <span className={styles['cart-count']}>2</span>
+                                    {cartList.length > 0 && (
+                                        <span className={styles['cart-count']}>
+                                            {cartList.length}
+                                        </span>
+                                    )}
                                 </Link>
                             </Tippy>
                         </div>

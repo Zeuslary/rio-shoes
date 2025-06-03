@@ -2,9 +2,17 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { formatCurrencyVN, upperCaseFirstLetter } from '~/utils';
+
+import {
+    ReturnIcon,
+    CheckCircleIcon,
+    MinusIcon,
+    PlusIcon,
+    TruckIcon,
+} from '~/assets/icons';
 import Button from '~/components/Button';
 import styles from './Detail.module.scss';
-import { ReturnIcon, CheckCircleIcon, MinusIcon, PlusIcon, TruckIcon } from '~/assets/icons';
 
 const promotions = [
     {
@@ -61,9 +69,11 @@ function Detail({ item }) {
                 {/* Price */}
                 <p className={styles['price-wrapper']}>
                     <span className={styles['new-price']}>
-                        <strong>${item.newPrice}</strong>
+                        <strong>{formatCurrencyVN(item.newPrice)}</strong>
                     </span>
-                    <span className={styles['price']}>${item.originalPrice}</span>
+                    <span className={styles['price']}>
+                        {formatCurrencyVN(item.originalPrice)}
+                    </span>
                 </p>
 
                 {/* Size */}
@@ -95,7 +105,7 @@ function Detail({ item }) {
                             )}
                             onClick={() => handleColor(colorName)}
                         >
-                            {colorName}
+                            {upperCaseFirstLetter(colorName)}
                         </button>
                     ))}
                 </div>
@@ -104,13 +114,19 @@ function Detail({ item }) {
                 <div>
                     <h2 className={styles['title']}>Quantity</h2>
                     <div className={styles['quantity']}>
-                        <button className={styles['decrease-btn']} onClick={handleDecrement}>
+                        <button
+                            className={styles['decrease-btn']}
+                            onClick={handleDecrement}
+                        >
                             <MinusIcon />
                         </button>
 
                         <span>{quantity}</span>
 
-                        <button className={styles['increase-btn']} onClick={handleIncrement}>
+                        <button
+                            className={styles['increase-btn']}
+                            onClick={handleIncrement}
+                        >
                             <PlusIcon />
                         </button>
                     </div>
@@ -130,7 +146,10 @@ function Detail({ item }) {
             {/* Promotion */}
             <div className={styles['promotions']}>
                 {promotions.map((promotion, index) => (
-                    <div key={promotion.key || index} className={styles['promotion-item']}>
+                    <div
+                        key={promotion.key || index}
+                        className={styles['promotion-item']}
+                    >
                         {promotion.icon && promotion.icon}
                         <span>{promotion.desc}</span>
                     </div>

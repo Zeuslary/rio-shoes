@@ -9,7 +9,7 @@ import 'swiper/scss/pagination';
 import { api, backEndApi, toastError } from '~/utils';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '~/assets/icons';
-import ProductCart from '~/components/ProductCart';
+import { ProductCart } from '~/components';
 import styles from './FlashSale.module.scss';
 
 function FlashSale() {

@@ -49,6 +49,21 @@ const getAll = async (path) => {
     }
 };
 
+const getPart = async (path, page) => {
+    try {
+        const res = await instanceAxios.get(`${path}?page=${page}`);
+        console.group('Get part: ', path);
+        console.log('Page: ', page);
+        console.log('Result: ', res);
+        console.groupEnd();
+
+        return res.data;
+    } catch (err) {
+        console.error('Error fetching data!', err);
+        throw err;
+    }
+};
+
 const post = async (path, data) => {
     try {
         const res = await instanceAxios.post(path, data);
@@ -214,6 +229,7 @@ const updatePassword = async (path, id, data) => {
 export default {
     getById,
     getAll,
+    getPart,
     post,
     deleteById,
     putById,

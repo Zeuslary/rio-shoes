@@ -6,27 +6,17 @@ import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 
-import styles from './GalleryImages.module.scss';
-import images from '~/assets/images';
-import Image from '~/components/Image';
+import { IMG_PRODUCT_PATH } from '~/constants';
+
+import { Image, Button } from '~/components';
 import { ChevronLeftIcon, ChevronRightIcon } from '~/assets/icons';
-import Button from '~/components/Button';
+import styles from './GalleryImages.module.scss';
 
-const galleryImgs = [
-    images.nikeProduct,
-    images.adidasProduct,
-    images.bannerAdidas,
-    images.adidasProduct,
-    images.bannerPuma,
-    images.adidasProduct,
-];
-
-function GalleryImage() {
+function GalleryImage({ galleryImgs = [] }) {
     const [indexImg, setIndexImg] = useState();
     const [direction, setDirection] = useState('next');
 
     const handleSwitchIndexImg = (src) => {
-        console.log('Handle Switch main img...');
         setIndexImg(src);
     };
 
@@ -40,7 +30,7 @@ function GalleryImage() {
                         styles['main-img'],
                         direction === 'prev' && styles['slide-prev'],
                     )}
-                    src={galleryImgs[indexImg]}
+                    src={IMG_PRODUCT_PATH + galleryImgs[indexImg]}
                 />
                 <Button customStyle={styles['prev-btn']}>
                     <ChevronLeftIcon />
@@ -52,7 +42,7 @@ function GalleryImage() {
 
             <Swiper
                 spaceBetween={12}
-                slidesPerView={5}
+                slidesPerView={4}
                 loop={true}
                 navigation={{
                     prevEl: `.${styles['prev-btn']}`,
@@ -77,7 +67,7 @@ function GalleryImage() {
                                 styles['img'],
                                 direction === 'next' && styles['left-to-right'],
                             )}
-                            src={img}
+                            src={IMG_PRODUCT_PATH + img}
                             onClick={() => handleSwitchIndexImg(index)}
                         />
                     </SwiperSlide>

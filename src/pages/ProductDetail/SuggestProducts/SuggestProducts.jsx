@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/scss';
@@ -6,21 +6,13 @@ import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '~/assets/icons';
-import dataProducts from '~/data/fakeApiProducts';
 import ProductCart from '~/components/ProductCart';
 import styles from './SuggestProducts.module.scss';
 
-function SuggestProducts({ title = 'Related Products' }) {
+function SuggestProducts({ title = 'Related Products', products = [] }) {
     // Initialize the navigation variables
     const nextButtonRef = useRef(null);
     const prevButtonRef = useRef(null);
-
-    useEffect(() => {
-        console.group(title);
-        console.log(nextButtonRef);
-        console.log(prevButtonRef);
-        console.groupEnd();
-    });
 
     return (
         <div className={styles['wrapper']}>
@@ -53,8 +45,11 @@ function SuggestProducts({ title = 'Related Products' }) {
                         loop={true}
                         modules={[Navigation]}
                     >
-                        {dataProducts.map((item, index) => (
-                            <SwiperSlide key={item.id || index} className={styles['product-item']}>
+                        {products.map((item, index) => (
+                            <SwiperSlide
+                                key={item.id || index}
+                                className={styles['product-item']}
+                            >
                                 <ProductCart item={item} />
                             </SwiperSlide>
                         ))}

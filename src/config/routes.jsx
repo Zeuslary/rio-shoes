@@ -2,9 +2,10 @@ const routes = {
     login: '/login', //Done
     register: '/register', //Done
     home: '/', //Done
-    adidas: '/adidas', //Done
-    nike: '/nike', //Done
-    puma: '/puma', //Done
+    product: '/product', // Merger form page adidas, nike, puma
+    adidas: '/adidas', //Done -> Switch into product
+    nike: '/nike', //Done -> Switch into product
+    puma: '/puma', //Done -> Switch into product
     orderTracking: '/order-tracking', //Done
     contact: '/contact', //Done
     search: '/search', //Done

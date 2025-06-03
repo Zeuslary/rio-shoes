@@ -10,9 +10,18 @@ router.get('/', productController.getAll);
 
 router.get('/minimal', productController.getAllMinimal);
 
+// Use for client
 router.get('/new', productController.getNewProducts);
 
+router.get('/part', productController.getPart);
+
+router.get('/filter', productController.filterProducts);
+
 router.get('/:id', productController.getById);
+
+router.get('/:id/suggestion', productController.getSuggestion);
+
+router.get('/detail/:id', productController.getDetail);
 
 // Private api
 router.use(verifyToken);

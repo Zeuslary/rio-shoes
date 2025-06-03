@@ -13,7 +13,7 @@ import {
     tokenUtils,
 } from '~/utils';
 
-import { ProfileContext } from '~/components/ProfileProvider';
+import { ProviderContext } from '~/components/Provider';
 
 import routes from '~/config/routes';
 
@@ -30,7 +30,7 @@ function Login() {
     // Need to use navigate at top level to avoid issues with hooks
     const navigate = useNavigate();
 
-    const { setProfile } = useContext(ProfileContext);
+    const { setProfile } = useContext(ProviderContext);
 
     // Skip login if token valid
     useEffect(() => {
@@ -89,7 +89,9 @@ function Login() {
                             pattern: patternValidate.alphaNumUnderscoreOnly,
                         })}
                     />
-                    <p className="form-msg-err">{errors.username && errors.username.message}</p>
+                    <p className="form-msg-err">
+                        {errors.username && errors.username.message}
+                    </p>
 
                     {/* Password */}
                     <label className="form-label" htmlFor="password">
@@ -106,7 +108,9 @@ function Login() {
                             minLength: patternValidate.password,
                         })}
                     />
-                    <p className="form-msg-err">{errors.password && errors.password.message}</p>
+                    <p className="form-msg-err">
+                        {errors.password && errors.password.message}
+                    </p>
 
                     {/* Button Login */}
                     <Button deepBlack customStyle={styles['login-btn']} type="submit">

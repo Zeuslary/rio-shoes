@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 import { useContext, useEffect, useState } from 'react';
 
-import { ProfileContext } from '~/components/ProfileProvider';
+import { ProviderContext } from '~/components/Provider';
 
 import {
     api,
@@ -20,7 +20,7 @@ import styles from './ImportAdd.module.scss';
 
 function ImportAdd({ setProductImports, setMode }) {
     const [products, setProducts] = useState([]);
-    const { profile } = useContext(ProfileContext);
+    const { profile } = useContext(ProviderContext);
 
     const {
         register,

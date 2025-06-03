@@ -152,7 +152,7 @@
 }
 
 .cart-list {
-    max-height: 50vh;
+    max-height: 268px;
     overflow-y: scroll;
 }
 
@@ -172,7 +172,8 @@
     display: flex;
 }
 
-button.view-cart-btn {
+.view-cart-btn {
+    color: var(--text-color);
     flex: 1;
     border-color: var(--text-color);
 
@@ -181,6 +182,6 @@ button.view-cart-btn {
     }
 }
 
-button.checkout-btn {
+.checkout-btn {
     flex: 1;
 }

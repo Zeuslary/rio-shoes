@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useCallback, useContext } from 'react';
 
-import { ProfileContext } from '~/components/ProfileProvider';
+import { ProviderContext } from '~/components/Provider';
 
 import { api, backEndApi, patternValidate, toastError, toastSuccess } from '~/utils';
 
@@ -17,7 +17,7 @@ function AccountSecurity() {
         formState: { errors },
     } = useForm();
     const newPassword = watch('newPassword');
-    const { profile } = useContext(ProfileContext);
+    const { profile } = useContext(ProviderContext);
 
     const handleUpdate = useCallback(async (data) => {
         if (data.password === data.newPassword) {
@@ -53,7 +53,9 @@ function AccountSecurity() {
                             Password:
                         </label>
                         <input
-                            className={errors.password ? 'form-input-invalid' : 'form-input'}
+                            className={
+                                errors.password ? 'form-input-invalid' : 'form-input'
+                            }
                             type="password"
                             id="password"
                             name="password"
@@ -62,14 +64,18 @@ function AccountSecurity() {
                                 minLength: patternValidate.password,
                             })}
                         />
-                        <p className="form-msg-err">{errors.password && errors.password.message}</p>
+                        <p className="form-msg-err">
+                            {errors.password && errors.password.message}
+                        </p>
 
                         {/* New Password */}
                         <label className="form-label" htmlFor="newPassword">
                             New Password:
                         </label>
                         <input
-                            className={errors.newPassword ? 'form-input-invalid' : 'form-input'}
+                            className={
+                                errors.newPassword ? 'form-input-invalid' : 'form-input'
+                            }
                             type="password"
                             id="newPassword"
                             name="newPassword"
@@ -88,7 +94,9 @@ function AccountSecurity() {
                         </label>
                         <input
                             className={
-                                errors.confirmNewPassword ? 'form-input-invalid' : 'form-input'
+                                errors.confirmNewPassword
+                                    ? 'form-input-invalid'
+                                    : 'form-input'
                             }
                             type="password"
                             id="confirmNewPassword"
@@ -100,12 +108,17 @@ function AccountSecurity() {
                             })}
                         />
                         <p className="form-msg-err">
-                            {errors.confirmNewPassword && errors.confirmNewPassword.message}
+                            {errors.confirmNewPassword &&
+                                errors.confirmNewPassword.message}
                         </p>
 
                         {/* Button Change */}
                         <p className="text-center mt-12">
-                            <Button deepBlack type="submit" customStyle={styles['update-btn']}>
+                            <Button
+                                deepBlack
+                                type="submit"
+                                customStyle={styles['update-btn']}
+                            >
                                 Change
                             </Button>
                         </p>

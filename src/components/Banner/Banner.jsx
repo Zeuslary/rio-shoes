@@ -7,9 +7,11 @@ import 'swiper/scss/pagination';
 import 'swiper/scss/autoplay';
 import 'swiper/scss/pagination';
 
-import styles from './Banner.module.scss';
+import routes from '~/config/routes';
+
 import Image from '~/components/Image';
 import images from '~/assets/images';
+import styles from './Banner.module.scss';
 
 function Banner() {
     return (
@@ -28,17 +30,17 @@ function Banner() {
             >
                 {/* Slider */}
                 <SwiperSlide>
-                    <Link to="/adidas">
+                    <Link to={routes.product}>
                         <Image src={images.bannerAdidas} className={styles['image']} />
                     </Link>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <Link to="/nike">
+                    <Link to={routes.product}>
                         <Image src={images.bannerNike} className={styles['image']} />
                     </Link>
                 </SwiperSlide>
                 <SwiperSlide>
-                    <Link to="/puma">
+                    <Link to={routes.product}>
                         <Image src={images.bannerPuma} className={styles['image']} />
                     </Link>
                 </SwiperSlide>

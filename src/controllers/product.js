@@ -20,12 +20,178 @@ const getAll = async (req, res) => {
 
 const getAllMinimal = async (req, res) => {
     try {
-        const products = await Product.find().select('name');
+        const products = await Product.find().select('name image originalPrice newPrice');
 
         console.log('Product ', products);
         return res.status(200).json(products);
     } catch (err) {
         console.error('Fetching data failed...', err);
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
+// Get a part of products
+const getPart = async (req, res) => {
+    try {
+        const { page = 1 } = req.query;
+        const limit = 16;
+        const skip = (page - 1) * limit;
+
+        const totalProducts = await Product.countDocuments({
+            status: 'active',
+            stock: { $gt: 0 },
+        });
+
+        const lastPage = Math.ceil(totalProducts / limit);
+
+        console.log('Count: ', totalProducts);
+        console.log('Page: ', page);
+        console.log('Last page: ', lastPage);
+
+        const products = await Product.find({
+            status: 'active',
+            stock: { $gt: 0 },
+        })
+            .skip(skip)
+            .limit(limit)
+            .populate('brandId', 'name');
+
+        console.log('Products: ', products);
+
+        return res.status(200).json({
+            message: 'Fetching a part of products successfully!',
+            data: products,
+            currentPage: page,
+            lastPage,
+        });
+    } catch (err) {
+        console.error('Fetching a part of products failed...', err);
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
+// Suggestion product base on ID
+const getSuggestion = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const currentProduct = await Product.findById(id).select('category');
+
+        if (!currentProduct)
+            return res.status(404).json({
+                message: 'Product not found!',
+                data: id,
+            });
+
+        const suggestions = await Product.find({
+            _id: { $ne: id }, // exclude current product
+            status: 'active',
+            stock: { $gt: 0 },
+            category: { $in: currentProduct.category },
+        })
+            .limit(8)
+            .select('name image originalPrice newPrice type category');
+
+        console.log('Suggestions: ', suggestions);
+
+        return res.status(200).json({
+            message: 'Get suggestion products successfully!',
+            data: suggestions,
+        });
+    } catch (err) {
+        console.error('Get suggestion products failed...', err);
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
+// Include product, relative (category), you also may like (stock decrement)
+const getDetail = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const currentProduct = await Product.findById(id);
+
+        if (!currentProduct)
+            return res.status(404).json({
+                message: 'Product not found!',
+                data: id,
+            });
+
+        const suggestions = await Product.find({
+            _id: { $ne: id }, // exclude current product
+            status: 'active',
+            stock: { $gt: 0 },
+            category: { $in: currentProduct.category },
+        })
+            .limit(8)
+            .select('name image originalPrice newPrice');
+
+        console.log('Suggestions: ', suggestions);
+
+        const youAlsoMayLike = await Product.find({
+            _id: { $ne: id }, // exclude current product
+            status: 'active',
+            stock: { $gt: 0 },
+        })
+            .sort({ sold: -1 })
+            .limit(8)
+            .select('name image originalPrice newPrice');
+
+        console.log('youAlsoMayLike: ', youAlsoMayLike);
+
+        return res.status(200).json({
+            message: 'Fetching product detail successfully!',
+            data: currentProduct,
+            suggestions,
+            youAlsoMayLike,
+        });
+    } catch (err) {
+        console.error('Get detail product failed...', err);
+
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
+const filterProducts = async (req, res) => {
+    try {
+        const { color, category, type, style, material, design, size, brandId } =
+            req.query;
+
+        const filter = {
+            status: 'active',
+            stock: { $gt: 0 },
+        };
+
+        // $in works like: field: { $in: ['red', 'blue'] } → it checks if any value exists in the array.
+        if (color) filter.colors = { $in: color.split(',') };
+        if (category) filter.category = { $in: category.split(',') };
+        if (type) filter.type = { $in: type.split(',') };
+        if (style) filter.style = { $in: style.split(',') };
+        if (material) filter.material = { $in: material.split(',') };
+        if (design) filter.design = { $in: design.split(',') };
+        if (size) filter.sizes = { $in: size.split(',') };
+        if (brandId) filter.brandId = brandId;
+
+        console.log('Filter: ', filter);
+
+        const products = await Product.find(filter).populate('brandId', 'name');
+
+        console.log('Filter products: ', products);
+
+        return res.status(200).json({
+            message: 'Filter products successfully!',
+            data: products,
+        });
+    } catch (err) {
+        console.error('Filter products failed...', err);
         return res.status(500).json({
             message: 'Internal Server Error!',
         });
@@ -349,7 +515,11 @@ export default {
     getAll,
     getAllMinimal,
     getNewProducts,
+    getSuggestion,
+    getDetail,
+    filterProducts,
     getById,
+    getPart,
     create,
     deleteById,
     updateById,

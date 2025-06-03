@@ -253,8 +253,10 @@ database:
 - When add any field, last img blob still not clear .
 - Just login can be pass verifyToken -> all user just have account will be change info as admin -> Need fix.
 - Think about update product, when you not change gallery image, what happen?
-- Need make pagination, add pagination into api
-
+- Need make pagination, add pagination into api.
+- Need handle when delete product, product import will be error.
+- Button pre, next of Banner
+- Need to fix apply voucher
 
 
 ------ Step you are doing ---------------
@@ -280,7 +282,7 @@ database:
 ------------- Note --------------
 - Regax phone vn: /^(84|0[3|5|7|8|9])+([0-9]{8})\b$/
 - Regax email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-
+2500000
 ----------------------
 Pagination
 page: 

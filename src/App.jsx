@@ -49,20 +49,25 @@ const publicRouters = [
     },
     {
         id: 2,
-        path: routes.adidas,
+        path: routes.product,
         component: <Products />,
     },
-
     {
         id: 3,
-        path: routes.puma,
-        component: <Products />,
+        path: `${routes.product}/:id`,
+        component: <ProductDetail />,
     },
-    {
-        id: 4,
-        path: routes.nike,
-        component: <Products />,
-    },
+
+    // {
+    //     id: 3,
+    //     path: routes.puma,
+    //     component: <Products />,
+    // },
+    // {
+    //     id: 4,
+    //     path: routes.nike,
+    //     component: <Products />,
+    // },
     {
         id: 5,
         path: routes.contact,
@@ -207,7 +212,10 @@ function App() {
                         const Layout = route.layout || DefaultLayout;
 
                         return (
-                            <Route path={route.path} element={<Layout>{route.component}</Layout>} />
+                            <Route
+                                path={route.path}
+                                element={<Layout>{route.component}</Layout>}
+                            />
                         );
                     })}
 

@@ -1,6 +1,8 @@
 export const API_BASE_URL = 'http://localhost:5000/api';
 export const FRONT_END_URL = 'http://localhost:5173';
 
+export const keyLocalStorageCart = 'LIST_PRODUCT_CART';
+
 export const UPLOAD_FOLDERS = {
     admin: 'uploads/admins',
     product: 'uploads/products',
@@ -25,6 +27,15 @@ export const ORDER_STATUSES = [
     'delivered',
     'completed',
     'cancelled',
+];
+
+export const SORT_OPTIONS = [
+    { label: 'Newest', value: 'newest' },
+    { label: 'Best Seller', value: 'bestSeller' },
+    { label: 'Price decreasing', value: 'priceDesc' },
+    { label: 'Price increasing', value: 'priceAsc' },
+    { label: 'A - Z', value: 'az' },
+    { label: 'Z - A', value: 'za' },
 ];
 
 export const FILTER_PRODUCTS = ['All Products', 'Adidas', 'Nike', 'Puma'];

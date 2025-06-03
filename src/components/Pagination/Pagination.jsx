@@ -4,24 +4,51 @@ import PropTypes from 'prop-types';
 import styles from './Pagination.module.scss';
 import { ChevronLeftIcon, ChevronRightIcon, LoadingDotsIcon } from '~/assets/icons';
 
-function Pagination({ numPages, currentPage = 1, viewPages = 4 }) {
+// Auto switch page when click next or prev page
+function Pagination({
+    numPages,
+    currentPage = 1,
+    viewPages = 4,
+    setPage,
+    handleClick = () => {},
+}) {
     const arrPages = Array.from({ length: numPages }).map((i, index) => index + 1);
+    const isShort = numPages < viewPages;
+
     const showPage = (page) => (
         <button
             key={page}
             className={clsx(styles['btn'], currentPage === page && styles['active'])}
+            onClick={() => {
+                setPage(page);
+                handleClick(page);
+            }}
         >
             {page}
         </button>
     );
 
-    const isShort = numPages < viewPages;
+    const handlePrevPage = () => {
+        const prevPage = currentPage - 1;
+
+        setPage(prevPage);
+        handleClick(prevPage);
+    };
+
+    const handleNextPage = () => {
+        const nextPage = currentPage + 1;
+
+        setPage(nextPage);
+        handleClick(nextPage);
+    };
 
     return (
         <div className={styles['wrapper']}>
-            <button className={styles['btn']} disabled={currentPage === 1}>
-                <ChevronLeftIcon />
-            </button>
+            {currentPage !== 1 && (
+                <button className={styles['btn']} onClick={handlePrevPage}>
+                    <ChevronLeftIcon />
+                </button>
+            )}
 
             {isShort && arrPages.map(showPage)}
             {!isShort && (
@@ -41,16 +68,21 @@ function Pagination({ numPages, currentPage = 1, viewPages = 4 }) {
                                 <LoadingDotsIcon />
                             </span>
                             {arrPages
-                                .slice(currentPage - viewPages / 2, currentPage + viewPages / 2)
+                                .slice(
+                                    currentPage - viewPages / 2,
+                                    currentPage + viewPages / 2,
+                                )
                                 .map(showPage)}
                         </>
                     )}
                 </>
             )}
 
-            <button className={styles['btn']} disabled={currentPage === numPages}>
-                <ChevronRightIcon />
-            </button>
+            {currentPage < numPages && (
+                <button className={styles['btn']} onClick={handleNextPage}>
+                    <ChevronRightIcon />
+                </button>
+            )}
         </div>
     );
 }

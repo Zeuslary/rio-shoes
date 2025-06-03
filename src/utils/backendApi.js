@@ -16,6 +16,9 @@ const backEndApi = {
     flashSale: '/flash-sale',
     newProducts: '/product/new',
     brandMinimal: '/brand/minimal',
+    partProducts: '/product/part',
+    filterProducts: '/product/filter',
+    productDetail: '/product/detail',
 };
 
 export default backEndApi;

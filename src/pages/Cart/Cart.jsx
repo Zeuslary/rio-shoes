@@ -1,13 +1,37 @@
 import clsx from 'clsx';
+import { useContext, useState } from 'react';
 
-import styles from './Cart.module.scss';
-import CartItem from './CartItem';
-import Button from '~/components/Button';
-import { CartIcon } from '~/assets/icons';
-import dataProducts from '~/data/fakeApiProducts';
+import { api, backEndApi, formatCurrencyVN, toastError } from '~/utils';
 import routes from '~/config/routes';
 
+import CartItem from './CartItem';
+
+import { Button } from '~/components';
+import { ProviderContext } from '~/components/Provider';
+import { CartIcon } from '~/assets/icons';
+import styles from './Cart.module.scss';
+
 function Cart() {
+    const { cartList, subTotal, shippingFee, discount, setDiscount, total } =
+        useContext(ProviderContext);
+
+    const [code, setCode] = useState();
+
+    const handleLoadDiscount = async () => {
+        console.log('Code: ', code);
+        if (!code) toastError('Please enter your code!');
+
+        try {
+            const res = await api.getAll(`${backEndApi.voucher}/check?code=${code}`);
+
+            setDiscount(res.data.discountValue);
+            console.log('Res: ', res);
+        } catch (err) {
+            console.error('Apply voucher failed...', err);
+            toastError(err.response?.data?.message || 'Apply voucher error!');
+        }
+    };
+
     return (
         <div className={styles['wrapper']}>
             <div className="grid wide">
@@ -15,8 +39,8 @@ function Cart() {
                 <div className={styles['content']}>
                     {/* List cards */}
                     <div className={styles['list-carts']}>
-                        {dataProducts.slice(0, 5).map((item, index) => (
-                            <CartItem key={item.id || index} item={item} />
+                        {cartList.map((item) => (
+                            <CartItem key={item._id} item={item} />
                         ))}
                     </div>
 
@@ -24,30 +48,46 @@ function Cart() {
                         {/* Summary */}
                         <div className={styles['summary']}>
                             <h3 className={styles['title']}>Order Summary</h3>
+
                             <div className={styles['space-between']}>
                                 <span>Subtotal:</span>
-                                <span>$279</span>
+                                <span>{formatCurrencyVN(subTotal)}</span>
                             </div>
+
                             <div className={styles['space-between']}>
                                 <span>Shipping:</span>
-                                <span>$9.99</span>
+                                <span>{formatCurrencyVN(shippingFee)}</span>
                             </div>
+
                             <div className={styles['code']}>
-                                <input type="text" placeholder="Enter promotion code" />
-                                <Button deepBlack small customStyle={styles['apply-btn']}>
+                                <input
+                                    type="text"
+                                    placeholder="Enter promotion code"
+                                    value={code}
+                                    onChange={(e) => setCode(e.target.value)}
+                                />
+                                <Button
+                                    deepBlack
+                                    small
+                                    customStyle={styles['apply-btn']}
+                                    onClick={handleLoadDiscount}
+                                >
                                     Apply
                                 </Button>
                             </div>
 
                             <div className={styles['space-between']}>
                                 <span>Discount:</span>
-                                <span>-$0</span>
+                                <span>-{formatCurrencyVN(discount)}</span>
                             </div>
 
-                            <div className={clsx(styles['space-between'], styles['total'])}>
+                            <div
+                                className={clsx(styles['space-between'], styles['total'])}
+                            >
                                 <span>Total:</span>
-                                <strong>$279</strong>
+                                <strong>{formatCurrencyVN(total)}</strong>
                             </div>
+
                             <Button
                                 to={routes.checkout}
                                 deepBlack
