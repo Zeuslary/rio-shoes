@@ -100,7 +100,7 @@ function ProductDetail() {
                                             </td>
                                             <td className={styles['value-cell']}>
                                                 {upperCaseFirstLetter(
-                                                    field.value.toString(),
+                                                    field?.value?.toString(),
                                                 )}
                                             </td>
                                         </tr>

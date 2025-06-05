@@ -2,7 +2,13 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { useContext } from 'react';
 
-import { formatCurrencyVN, storage, upperCaseFirstLetter } from '~/utils';
+import {
+    formatCurrencyVN,
+    storage,
+    toastError,
+    toastSuccess,
+    upperCaseFirstLetter,
+} from '~/utils';
 import { IMG_PRODUCT_PATH, keyLocalStorageCart } from '~/constants';
 import routes from '~/config/routes';
 
@@ -18,35 +24,41 @@ function ProductCart({ item }) {
         // Wrapper is Link -> prevent switch
         e.preventDefault();
 
-        const itemSave = {
+        const newItem = {
             _id: item._id,
             name: item.name,
             originalPrice: item.originalPrice,
             newPrice: item.newPrice,
             image: item.image,
-            colors: [item.colors[0]],
-            sizes: [item.sizes[0]],
+            color: item.colors[0],
+            size: item.sizes[0],
             quantity: 1,
+            stock: item.stock,
         };
 
         let isExist = false;
 
-        const updateCartList = cartList.map((cartItem) => {
-            if (cartItem._id === itemSave._id) {
+        const updateCartList = cartList.map((item) => {
+            if (
+                item._id === newItem._id &&
+                item.color === newItem.color &&
+                item.size === newItem.size
+            ) {
                 isExist = true;
-
-                return {
-                    ...cartItem,
-                    colors: [...cartItem.colors, item.colors[0]],
-                    sizes: [...cartItem.sizes, item.sizes[0]],
-                    quantity: cartItem.quantity + 1,
-                };
+                if (item.quantity >= item.stock) {
+                    toastError('Stock is not enough!');
+                } else {
+                    item.quantity += 1;
+                    toastSuccess('Add product successfully!');
+                }
             }
-
-            return cartItem;
+            return item;
         });
 
-        if (!isExist) updateCartList.push(itemSave);
+        if (!isExist) {
+            updateCartList.push(newItem);
+            toastSuccess('Add product successfully!');
+        }
 
         // Save
         setCartList(updateCartList);
@@ -81,6 +93,7 @@ function ProductCart({ item }) {
                             {formatCurrencyVN(item.originalPrice)}
                         </span>
                     </span>
+
                     <Button
                         onClick={handleAddProduct}
                         small

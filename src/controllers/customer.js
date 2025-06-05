@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import { UPLOAD_FOLDERS } from '../constants/index.js';
 import nestObject from '../utils/nestObject.js';
 import deleteFileDiskStorage from '../utils/deleteFileDiskStorage.js';
-import { Customer } from '../models/index.js';
+import { Customer, Order } from '../models/index.js';
 
 const deleteFileJustUpload = (file) => {
     if (file) deleteFileDiskStorage(file.filename, UPLOAD_FOLDERS.customer);
@@ -141,6 +141,21 @@ const deleteById = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(id))
             return res.status(400).json({
                 message: 'Invalid ID',
+                data: id,
+            });
+
+        // If exist order -> can't delete customer
+        const orderCustomer = await Order.find({
+            customerId: id,
+        });
+
+        console.log('CustomerId: ', id);
+        console.log('Customer: ', orderCustomer);
+        console.log('Customer: ', orderCustomer.length <= 0);
+
+        if (orderCustomer && orderCustomer.length >= 1)
+            return res.status(400).json({
+                message: "Can't delete customer has order!",
                 data: id,
             });
 

@@ -16,6 +16,10 @@ function OrderDetail({ orderDetail }) {
                     <CartBox>
                         <h2 className={styles['section-title']}>Shipping Information</h2>
                         <p className={styles['info-item']}>
+                            <span className={styles['info-title']}>ID</span>
+                            <span>{orderDetail._id}</span>
+                        </p>
+                        <p className={styles['info-item']}>
                             <span className={styles['info-title']}>Name</span>
                             <span>{orderDetail.customerName}</span>
                         </p>

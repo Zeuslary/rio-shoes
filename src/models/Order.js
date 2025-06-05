@@ -7,7 +7,7 @@ const orderSchema = new Schema(
         customerId: { type: Types.ObjectId, required: true, ref: 'Customer' },
         items: [
             {
-                id: { type: Types.ObjectId, required: true, ref: 'Product' },
+                _id: { type: Types.ObjectId, required: true, ref: 'Product' },
                 name: String,
                 size: { type: String, required: true },
                 color: { type: String, required: true },
@@ -18,7 +18,7 @@ const orderSchema = new Schema(
         paymentId: { type: Types.ObjectId, required: true, ref: 'Payment' },
         shippingId: { type: Types.ObjectId, required: true, ref: 'Shipping' },
         summary: {
-            subtotal: { type: Number, required: true, min: 0 },
+            subTotal: { type: Number, required: true, min: 0 },
             shippingFee: { type: Number, required: true, default: 0 },
             discount: { type: Number, default: 0 },
             voucherId: { type: Types.ObjectId, ref: 'Voucher' },

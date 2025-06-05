@@ -1,9 +1,8 @@
 import clsx from 'clsx';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useRef } from 'react';
 
 import { ProviderContext } from '~/components/Provider';
-import { api, backEndApi, formatCurrencyVN, toastError } from '~/utils';
-import routes from '~/config/routes';
+import { formatCurrencyVN } from '~/utils';
 
 import ContactInfo from './ContactInfo';
 
@@ -11,34 +10,22 @@ import { CartItemSummary, Button } from '~/components';
 import styles from './Checkout.module.scss';
 
 function Checkout() {
-    const [shippingMethods, setShippingMethods] = useState([]);
-    const { cartList, subTotal, shippingFee, setShippingFee, discount, total } =
-        useContext(ProviderContext);
+    const {
+        cartList,
+        subTotal,
+        shippingMethods,
+        shipping,
+        setShipping,
+        payment,
+        discount,
+        total,
+    } = useContext(ProviderContext);
 
     // ref for form
     const contactFormRef = useRef();
 
-    useEffect(() => {
-        const fetchingShipping = async () => {
-            try {
-                const res = await api.getAll(backEndApi.shipping);
-                console.log(res);
-                setShippingMethods(res);
-                setShippingId(res[0]._id);
-            } catch (err) {
-                console.error('Fetching shipping failed...', err);
-                toastError(err.response?.data?.message || 'Fetching shipping error!');
-            }
-        };
-
-        fetchingShipping();
-    }, []);
-
-    const [shippingId, setShippingId] = useState();
-
     const handleShipping = (method) => {
-        setShippingId(method._id);
-        setShippingFee(method.price);
+        setShipping(method);
     };
 
     const handleConfirm = () => {
@@ -66,7 +53,7 @@ function Checkout() {
                                             <div
                                                 className={clsx(
                                                     styles['option'],
-                                                    shippingId === method._id &&
+                                                    shipping._id === method._id &&
                                                         styles['option-active'],
                                                 )}
                                                 onClick={() => handleShipping(method)}
@@ -103,10 +90,12 @@ function Checkout() {
                             >
                                 <div className={styles['option-info']}>
                                     <h5 className={styles['option-title']}>
-                                        Cash on Delivery (COD)
+                                        {`${
+                                            payment?.name
+                                        } (${payment?.code?.toUpperCase()})`}
                                     </h5>
                                     <p className={styles['option-desc']}>
-                                        Pay when you receive your order
+                                        {payment?.description}
                                     </p>
                                 </div>
                             </div>
@@ -129,12 +118,14 @@ function Checkout() {
                             </div>
                             <div className={styles['space-between']}>
                                 <span>Shipping:</span>
-                                <span>{formatCurrencyVN(shippingFee)}</span>
+                                <span>{formatCurrencyVN(shipping?.price)}</span>
                             </div>
 
                             <div className={styles['space-between']}>
                                 <span>Discount:</span>
-                                <span>-{formatCurrencyVN(discount)}</span>
+                                <span>
+                                    -{formatCurrencyVN(discount?.discountValue || 0)}
+                                </span>
                             </div>
 
                             <div className={styles['space-between']}>

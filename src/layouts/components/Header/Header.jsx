@@ -99,9 +99,9 @@ function Header() {
 
                                                     {/* List product */}
                                                     <div className={styles['cart-list']}>
-                                                        {cartList.map((item) => (
+                                                        {cartList.map((item, index) => (
                                                             <CartItem
-                                                                key={item._id}
+                                                                key={index}
                                                                 item={item}
                                                             />
                                                         ))}

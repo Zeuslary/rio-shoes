@@ -278,7 +278,7 @@ database:
 31/5 - 440
  + customer: view, edit, delete -> Done -> BE: public all api -> update, view detail done
  + order: done edit -> Be: just public getAll, getById, and create order.
-
+2/6: 562
 ------------- Note --------------
 - Regax phone vn: /^(84|0[3|5|7|8|9])+([0-9]{8})\b$/
 - Regax email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/

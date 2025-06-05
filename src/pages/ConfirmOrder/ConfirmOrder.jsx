@@ -1,69 +1,71 @@
-import CartItemSummary from '~/components/CartItemSummary';
-import Button from '~/components/Button';
-import { ReturnIcon } from '~/assets/icons';
-import routes from '~/config/routes';
-import styles from './ConfirmOrder.module.scss';
+import { useContext } from 'react';
 
-// Fake confirm order
-const fakeConfirmOrderData = {
-    contactInfo: {
-        fullName: 'John Doe',
-        phone: '0912345678',
-        email: 'john.doe@example.com',
-        address: {
-            houseNumber: '123',
-            ward: 'Ward 1',
-            district: 'District 3',
-            city: 'Ho Chi Minh City',
-        },
-    },
-    shippingMethod: {
-        id: 'express',
-        name: 'Express',
-        description: '1-2 business days',
-        price: 19.99,
-    },
-    paymentMethod: {
-        type: 'Cash on Delivery (COD)',
-        description: 'Pay when you receive your order',
-    },
-    items: [
-        {
-            name: 'Adidas Ultraboost 22',
-            image: '/src/assets/images/product/nike-1.png',
-            size: 42,
-            color: 'Black',
-            price: 150,
-            quantity: 2,
-        },
-        {
-            name: 'Converse Chuck Taylor All Star',
-            image: '/src/assets/images/product/nike-1.png',
-            size: 40,
-            color: 'Red',
-            price: 75,
-            quantity: 1,
-        },
-        {
-            name: 'Nike Air Force 1',
-            image: '/src/assets/images/product/nike-1.png',
-            size: 38,
-            color: 'White',
-            price: 120,
-            quantity: 1,
-        },
-    ],
-    summary: {
-        subTotal: 495,
-        shipping: 19.99,
-        discount: 0,
-        total: 514.99,
-    },
-    createdAt: '2025-05-07',
-};
+import {
+    api,
+    backEndApi,
+    displayAddress,
+    formatCurrencyVN,
+    storage,
+    toastError,
+    toastSuccess,
+} from '~/utils';
+import routes from '~/config/routes';
+
+import { ProviderContext } from '~/components/Provider';
+import { Button, CartItemSummary } from '~/components';
+import { ReturnIcon } from '~/assets/icons';
+import styles from './ConfirmOrder.module.scss';
+import { keyLocalStorageCart } from '~/constants';
+import { useNavigate } from 'react-router';
 
 function ConfirmOrder() {
-    const { contactInfo, shippingMethod, paymentMethod, items, summary } = fakeConfirmOrderData;
+    const {
+        profile,
+        cartList,
+        setCartList,
+        contactInfo,
+        subTotal,
+        shipping,
+        payment,
+        discount,
+        total,
+    } = useContext(ProviderContext);
+
+    const navigate = useNavigate();
+
+    const handleOrder = async () => {
+        const dataSend = {
+            profile,
+            contactInfo,
+            items: cartList,
+            shipping,
+            payment,
+            discount,
+        };
+
+        try {
+            const result = await api.post(backEndApi.order, dataSend);
+
+            const shortData = {
+                _id: result.data._id,
+                estimateTime: shipping.estimateTime,
+            };
+
+            toastSuccess(result.message);
+
+            // Delete items inside cart list
+            setCartList([]);
+            storage.remove(keyLocalStorageCart);
+
+            // Switch to Order success
+            navigate(routes.orderSuccess, {
+                state: shortData,
+            });
+        } catch (err) {
+            console.error('Order failed...', err);
+            toastError(err?.response?.data?.message || 'Order error!');
+        }
+    };
 
     return (
         <div className={styles['wrapper']}>
@@ -86,39 +88,41 @@ function ConfirmOrder() {
                         <div className={styles['info']}>
                             <p className={styles['info-item']}>
                                 <span className={styles['info-title']}>Name</span>
-                                <span>{contactInfo.fullName}</span>
-                            </p>
-                            <p className={styles['info-item']}>
-                                <span className={styles['info-title']}>Phone number</span>
-                                <span>{contactInfo.phone}</span>
-                            </p>
-                            <p className={styles['info-item']}>
-                                <span className={styles['info-title']}>Email</span>
-                                <span>{contactInfo.email}</span>
-                            </p>
-                            <p className={styles['info-item']}>
-                                <span className={styles['info-title']}>Address</span>
                                 <span>
-                                    {contactInfo.address.houseNumber +
+                                    {(
+                                        contactInfo?.fullName?.firstName +
                                         ' ' +
-                                        contactInfo.address.ward +
-                                        ' ' +
-                                        contactInfo.address.district +
-                                        ' ' +
-                                        contactInfo.address.city}
+                                        contactInfo?.fullName?.lastName
+                                    ).trim()}
                                 </span>
                             </p>
                             <p className={styles['info-item']}>
+                                <span className={styles['info-title']}>Phone number</span>
+                                <span>{contactInfo?.phone}</span>
+                            </p>
+                            <p className={styles['info-item']}>
+                                <span className={styles['info-title']}>Email</span>
+                                <span>{contactInfo?.email}</span>
+                            </p>
+                            <p className={styles['info-item']}>
+                                <span className={styles['info-title']}>Address</span>
+                                <span>{displayAddress(contactInfo?.address)}</span>
+                            </p>
+                            <p className={styles['info-item']}>
                                 <span className={styles['info-title']}>Message</span>
-                                <span>{contactInfo.message}</span>
+                                <span>{contactInfo?.message}</span>
                             </p>
                             <p className={styles['info-item']}>
                                 <span className={styles['info-title']}>Shipping</span>
-                                <span>{shippingMethod.name + ' - $' + shippingMethod.price}</span>
+                                <span>
+                                    {shipping?.name +
+                                        ' - ' +
+                                        formatCurrencyVN(shipping?.price)}
+                                </span>
                             </p>
                             <p className={styles['info-item']}>
                                 <span className={styles['info-title']}>Payment</span>
-                                <span>{paymentMethod.type}</span>
+                                <span>{payment?.name}</span>
                             </p>
                         </div>
                     </div>
@@ -129,28 +133,31 @@ function ConfirmOrder() {
 
                         {/* List items */}
                         <div className={styles['list-items']}>
-                            {items.map((item, index) => (
-                                <CartItemSummary key={item.id || index} item={item} />
-                            ))}
+                            {cartList.length > 0 &&
+                                cartList.map((item) => (
+                                    <CartItemSummary key={item._id} item={item} />
+                                ))}
                         </div>
 
                         {/* Summary */}
                         <div className={styles['summary']}>
                             <p>
                                 <span>Subtotal</span>
-                                <span>${summary.subTotal}</span>
+                                <span>{formatCurrencyVN(subTotal)}</span>
                             </p>
                             <p>
                                 <span>Shipping</span>
-                                <span>${summary.shipping}</span>
+                                <span>{formatCurrencyVN(shipping?.price)}</span>
                             </p>
                             <p>
                                 <span>Discount</span>
-                                <span>-${summary.discount}</span>
+                                <span>
+                                    -{formatCurrencyVN(discount?.discountValue || 0)}
+                                </span>
                             </p>
                             <p className={styles['total']}>
                                 <strong>Total</strong>
-                                <strong>${summary.total}</strong>
+                                <strong>{formatCurrencyVN(total)}</strong>
                             </p>
                         </div>
                     </div>
@@ -158,7 +165,13 @@ function ConfirmOrder() {
 
                 <div className={styles['confirm']}>
                     <p>Please review all information before confirming your order</p>
-                    <Button to={routes.orderDetail} deepBlack customStyle={styles['order-btn']}>
+
+                    <Button
+                        // to={routes.orderDetail}
+                        deepBlack
+                        customStyle={styles['order-btn']}
+                        onClick={handleOrder}
+                    >
                         Place Order
                     </Button>
                 </div>

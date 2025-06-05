@@ -9,7 +9,7 @@ const customerSchema = new Schema(
         role: { type: String, default: 'customer' },
         fullName: {
             firstName: { type: String, required: true },
-            lastName: { type: String, required: true },
+            lastName: { type: String },
         },
         phone: { type: String, required: true },
         email: String,

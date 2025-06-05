@@ -1,27 +1,30 @@
-import { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
+import { useNavigate } from 'react-router';
 import { FormProvider, useForm } from 'react-hook-form';
+import { forwardRef, useCallback, useContext, useImperativeHandle, useRef } from 'react';
 
 import { patternValidate } from '~/utils';
+import routes from '~/config/routes';
 
 import { AddressForm } from '~/components';
-import { useNavigate } from 'react-router';
-import routes from '~/config/routes';
+import { ProviderContext } from '~/components/Provider';
 import styles from './ContactInfo.module.scss';
 
 const ContactInfo = forwardRef((props, ref) => {
+    const { contactInfo, setContactInfo } = useContext(ProviderContext);
+
     const methods = useForm({
         defaultValues: {
             fullName: {
-                firstName: '',
-                lastName: '',
+                firstName: contactInfo?.fullName?.firstName || '',
+                lastName: contactInfo?.fullName?.lastName || '',
             },
-            phone: '',
-            email: '',
+            phone: contactInfo?.phone || '',
+            email: contactInfo?.email || '',
             address: {
-                city: 'default',
-                district: 'default',
-                ward: 'default',
-                houseNumber: '',
+                city: contactInfo?.address?.city || 'default',
+                district: contactInfo?.address?.district || 'default',
+                ward: contactInfo?.address?.ward || 'default',
+                houseNumber: contactInfo?.address?.houseNumber || '',
             },
             message: '',
         },
@@ -39,11 +42,9 @@ const ContactInfo = forwardRef((props, ref) => {
     const formRef = useRef();
 
     const onSubmit = useCallback((data) => {
-        const contactInfo = data;
-        // Switch contact info to page confirm order
-        navigate(routes.confirmOrder, {
-            state: contactInfo,
-        });
+        setContactInfo(data);
+
+        navigate(routes.confirmOrder);
     }, []);
 
     useImperativeHandle(
@@ -62,7 +63,7 @@ const ContactInfo = forwardRef((props, ref) => {
             <h2 className={styles['title']}>Contact Information</h2>
 
             <FormProvider {...methods}>
-                <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+                <form ref={formRef}>
                     {/* FullName */}
                     <div className="row">
                         {/* First Name */}
@@ -178,11 +179,6 @@ const ContactInfo = forwardRef((props, ref) => {
                                 (errors.message?.message || `This field is required`)}
                         </p>
                     </div>
-
-                    {/* Fake submit */}
-                    {/* <Button onClick={handleSubmit(onSubmit)} deepBlack>
-                    Submit
-                </Button> */}
                 </form>
             </FormProvider>
         </div>

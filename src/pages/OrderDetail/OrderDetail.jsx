@@ -1,72 +1,42 @@
 import clsx from 'clsx';
+import { useParams } from 'react-router';
+import { useEffect, useState } from 'react';
 
-import Button from '~/components/Button';
-import CartItemSummary from '~/components/CartItemSummary';
+import {
+    api,
+    backEndApi,
+    formatCurrencyVN,
+    toastError,
+    upperCaseFirstLetter,
+} from '~/utils';
 import routes from '~/config/routes';
+
+import { Button, CartItemSummary } from '~/components';
 import styles from './OrderDetail.module.scss';
 
-// Fake order history
-const fakeOrderHistory = {
-    id: 103,
-    status: 'processing',
-    createdAt: '2025-05-06',
-    contactInfo: {
-        fullName: 'John Doe',
-        phone: '0912345678',
-        email: 'john.doe@example.com',
-        address: {
-            houseNumber: '123',
-            ward: 'Ward 1',
-            district: 'District 3',
-            city: 'Ho Chi Minh City',
-        },
-    },
-    shippingMethod: {
-        id: 'express',
-        name: 'Express',
-        description: '1-2 business days',
-        price: 19.99,
-    },
-    paymentMethod: {
-        type: 'Cash on Delivery (COD)',
-        description: 'Pay when you receive your order',
-    },
-    items: [
-        {
-            name: 'New Balance 574',
-            image: '/src/assets/images/product/nike-1.png',
-            size: 43,
-            color: 'Grey',
-            price: 110,
-            quantity: 1,
-        },
-        {
-            name: 'Puma Suede Classic',
-            image: '/src/assets/images/product/nike-1.png',
-            size: 42,
-            color: 'Green',
-            price: 90,
-            quantity: 1,
-        },
-        {
-            name: 'Converse Chuck 70',
-            image: '/src/assets/images/product/nike-1.png',
-            size: 41,
-            color: 'Black',
-            price: 95,
-            quantity: 1,
-        },
-    ],
-    summary: {
-        subTotal: 295,
-        shipping: 19.99,
-        discount: 0,
-        total: 314.99,
-    },
-};
-
 function OrderDetail() {
-    const { id, createdAt, status, contactInfo, items, summary } = fakeOrderHistory;
+    const { id } = useParams();
+    const [order, setOrder] = useState();
+
+    // Fetch order detail using `id`
+    useEffect(() => {
+        const fetchingData = async (id) => {
+            if (!id) {
+                toastError('Get order error!');
+                return;
+            }
+            try {
+                const result = await api.getById(backEndApi.order, id);
+
+                setOrder(result.data);
+            } catch (err) {
+                console.log('Get order failed...', err);
+                toastError('Get order error!');
+            }
+        };
+
+        fetchingData(id);
+    }, [id]);
 
     return (
         <div className={styles['wrapper']}>
@@ -77,58 +47,70 @@ function OrderDetail() {
                     <div className={clsx('col-6', styles['custom-col-6'])}>
                         {/* Order Info */}
                         <div className={styles['section-group']}>
-                            <h2 className={styles['section-header']}>Order Information</h2>
+                            <h2 className={styles['section-header']}>
+                                Order Information
+                            </h2>
 
                             <div className={styles['section-body']}>
                                 <p className={styles['section-item']}>
-                                    <span className={styles['section-label']}>Order number</span>
-                                    <span>{id}</span>
-                                </p>
-                                <p className={styles['section-item']}>
-                                    <span className={styles['section-label']}>Order date</span>
-                                    <span>{createdAt}</span>
-                                </p>
-                                <p className={styles['section-item']}>
-                                    <span className={styles['section-label']}>Status</span>
-                                    <span>
-                                        {status.slice(0, 1).toUpperCase() + status.slice(1)}
+                                    <span className={styles['section-label']}>
+                                        Order ID
                                     </span>
+                                    <span>{order?._id}</span>
+                                </p>
+                                <p className={styles['section-item']}>
+                                    <span className={styles['section-label']}>
+                                        Order date
+                                    </span>
+                                    <span>{order?.createdAt}</span>
+                                </p>
+                                <p className={styles['section-item']}>
+                                    <span className={styles['section-label']}>
+                                        Status
+                                    </span>
+                                    <span>{upperCaseFirstLetter(order?.status)}</span>
                                 </p>
                             </div>
                         </div>
 
                         {/* Shipping info */}
                         <div className={styles['section-group']}>
-                            <h2 className={styles['section-header']}>Shipping Information</h2>
+                            <h2 className={styles['section-header']}>
+                                Shipping Information
+                            </h2>
 
                             <div className={styles['section-body']}>
                                 <p className={styles['section-item']}>
                                     <span className={styles['section-label']}>Name</span>
-                                    <span>{contactInfo.fullName}</span>
+                                    <span>{order?.customerId?.getFullName}</span>
                                 </p>
                                 <p className={styles['section-item']}>
-                                    <span className={styles['section-label']}>Phone number</span>
-                                    <span>{contactInfo.phone}</span>
+                                    <span className={styles['section-label']}>Phone</span>
+                                    <span>{order?.customerId?.phone}</span>
                                 </p>
                                 <p className={styles['section-item']}>
                                     <span className={styles['section-label']}>Email</span>
-                                    <span>{contactInfo.email}</span>
+                                    <span>{order?.customerId?.email}</span>
                                 </p>
                                 <p className={styles['section-item']}>
-                                    <span className={styles['section-label']}>Address</span>
+                                    <span className={styles['section-label']}>
+                                        Address
+                                    </span>
                                     <span>
-                                        {contactInfo.address.houseNumber +
+                                        {order?.address.houseNumber +
                                             ' ' +
-                                            contactInfo.address.ward +
+                                            order?.address.ward +
                                             ' ' +
-                                            contactInfo.address.district +
+                                            order?.address.district +
                                             ' ' +
-                                            contactInfo.address.city}
+                                            order?.address.city}
                                     </span>
                                 </p>
                                 <p className={styles['section-item']}>
-                                    <span className={styles['section-label']}>Message</span>
-                                    <span>{contactInfo.message}</span>
+                                    <span className={styles['section-label']}>
+                                        Message
+                                    </span>
+                                    <span>{order?.message}</span>
                                 </p>
                             </div>
                         </div>
@@ -141,28 +123,35 @@ function OrderDetail() {
 
                             {/* List items */}
                             <div className={styles['list-items']}>
-                                {items.map((item, index) => (
-                                    <CartItemSummary key={item.id || index} item={item} />
-                                ))}
+                                {order?.items?.length > 0 &&
+                                    order.items.map((item, index) => (
+                                        <CartItemSummary key={index} item={item} />
+                                    ))}
                             </div>
 
                             {/* Summary */}
                             <div className={styles['summary']}>
                                 <p className={clsx('space-between', 'mt-12')}>
                                     <span>Subtotal</span>
-                                    <span>${summary.subTotal}</span>
+                                    <span>
+                                        {formatCurrencyVN(order?.summary?.subTotal)}
+                                    </span>
                                 </p>
                                 <p className={clsx('space-between', 'mt-12')}>
                                     <span>Shipping</span>
-                                    <span>${summary.shipping}</span>
+                                    <span>
+                                        {formatCurrencyVN(order?.summary?.shippingFee)}
+                                    </span>
                                 </p>
                                 <p className={clsx('space-between', 'mt-12')}>
                                     <span>Discount</span>
-                                    <span>-${summary.discount}</span>
+                                    <span>
+                                        -{formatCurrencyVN(order?.summary?.discount)}
+                                    </span>
                                 </p>
                                 <h5 className={clsx('space-between', styles['total'])}>
                                     <span>Total</span>
-                                    <span>${summary.total}</span>
+                                    <span>{formatCurrencyVN(order?.summary?.total)}</span>
                                 </h5>
                             </div>
                         </div>

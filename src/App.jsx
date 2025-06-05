@@ -118,9 +118,15 @@ const publicRouters = [
         path: routes.orderHistory,
         component: <OrderHistory />,
     },
+    // To fix error No routes matched location "/order-detail" when use navigate/:id
+    {
+        id: 17,
+        path: `${routes.orderDetail}`,
+        component: <OrderDetail />,
+    },
     {
         id: 15,
-        path: routes.orderDetail,
+        path: `${routes.orderDetail}/:id`,
         component: <OrderDetail />,
     },
     {

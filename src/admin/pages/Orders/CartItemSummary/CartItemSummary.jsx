@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import Image from '~/components/Image';
 import styles from './CartItemSummary.module.scss';
+import { IMG_PRODUCT_PATH } from '~/constants';
 
 function CartItemSummary({ item }) {
+    console.log(item);
     return (
         <div className={styles['wrapper']}>
-            <Image src={item.image} className={styles['img']} />
+            <Image src={IMG_PRODUCT_PATH + item.image} className={styles['img']} />
 
             <div className={styles['body']}>
                 <h4 className={styles['name']}>{item.name}</h4>

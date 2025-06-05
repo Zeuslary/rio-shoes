@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Link } from 'react-router';
 
-import { formatCurrencyVN, storage } from '~/utils';
+import { formatCurrencyVN, storage, upperCaseFirstLetter, toastError } from '~/utils';
 import { IMG_PRODUCT_PATH, keyLocalStorageCart } from '~/constants';
 
 import routes from '~/config/routes';
@@ -22,34 +22,34 @@ function CartItem({ item }) {
     const handleDecrement = () => {
         const newCartList = cartList
             .map((cart) => {
-                if (cart._id === item._id) {
-                    if (cart.quantity === 1) return null;
-
-                    return {
-                        ...cart,
-                        quantity: cart.quantity - 1,
-                        colors: [...cart.colors.slice(0, cart.colors.length - 1)],
-                        sizes: [...cart.sizes.slice(0, cart.sizes.length - 1)],
-                    };
+                let isDelete = false;
+                if (
+                    cart._id === item._id &&
+                    cart.color === item.color &&
+                    cart.size === item.size
+                ) {
+                    if (item.quantity <= 1) isDelete = true;
+                    else cart.quantity--;
                 }
 
-                return cart;
+                return isDelete ? null : cart;
             })
-            .filter(Boolean); // Remove null
+            // Handle cartList = [null] -> error when map
+            .filter(Boolean);
 
         saveCartList(newCartList);
     };
 
     const handleIncrement = () => {
         const newCartList = cartList.map((cart) => {
-            if (cart._id === item._id)
-                return {
-                    ...cart,
-                    quantity: cart.quantity + 1,
-                    colors: [...cart.colors, cart.colors[cart.colors.length - 1]],
-                    sizes: [...cart.sizes, cart.sizes[cart.sizes.length - 1]],
-                };
-
+            if (
+                cart._id === item._id &&
+                cart.color === item.color &&
+                cart.size === item.size
+            ) {
+                if (item.quantity >= item.stock) toastError('Stock is not enough!');
+                else cart.quantity++;
+            }
             return cart;
         });
 
@@ -74,9 +74,9 @@ function CartItem({ item }) {
                 </Link>
 
                 <div className={styles['style']}>
-                    <span className={styles['size']}>Size: {item.sizes.join(' - ')}</span>
+                    <span className={styles['size']}>Size: {item.size}</span>
                     <span className={styles['color']}>
-                        Color: {item.colors.join(' - ')}
+                        Color: {upperCaseFirstLetter(item.color)}
                     </span>
                 </div>
 

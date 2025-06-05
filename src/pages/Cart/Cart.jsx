@@ -12,20 +12,21 @@ import { CartIcon } from '~/assets/icons';
 import styles from './Cart.module.scss';
 
 function Cart() {
-    const { cartList, subTotal, shippingFee, discount, setDiscount, total } =
+    const { cartList, subTotal, shipping, discount, setDiscount, total } =
         useContext(ProviderContext);
 
-    const [code, setCode] = useState();
+    const [code, setCode] = useState('');
 
     const handleLoadDiscount = async () => {
-        console.log('Code: ', code);
-        if (!code) toastError('Please enter your code!');
+        if (!code) {
+            toastError('Please enter your code!');
+            return;
+        }
 
         try {
             const res = await api.getAll(`${backEndApi.voucher}/check?code=${code}`);
 
-            setDiscount(res.data.discountValue);
-            console.log('Res: ', res);
+            setDiscount(res.data);
         } catch (err) {
             console.error('Apply voucher failed...', err);
             toastError(err.response?.data?.message || 'Apply voucher error!');
@@ -39,8 +40,8 @@ function Cart() {
                 <div className={styles['content']}>
                     {/* List cards */}
                     <div className={styles['list-carts']}>
-                        {cartList.map((item) => (
-                            <CartItem key={item._id} item={item} />
+                        {cartList.map((item, index) => (
+                            <CartItem key={index} item={item} />
                         ))}
                     </div>
 
@@ -56,7 +57,7 @@ function Cart() {
 
                             <div className={styles['space-between']}>
                                 <span>Shipping:</span>
-                                <span>{formatCurrencyVN(shippingFee)}</span>
+                                <span>{formatCurrencyVN(shipping?.price)}</span>
                             </div>
 
                             <div className={styles['code']}>
@@ -78,7 +79,7 @@ function Cart() {
 
                             <div className={styles['space-between']}>
                                 <span>Discount:</span>
-                                <span>-{formatCurrencyVN(discount)}</span>
+                                <span>-{formatCurrencyVN(discount?.discountValue)}</span>
                             </div>
 
                             <div

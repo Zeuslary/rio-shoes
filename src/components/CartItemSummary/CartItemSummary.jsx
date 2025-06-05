@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import { IMG_PRODUCT_PATH } from '~/constants';
-import { formatCurrencyVN } from '~/utils';
+import { formatCurrencyVN, upperCaseFirstLetter } from '~/utils';
 import { Image } from '..';
 import styles from './CartItemSummary.module.scss';
 
@@ -14,9 +14,9 @@ function CartItemSummary({ item }) {
                 <h4 className={styles['name']}>{item.name}</h4>
 
                 <p>
-                    <span>Size: {[...new Set(item.sizes)].join(', ')}</span>
+                    <span>Size: {item.size}</span>
                     <span className={styles['color']}>
-                        Color: {[...new Set(item.colors)].join(', ')}
+                        Color: {upperCaseFirstLetter(item.color)}
                     </span>
                 </p>
 

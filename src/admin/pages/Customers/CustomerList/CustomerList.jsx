@@ -40,7 +40,7 @@ function CustomerList({
             setMode('view');
         } catch (err) {
             console.error('Deleting customer failed...', err);
-            toastError('Deleting customer error!');
+            toastError(err?.response?.data?.message || 'Deleting customer error!');
         }
     };
 

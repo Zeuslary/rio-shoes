@@ -1,8 +1,16 @@
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { formatCurrencyVN, upperCaseFirstLetter } from '~/utils';
+import {
+    formatCurrencyVN,
+    toastError,
+    toastSuccess,
+    upperCaseFirstLetter,
+    storage,
+} from '~/utils';
+
+import { keyLocalStorageCart } from '~/constants';
 
 import {
     ReturnIcon,
@@ -13,6 +21,7 @@ import {
 } from '~/assets/icons';
 import Button from '~/components/Button';
 import styles from './Detail.module.scss';
+import { ProviderContext } from '~/components/Provider';
 
 const promotions = [
     {
@@ -33,9 +42,11 @@ const promotions = [
 ];
 
 function Detail({ item }) {
-    const [size, setSize] = useState();
-    const [color, setColor] = useState();
+    const [size, setSize] = useState(item.sizes?.[0]);
+    const [color, setColor] = useState(item.colors?.[0]);
     const [quantity, setQuantity] = useState(1);
+
+    const { cartList, setCartList } = useContext(ProviderContext);
 
     // Handle Size
     const handleSize = (sizeName) => {
@@ -49,7 +60,12 @@ function Detail({ item }) {
 
     // Handle Increment  Quantity
     const handleIncrement = () => {
-        setQuantity((prev) => prev + 1);
+        setQuantity((prev) => {
+            if (prev < item.stock) return prev + 1;
+
+            toastError('Stock is not enough!');
+            return prev;
+        });
     };
 
     // Handle Decrement Quantity
@@ -58,6 +74,53 @@ function Detail({ item }) {
             if (prev != 1) return prev - 1;
             return prev;
         });
+    };
+
+    const handleAdd = () => {
+        const newItem = {
+            _id: item._id,
+            name: item.name,
+            originalPrice: item.originalPrice,
+            newPrice: item.newPrice,
+            image: item.image,
+            color,
+            size,
+            quantity,
+            stock: item.stock,
+        };
+
+        let isExist = false;
+
+        const updateCartList = cartList.map((item) => {
+            if (
+                item._id === newItem._id &&
+                item.color === newItem.color &&
+                item.size === newItem.size
+            ) {
+                isExist = true;
+                const totalQuantity = item.quantity + newItem.quantity;
+                if (totalQuantity <= item.stock) {
+                    item.quantity = totalQuantity;
+                    toastSuccess('Add product successfully!');
+                } else {
+                    toastError('Stock is not enough!');
+                }
+            }
+            return item;
+        });
+
+        if (!isExist) {
+            updateCartList.push(newItem);
+            toastSuccess('Add product successfully!');
+        }
+
+        // Save
+        setCartList(updateCartList);
+        storage.save(keyLocalStorageCart, updateCartList);
+    };
+
+    const handleBuyNow = () => {
+        console.log('Buy now...');
     };
 
     return (
@@ -134,10 +197,15 @@ function Detail({ item }) {
 
                 {/* Group Buttons */}
                 <div className={styles['group-btns']}>
-                    <Button customStyle={styles['buy-btn']} primary>
+                    <Button
+                        customStyle={styles['buy-btn']}
+                        primary
+                        onClick={handleBuyNow}
+                    >
                         Buy Now
                     </Button>
-                    <Button customStyle={styles['add-btn']} deepBlack>
+
+                    <Button customStyle={styles['add-btn']} deepBlack onClick={handleAdd}>
                         Add to cart
                     </Button>
                 </div>
