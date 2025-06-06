@@ -8,7 +8,7 @@ import { ProviderContext } from '~/components/Provider';
 import routes from '~/config/routes';
 import { storage, toastSuccess } from '~/utils';
 
-import { IMG_ADMIN_PATH } from '~/constants';
+import { IMG_ADMIN_PATH, keyAdminProfile } from '~/constants';
 import { UserIcon } from '~/assets/icons';
 import Image from '~/components/Image';
 import styles from './Sidebar.module.scss';
@@ -32,11 +32,11 @@ const adminLinks = [
 function Sidebar() {
     const navigate = useNavigate();
 
-    const { profile } = useContext(ProviderContext);
+    const { adminProfile } = useContext(ProviderContext);
 
     const handleLogOut = () => {
         storage.remove('token');
-        storage.remove('profile');
+        storage.remove(keyAdminProfile);
         toastSuccess('Log out successfully!');
         navigate(routes.adminLogin);
     };
@@ -62,18 +62,18 @@ function Sidebar() {
 
             <div className={styles['info']}>
                 <Image
-                    src={IMG_ADMIN_PATH + profile?.avatar}
+                    src={IMG_ADMIN_PATH + adminProfile?.avatar}
                     className={styles['info-avatar']}
                 />
                 <div className={styles['info-body']}>
                     <h3 className={styles['info-name']}>
                         {(
-                            profile?.fullName?.firstName +
+                            adminProfile?.fullName?.firstName +
                             ' ' +
-                            profile?.fullName?.lastName
+                            adminProfile?.fullName?.lastName
                         ).trim()}
                     </h3>
-                    <p className={styles['info-contact']}>{profile?.email}</p>
+                    <p className={styles['info-contact']}>{adminProfile?.email}</p>
                 </div>
 
                 <div className={styles['sub-nav']}>

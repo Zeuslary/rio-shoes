@@ -14,7 +14,7 @@ import {
     patternValidate,
 } from '~/utils';
 import { ProviderContext } from '~/components/Provider';
-import { IMG_ADMIN_PATH } from '~/constants';
+import { IMG_CUSTOMER_PATH } from '~/constants';
 
 import Button from '~/components/Button';
 import Image from '~/components/Image';
@@ -22,7 +22,7 @@ import CartBox from '~/admin/components/CartBox';
 import styles from './AccountSetting.module.scss';
 
 function AccountSetting() {
-    const { adminProfile, setAdminProfile } = useContext(ProviderContext);
+    const { customerProfile, setCustomerProfile } = useContext(ProviderContext);
     const {
         register,
         handleSubmit,
@@ -31,19 +31,19 @@ function AccountSetting() {
     } = useForm({
         defaultValues: {
             fullName: {
-                firstName: adminProfile?.fullName?.firstName,
-                lastName: adminProfile?.fullName?.lastName,
+                firstName: customerProfile?.fullName?.firstName,
+                lastName: customerProfile?.fullName?.lastName,
             },
-            email: adminProfile?.email,
-            phone: adminProfile?.phone,
-            avatar: adminProfile?.avatar,
+            email: customerProfile?.email,
+            phone: customerProfile?.phone,
+            avatar: customerProfile?.avatar,
         },
     });
 
     const [preview, setPreview] = useState(() => {
         const avatar = watch('avatar');
 
-        if (avatar && typeof avatar === 'string') return IMG_ADMIN_PATH + avatar;
+        if (avatar && typeof avatar === 'string') return IMG_CUSTOMER_PATH + avatar;
         return '';
     });
 
@@ -63,22 +63,27 @@ function AccountSetting() {
     const handleUpdate = useCallback(async (data) => {
         if (typeof data.avatar === 'string') delete data.avatar;
 
-        if (isSameValueObject(data, adminProfile)) {
+        console.log('Profile: ', customerProfile);
+
+        if (isSameValueObject(data, customerProfile)) {
             toastInfo('Nothing modified!');
             return;
         }
 
         try {
             const result = await api.putMultipart(
-                backEndApi.admin,
-                adminProfile._id,
+                `${backEndApi.customer}`,
+                customerProfile._id,
                 flatObject(data),
             );
-            storage.save('adminProfile', result.data);
-            setAdminProfile(result.data);
+
+            delete result?.data?.password;
+
+            storage.save('customerProfile', result.data);
+            setCustomerProfile(result.data);
             toastSuccess(result.message);
         } catch (err) {
-            toastError(err.response?.data?.message || 'Update admin error!');
+            toastError(err.response?.data?.message || 'Update customer error!');
         }
     }, []);
 
@@ -142,7 +147,6 @@ function AccountSetting() {
                                 id="email"
                                 name="email"
                                 {...register('email', {
-                                    required: patternValidate.required,
                                     pattern: patternValidate.email,
                                 })}
                             />

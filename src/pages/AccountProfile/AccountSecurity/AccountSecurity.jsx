@@ -13,11 +13,16 @@ function AccountSecurity() {
     const {
         register,
         handleSubmit,
+        setValue,
         watch,
         formState: { errors },
-    } = useForm();
+    } = useForm({
+        password: '',
+        newPassword: '',
+        confirmNewPassword: '',
+    });
     const newPassword = watch('newPassword');
-    const { adminProfile } = useContext(ProviderContext);
+    const { customerProfile } = useContext(ProviderContext);
 
     const handleUpdate = useCallback(async (data) => {
         if (data.password === data.newPassword) {
@@ -26,12 +31,20 @@ function AccountSecurity() {
         }
 
         try {
-            const result = await api.updatePassword(backEndApi.admin, adminProfile._id, {
-                password: data.password,
-                newPassword: data.newPassword,
-            });
+            const result = await api.updatePassword(
+                backEndApi.customer,
+                customerProfile._id,
+                {
+                    password: data.password,
+                    newPassword: data.newPassword,
+                },
+            );
 
             toastSuccess(result.message);
+
+            setValue('password', '');
+            setValue('newPassword', '');
+            setValue('confirmNewPassword', '');
         } catch (err) {
             toastError(err.response?.data?.message || 'Change password failed!');
         }

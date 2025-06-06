@@ -1,0 +1,40 @@
+.wrapper {
+    padding: 32px 0;
+    background-color: var(--background-color);
+}
+
+.content {
+    margin: 0 auto;
+    max-width: 680px;
+}
+
+.header {
+    margin: 24px 0 16px;
+    font-size: 2.2rem;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.address {
+    display: block;
+    margin: 16px 0 -14px;
+    font-weight: bolder;
+}
+
+label.house-number {
+    margin-top: 6px;
+}
+
+.cancel-btn {
+    margin-right: 12px;
+}
+
+.avatar {
+    --edge: 90px;
+    width: var(--edge);
+    height: var(--edge);
+
+    border-radius: 50%;
+    margin: 24px auto;
+    display: block;
+}

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 
 import { ProviderContext } from '~/components/Provider';
 import { formatCurrencyVN } from '~/utils';
@@ -17,12 +17,20 @@ function Checkout() {
         shipping,
         setShipping,
         payment,
+        setPayment,
+        paymentMethods,
         discount,
         total,
     } = useContext(ProviderContext);
 
     // ref for form
     const contactFormRef = useRef();
+
+    useEffect(() => {
+        if (!shipping) setShipping(shippingMethods[0]);
+
+        if (!payment) setPayment(paymentMethods.find((method) => method.code === 'cod'));
+    }, []);
 
     const handleShipping = (method) => {
         setShipping(method);
@@ -49,11 +57,11 @@ function Checkout() {
                             <div className="row">
                                 {shippingMethods &&
                                     shippingMethods.map((method) => (
-                                        <div key={method._id} className="col-6">
+                                        <div key={method?._id} className="col-6">
                                             <div
                                                 className={clsx(
                                                     styles['option'],
-                                                    shipping._id === method._id &&
+                                                    shipping?._id === method?._id &&
                                                         styles['option-active'],
                                                 )}
                                                 onClick={() => handleShipping(method)}

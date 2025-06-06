@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_BASE_URL } from '~/constants';
+import { API_BASE_URL, keyToken } from '~/constants';
 import storage from './storage.js';
 
 // Create custom axios, with config as you want
@@ -15,7 +15,7 @@ const instanceAxios = axios.create({
 // config: object default contain info of axios like baseURL, method, url,...
 // Bearer: token based auth usually JWT
 instanceAxios.interceptors.request.use((config) => {
-    const token = storage.get('token');
+    const token = storage.get(keyToken);
 
     if (token) config.headers.Authorization = `Bearer ${token}`;
 

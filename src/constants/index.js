@@ -1,8 +1,17 @@
 export const API_BASE_URL = 'http://localhost:5000/api';
 export const FRONT_END_URL = 'http://localhost:5173';
 
+// Key of localStorage
 export const keyLocalStorageCart = 'LIST_PRODUCT_CART';
+export const keyCustomerProfile = 'PROFILE_CUSTOMER';
+export const keyAdminProfile = 'PROFILE_ADMIN';
+export const keyShippingMethods = 'SHIPPING_METHODS';
+export const keyPaymentMethods = 'PAYMENT_METHODS';
+export const keyCustomerToken = 'token';
+export const keyAdminToken = 'token';
+export const keyToken = 'token';
 
+// Folder to save img
 export const UPLOAD_FOLDERS = {
     admin: 'uploads/admins',
     product: 'uploads/products',

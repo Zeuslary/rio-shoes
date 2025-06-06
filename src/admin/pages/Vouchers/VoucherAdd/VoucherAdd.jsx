@@ -19,7 +19,7 @@ import Button from '~/components/Button';
 import styles from './VoucherAdd.module.scss';
 
 function VoucherAdd({ setVouchers, setMode }) {
-    const { profile } = useContext(ProviderContext);
+    const { adminProfile } = useContext(ProviderContext);
     const methods = useForm({
         defaultValues: {
             code: '',
@@ -32,7 +32,7 @@ function VoucherAdd({ setVouchers, setMode }) {
             endDate: new Date().toISOString().slice(0, 10),
             quantity: 10,
             usedCount: 0,
-            createdBy: profile._id,
+            createdBy: adminProfile._id,
             status: 'active',
         },
     });

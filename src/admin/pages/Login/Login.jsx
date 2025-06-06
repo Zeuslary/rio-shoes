@@ -12,6 +12,7 @@ import {
     toastSuccess,
     tokenUtils,
 } from '~/utils';
+import { keyAdminProfile } from '~/constants';
 
 import { ProviderContext } from '~/components/Provider';
 
@@ -30,7 +31,7 @@ function Login() {
     // Need to use navigate at top level to avoid issues with hooks
     const navigate = useNavigate();
 
-    const { setProfile } = useContext(ProviderContext);
+    const { setAdminProfile } = useContext(ProviderContext);
 
     // Skip login if token valid
     useEffect(() => {
@@ -55,10 +56,10 @@ function Login() {
             storage.save('token', auth.token);
 
             // Save info token into localStorage
-            storage.save('profile', auth.data);
+            storage.save(keyAdminProfile, auth.data);
 
             // Add info to profile
-            setProfile(auth.data);
+            setAdminProfile(auth.data);
 
             // Login successfully, redirect to dashboard
             navigate(routes.adminDashboard);

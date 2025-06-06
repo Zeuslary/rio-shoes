@@ -4,6 +4,7 @@ import { CheckCircleIcon, CloseCircleIcon } from '~/assets/icons';
 import Button from '~/components/Button';
 import OrderCart from '~/components/OrderCart';
 import styles from './OrderTracking.module.scss';
+import { patternValidate, toastError } from '~/utils';
 
 const item = {
     id: 101,
@@ -29,6 +30,17 @@ const item = {
 
 function OrderTracking() {
     const [order, setOrder] = useState(true);
+    const [phone, setPhone] = useState('');
+
+    const handleFind = () => {
+        console.log('Phone: ', phone);
+
+        const isPhone = patternValidate.phone.value.test(phone);
+
+        if (!isPhone) toastError(patternValidate.phone.message + '!');
+
+        console.log('Valid: ', isPhone);
+    };
 
     return (
         <div className={styles['wrapper']}>
@@ -39,9 +51,17 @@ function OrderTracking() {
                     <input
                         className={styles['input']}
                         type="text"
-                        placeholder="Enter your order number"
+                        placeholder="Enter your phone order"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
                     />
-                    <Button deepBlack customStyle={styles['find-btn']}>
+
+                    <Button
+                        deepBlack
+                        customStyle={styles['find-btn']}
+                        onClick={handleFind}
+                        type="submit"
+                    >
                         Find order
                     </Button>
                 </div>
@@ -53,8 +73,8 @@ function OrderTracking() {
                     <CloseCircleIcon />
                     <h3>Can't find your order</h3>.
                     <p>
-                        The order number doesn't match any orders in our system. Please check the
-                        number and try again.
+                        The order number doesn't match any orders in our system. Please
+                        check the number and try again.
                     </p>
                 </div>
             )}

@@ -1,12 +1,23 @@
 import { useState, useMemo, useEffect } from 'react';
 
 import { api, backEndApi, storage, toastError } from '~/utils';
-import { keyLocalStorageCart } from '~/constants';
+import {
+    keyAdminProfile,
+    keyCustomerProfile,
+    keyLocalStorageCart,
+    keyPaymentMethods,
+    keyShippingMethods,
+} from '~/constants';
 
 import ProviderContext from './ProviderContext';
 
 function Provider({ children }) {
-    const [profile, setProfile] = useState(() => storage.get('profile'));
+    const [adminProfile, setAdminProfile] = useState(() => storage.get(keyAdminProfile));
+
+    const [customerProfile, setCustomerProfile] = useState(() =>
+        storage.get(keyCustomerProfile),
+    );
+
     const [cartList, setCartList] = useState(
         () => storage.get(keyLocalStorageCart) || [],
     );
@@ -36,12 +47,17 @@ function Provider({ children }) {
         const fetchingData = async () => {
             try {
                 const resShipping = await api.getAll(backEndApi.shipping);
+                const resPayment = await api.getAll(backEndApi.payment);
 
+                // Save data to localStorage
+                storage.save(keyShippingMethods, resShipping || []);
+                storage.save(keyPaymentMethods, resPayment || []);
+
+                // Save shipping into provider
                 setShippingMethods(resShipping);
                 setShipping(resShipping[0]);
 
-                const resPayment = await api.getAll(backEndApi.payment);
-
+                // Save payment into provider
                 setPaymentMethods(resPayment);
                 setPayment(resPayment.find((payment) => payment.code === 'cod'));
             } catch (err) {
@@ -50,14 +66,36 @@ function Provider({ children }) {
             }
         };
 
-        fetchingData();
+        // Save shippings and payments into provider
+        const shippingsFromStorage = storage.get(keyShippingMethods);
+        const paymentsFromStorage = storage.get(keyShippingMethods);
+
+        if (shippingsFromStorage && paymentsFromStorage) {
+            setShippingMethods(shippingsFromStorage);
+            setShipping(shippingsFromStorage[0]);
+
+            setPaymentMethods(paymentsFromStorage);
+            setPayment(paymentsFromStorage.find((method) => method.code === 'cod'));
+        } else {
+            fetchingData();
+        }
+
+        // Save customer into provider
+        const customerFromStorage = storage.get(keyCustomerProfile);
+        if (customerProfile) {
+            setCustomerProfile(customerFromStorage);
+        }
     }, []);
 
     return (
         <ProviderContext.Provider
             value={{
-                profile,
-                setProfile,
+                adminProfile,
+                setAdminProfile,
+
+                customerProfile,
+                setCustomerProfile,
+
                 cartList,
                 setCartList,
 

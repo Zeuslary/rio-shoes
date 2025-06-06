@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router';
 
 function ConfirmOrder() {
     const {
-        profile,
+        adminProfile,
         cartList,
         setCartList,
         contactInfo,
@@ -35,7 +35,7 @@ function ConfirmOrder() {
 
     const handleOrder = async () => {
         const dataSend = {
-            profile,
+            profile: adminProfile,
             contactInfo,
             items: cartList,
             shipping,

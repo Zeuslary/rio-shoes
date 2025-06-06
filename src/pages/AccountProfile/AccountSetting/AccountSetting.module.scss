@@ -1,0 +1,20 @@
+.wrapper {
+    width: 600px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.header {
+    margin: 12px 0 12px;
+    text-align: center;
+}
+
+// Original info
+.avatar {
+    --edge: 80px;
+    width: var(--edge);
+    height: var(--edge);
+    align-self: center;
+    border-radius: 50%;
+    margin: 24px 0;
+}

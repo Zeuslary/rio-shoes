@@ -19,6 +19,8 @@ const backEndApi = {
     partProducts: '/product/part',
     filterProducts: '/product/filter',
     productDetail: '/product/detail',
+    uniqueUserName: '/customer/unique-username',
+    customerLogin: '/customer/login',
 };
 
 export default backEndApi;

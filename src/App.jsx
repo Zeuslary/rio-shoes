@@ -23,6 +23,8 @@ import {
     OrderDetail,
     Register,
     Login,
+    UserInfo,
+    AccountProfile,
 } from '~/pages';
 import {
     AdminProducts,
@@ -56,6 +58,16 @@ const publicRouters = [
         id: 3,
         path: `${routes.product}/:id`,
         component: <ProductDetail />,
+    },
+    {
+        id: 4,
+        path: `${routes.userInfo}`,
+        component: <UserInfo />, // Continue page of Register
+    },
+    {
+        id: 5,
+        path: routes.accountProfile,
+        component: <AccountProfile />,
     },
 
     // {

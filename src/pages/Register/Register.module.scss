@@ -19,36 +19,6 @@
     margin: 10px 0 16px;
 }
 
-.label {
-    font-weight: 600;
-    font-size: 1.6rem;
-    margin-top: 20px;
-    display: block;
-}
-
-.input {
-    border: none;
-    outline: none;
-    width: 100%;
-    margin-top: 8px;
-    font-size: 1.5rem;
-    padding: 10px 16px;
-    border-radius: 4px;
-    background-color: var(--flash-white-color);
-}
-
-// State invalid
-.invalid {
-    box-shadow: 0 0 0 1px var(--red-color);
-}
-
-.error-msg {
-    color: var(--red-color);
-    font-size: 1.4rem;
-    margin-top: 12px;
-    line-height: 1;
-}
-
 .register-btn {
     width: 100%;
     margin-top: 24px;

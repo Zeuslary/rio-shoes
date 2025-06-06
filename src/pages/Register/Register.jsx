@@ -1,10 +1,9 @@
-import clsx from 'clsx';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 
-import { patternValidate } from '~/utils';
+import { api, backEndApi, patternValidate, toastError } from '~/utils';
 
-import Button from '~/components/Button';
+import { Button } from '~/components';
 import routes from '~/config/routes';
 import styles from './Register.module.scss';
 
@@ -16,8 +15,24 @@ function Register() {
         watch,
     } = useForm();
 
-    const onSubmit = (data) => {
+    const navigate = useNavigate();
+
+    const handleRegister = async (data) => {
         console.log('data: ', data);
+        try {
+            // Just validate unique username
+            const res = await api.post(backEndApi.uniqueUserName, data);
+
+            console.log('Res: ', res);
+
+            // Switch to page User Info
+            navigate(routes.userInfo, {
+                state: data,
+            });
+        } catch (err) {
+            console.error('Handle register failed...', err);
+            toastError(err?.response?.data?.message || 'Handle register error!');
+        }
     };
 
     return (
@@ -25,65 +40,58 @@ function Register() {
             <div className={styles['content']}>
                 <h1 className={styles['header']}>Register</h1>
 
-                <form action="" onSubmit={handleSubmit(onSubmit)}>
+                <form action="" onSubmit={handleSubmit(handleRegister)}>
                     {/* Username */}
-                    <label className={styles['label']} htmlFor="username">
+                    <label className="form-label" htmlFor="username">
                         Username
                     </label>
                     <input
-                        className={clsx(styles['input'], errors.username && styles['invalid'])}
+                        className={errors.username ? 'form-input-invalid' : 'form-input'}
                         type="text"
                         name="username"
                         id="username"
                         placeholder="Enter your username"
                         {...register('username', {
                             required: patternValidate.required,
-                            minLength: {
-                                value: 3,
-                                message: 'Username must be at least 3 characters',
-                            },
+                            minLength: patternValidate.minLength3,
                             maxLength: {
                                 value: 20,
-                                message: 'Username must be at most 30 characters',
+                                message: 'Username must be at most 20 characters',
                             },
-                            pattern: {
-                                value: /^[a-zA-Z0-9_]+$/,
-                                message: 'Only letters, numbers, and underscores are allowed',
-                            },
+                            pattern: patternValidate.alphaNumUnderscoreOnly,
                         })}
                     />
-                    <p className={styles['error-msg']}>
+                    <p className="form-msg-err">
                         {errors.username && errors.username.message}
                     </p>
 
                     {/* Password */}
-                    <label className={styles['label']} htmlFor="password">
+                    <label className="form-label" htmlFor="password">
                         Password
                     </label>
                     <input
-                        className={clsx(styles['input'], errors.username && styles['invalid'])}
+                        className={errors.password ? 'form-input-invalid' : 'form-input'}
                         type="password"
                         name="password"
                         id="password"
                         placeholder="Enter your password"
                         {...register('password', {
                             required: patternValidate.required,
-                            minLength: {
-                                value: 6,
-                                message: 'Password must be at least 6 characters',
-                            },
+                            minLength: patternValidate.password,
                         })}
                     />
-                    <p className={styles['error-msg']}>
+                    <p className="form-msg-err">
                         {errors.password && errors.password.message}
                     </p>
 
                     {/* Confirm password */}
-                    <label className={styles['label']} htmlFor="confirm-password">
+                    <label className="form-label" htmlFor="confirm-password">
                         Confirm password
                     </label>
                     <input
-                        className={clsx(styles['input'], errors.username && styles['invalid'])}
+                        className={
+                            errors.confirmPassword ? 'form-input-invalid' : 'form-input'
+                        }
                         type="password"
                         name="confirm-password"
                         id="confirm-password"
@@ -91,10 +99,11 @@ function Register() {
                         {...register('confirmPassword', {
                             required: patternValidate.required,
                             validate: (value) =>
-                                value === watch('password') || 'Your passwords do no match',
+                                value === watch('password') ||
+                                'Your passwords do not match',
                         })}
                     />
-                    <p className={styles['error-msg']}>
+                    <p className="form-msg-err">
                         {errors.confirmPassword && errors.confirmPassword.message}
                     </p>
 

@@ -13,3 +13,5 @@ export { default as OrderHistory } from './OrderHistory';
 export { default as OrderDetail } from './OrderDetail';
 export { default as Register } from './Register';
 export { default as Login } from './Login';
+export { default as UserInfo } from './UserInfo';
+export { default as AccountProfile } from './AccountProfile';

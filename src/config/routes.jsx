@@ -18,6 +18,9 @@ const routes = {
     orderHistory: '/order-history', //Done
     orderDetail: '/order-detail', //Done
 
+    userInfo: '/user-info', // After register of customer
+    accountProfile: '/account-profile',
+
     // Admin routes
     adminLogin: '/admin', //
 

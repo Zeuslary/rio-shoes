@@ -1,9 +1,11 @@
 import _ from 'lodash';
 import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
 
 import { UPLOAD_FOLDERS } from '../constants/index.js';
 import nestObject from '../utils/nestObject.js';
 import deleteFileDiskStorage from '../utils/deleteFileDiskStorage.js';
+
 import { Customer, Order } from '../models/index.js';
 
 const deleteFileJustUpload = (file) => {
@@ -46,6 +48,155 @@ const getById = async (req, res) => {
         });
     } catch (err) {
         console.error('Get customer failed...', err);
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
+const uniqueUserName = async (req, res) => {
+    try {
+        console.log('Body: ', req.body);
+
+        if (!req.body)
+            return res.status(400).json({
+                message: 'Empty body!',
+            });
+
+        if (!req.body?.username)
+            return res.status(400).json({
+                message: 'Username is required!',
+                data: req.body,
+            });
+
+        const customer = await Customer.find({
+            username: req.body.username,
+        });
+
+        console.log('Customer: ', customer);
+
+        if (customer && customer.length > 0)
+            return res.status(400).json({
+                message: 'Username already exists!',
+                data: req.body,
+            });
+
+        return res.status(200).json({
+            message: 'Check unique username successfully!',
+            data: req.body,
+        });
+    } catch (err) {
+        console.error('Check unique username failed...', err);
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
+const login = async (req, res) => {
+    try {
+        if (!req.body)
+            return res.status(400).json({
+                message: 'Empty body!',
+            });
+
+        const username = req.body?.username;
+        const password = req.body?.password;
+
+        if (!username || !password)
+            return res.status(400).json({
+                message: 'Username and password are required!',
+                data: req.body,
+            });
+
+        const customer = await Customer.findOne({
+            username,
+            password,
+        });
+
+        console.log('Customer: ', customer);
+
+        if (customer) {
+            const customerToken = jwt.sign(
+                {
+                    ...customer,
+                },
+                process?.env?.JWT_SECRET,
+                {
+                    expiresIn: process?.env?.JWT_EXPIRATION,
+                },
+            );
+
+            console.log('Customer token: ', customerToken);
+            // Delete password
+            delete customer._doc.password;
+
+            return res.status(200).json({
+                message: 'Login successfully!',
+                data: customer,
+                token: customerToken,
+            });
+        }
+
+        return res.status(404).json({
+            message: 'Username or password invalid!',
+        });
+    } catch (err) {
+        console.error('Login failed...', err);
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
+const updatePassword = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { password, newPassword } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(id))
+            return res.status(400).json({
+                message: 'Invalid ID',
+                data: id,
+            });
+
+        if (!password || !newPassword)
+            return res.status(400).json({
+                message: 'Password and New password are required!',
+            });
+
+        const customer = await Customer.findById(id);
+
+        if (!customer)
+            return res.status(404).json({
+                message: 'Customer not found!',
+            });
+
+        if (customer.password != req.body.password)
+            return res.status(400).json({
+                message: 'Wrong password!',
+            });
+
+        customer.password = newPassword;
+
+        const saved = await customer.save();
+
+        console.log('Saved: ', saved);
+
+        // Delete password in res
+        delete saved._doc.password;
+
+        if (saved)
+            return res.status(200).json({
+                message: 'Update password successfully!',
+                data: saved,
+            });
+
+        return res.status(400).json({
+            message: 'Update password error!',
+        });
+    } catch (err) {
+        console.error('Update password failed...', err);
         return res.status(500).json({
             message: 'Internal Server Error!',
         });
@@ -115,10 +266,27 @@ const create = async (req, res) => {
         // Saved customer into db
         const saved = await newCustomer.save();
 
+        // Delete password before send back client
+        delete newCustomer.password;
+
+        // Create token for this customer
+        const customerToken = jwt.sign(
+            {
+                ...newCustomer,
+            },
+            process?.env.JWT_SECRET,
+            {
+                expiresIn: process?.env?.JWT_EXPIRATION,
+            },
+        );
+
+        console.log('Customer token: ', customerToken);
+
         if (saved)
             return res.status(201).json({
                 message: 'Create customer successfully!',
                 data: newCustomer,
+                customerToken,
             });
 
         deleteFileJustUpload(file);
@@ -211,7 +379,7 @@ const updateById = async (req, res) => {
         if (!originalCustomer) {
             deleteFileJustUpload(file);
             return res.status(404).json({
-                message: 'Voucher not found',
+                message: 'Customer not found',
                 data: id,
             });
         }
@@ -223,7 +391,7 @@ const updateById = async (req, res) => {
         if (!isChange) {
             deleteFileJustUpload(file);
             return res.status(200).json({
-                message: 'Voucher not modifier!',
+                message: 'Customer not modifier!',
                 data: originalCustomer,
             });
         }
@@ -237,7 +405,7 @@ const updateById = async (req, res) => {
             deleteFileDiskStorage(originalCustomer.avatar, UPLOAD_FOLDERS.customer);
 
         return res.status(200).json({
-            message: 'Update voucher successfully!',
+            message: 'Update customer successfully!',
             data: updateCustomer,
         });
     } catch (err) {
@@ -251,6 +419,9 @@ const updateById = async (req, res) => {
 export default {
     getAll,
     getById,
+    uniqueUserName,
+    updatePassword,
+    login,
     create,
     deleteById,
     updateById,

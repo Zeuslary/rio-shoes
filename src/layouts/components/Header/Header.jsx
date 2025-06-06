@@ -1,12 +1,13 @@
 import clsx from 'clsx';
-import { Link, NavLink } from 'react-router';
+import { Link, NavLink, useNavigate } from 'react-router';
 import Tippy from '@tippyjs/react/headless';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 
 import routes from '~/config/routes';
-import { formatCurrencyVN } from '~/utils';
+import { formatCurrencyVN, storage, toastSuccess } from '~/utils';
 
 import { ProviderContext } from '~/components/Provider';
+import { IMG_CUSTOMER_PATH, keyCustomerProfile, keyCustomerToken } from '~/constants';
 
 import { Image, Button } from '~/components';
 import { CartIcon, SearchIcon } from '~/assets/icons';
@@ -22,18 +23,43 @@ const navItems = [
 ];
 
 function Header() {
-    const { cartList } = useContext(ProviderContext);
-    const total = cartList.reduce(
-        (total, item) => (total += item.quantity * item.newPrice),
-        0,
-    );
+    const { cartList, total, customerProfile, setCustomerProfile } =
+        useContext(ProviderContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (customerProfile) return;
+
+        console.log('Running');
+
+        if (!customerProfile) {
+            const data = storage.get(keyCustomerProfile);
+
+            if (data) setCustomerProfile(data);
+        }
+    }, []);
+
+    const handleLogout = () => {
+        storage.remove(keyCustomerProfile);
+        storage.remove(keyCustomerToken);
+        setCustomerProfile();
+
+        toastSuccess('Logout successfully!');
+        navigate(routes.home);
+    };
 
     return (
         <div className={clsx(styles['wrapper'])}>
             <div className="grid wide">
                 <header className={styles['header']}>
                     {/* Logo */}
-                    <Image className={styles['logo']} src={images.logo} alt="RioShoes" />
+                    <Link to={routes.home}>
+                        <Image
+                            className={styles['logo']}
+                            src={images.logo}
+                            alt="RioShoes"
+                        />
+                    </Link>
 
                     <nav className={styles['nav-list']}>
                         {navItems.map((item) => (
@@ -169,9 +195,52 @@ function Header() {
                         </div>
 
                         {/* Button login */}
-                        <Button to={routes.login} customStyle={styles['login-btn']}>
-                            Login
-                        </Button>
+                        {!customerProfile && (
+                            <Button to={routes.login} customStyle={styles['login-btn']}>
+                                Login
+                            </Button>
+                        )}
+
+                        {/* Customer profile */}
+                        {customerProfile && (
+                            <Tippy
+                                // visible
+                                interactive
+                                offset={[0, 17]}
+                                placement="bottom-end"
+                                render={(attrs) => (
+                                    <div
+                                        className={styles['profile-sub-nav']}
+                                        tabIndex="-1"
+                                        {...attrs}
+                                    >
+                                        <Button
+                                            to={routes.accountProfile}
+                                            className={styles['profile-sub-nav__item']}
+                                        >
+                                            Tài khoản của tôi
+                                        </Button>
+                                        <Button
+                                            to={routes.accountProfile}
+                                            className={styles['profile-sub-nav__item']}
+                                        >
+                                            Lịch sử đơn hàng
+                                        </Button>
+                                        <Button
+                                            className={styles['profile-sub-nav__item']}
+                                            onClick={handleLogout}
+                                        >
+                                            Đăng xuất
+                                        </Button>
+                                    </div>
+                                )}
+                            >
+                                <Image
+                                    src={IMG_CUSTOMER_PATH + customerProfile?.avatar}
+                                    className={styles['avatar']}
+                                />
+                            </Tippy>
+                        )}
                     </div>
                 </header>
             </div>

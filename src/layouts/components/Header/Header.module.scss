@@ -185,3 +185,37 @@
 .checkout-btn {
     flex: 1;
 }
+
+// Profile with sub nav
+
+.profile-sub-nav {
+    background-color: var(--white-color);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.profile-sub-nav__item {
+    display: block;
+    min-width: 160px;
+    padding: 12px 20px;
+    text-align: left;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    background: var(--white-color);
+
+    &:hover {
+        background-color: var(--flash-white-color);
+        cursor: pointer;
+    }
+}
+
+.avatar {
+    --edge: 36px;
+    width: var(--edge);
+    height: var(--edge);
+    margin: 0 8px;
+    border-radius: 50%;
+
+    cursor: pointer;
+}

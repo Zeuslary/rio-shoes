@@ -20,7 +20,7 @@ import styles from './ImportAdd.module.scss';
 
 function ImportAdd({ setProductImports, setMode }) {
     const [products, setProducts] = useState([]);
-    const { profile } = useContext(ProviderContext);
+    const { adminProfile } = useContext(ProviderContext);
 
     const {
         register,
@@ -32,7 +32,7 @@ function ImportAdd({ setProductImports, setMode }) {
             price: '',
             quantity: '',
             importDate: new Date().toISOString().slice(0, 10),
-            createdBy: profile._id,
+            createdBy: adminProfile._id,
         },
     });
 
