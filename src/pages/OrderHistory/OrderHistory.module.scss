@@ -4,6 +4,7 @@
 }
 
 .content,
+.filters,
 .not-found,
 .found-success {
     width: 760px;
@@ -40,6 +41,18 @@
 .find-btn {
     min-width: 150px;
     margin-left: 12px;
+}
+
+// Filter
+.filters {
+    margin-top: 24px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+}
+
+.filter-btn {
+    margin-right: 12px;
+    min-width: 68px;
 }
 
 // Find and not-found order

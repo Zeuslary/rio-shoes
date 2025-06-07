@@ -4,7 +4,6 @@ import styles from './CartItemSummary.module.scss';
 import { IMG_PRODUCT_PATH } from '~/constants';
 
 function CartItemSummary({ item }) {
-    console.log(item);
     return (
         <div className={styles['wrapper']}>
             <Image src={IMG_PRODUCT_PATH + item.image} className={styles['img']} />

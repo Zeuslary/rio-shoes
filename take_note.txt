@@ -257,6 +257,9 @@ database:
 - Need handle when delete product, product import will be error.
 - Button pre, next of Banner
 - Need to fix apply voucher
+- Fix verify token for admin and client different.
+- Fix make api to call seperate admin and client.
+- 8/6: Feature search is error, you need to check this. Recomment not use new URLSearchParams, just convert it into query you can see
 
 
 ------ Step you are doing ---------------

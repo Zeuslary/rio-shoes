@@ -77,6 +77,97 @@ const getById = async (req, res) => {
     }
 };
 
+// Search orders base on phone
+const filterByPhone = async (req, res) => {
+    try {
+        const { phone } = req.query;
+
+        if (!phone)
+            return res.status(400).json({
+                message: 'Phone is required!',
+            });
+
+        const customer = await Customer.findOne({ phone });
+
+        if (!customer)
+            return res.status(404).json({
+                message: 'Order not found!',
+            });
+
+        const orders = await Order.find({
+            customerId: customer._id,
+        })
+            .populate('shippingId', 'name')
+            .populate('paymentId', 'name');
+
+        // Add field img for each item of order
+        for (const order of orders) {
+            for (const item of order.items) {
+                const product = await Product.findById(item._id);
+
+                item._doc.image = product.image;
+            }
+        }
+
+        return res.status(200).json({
+            message: 'Filter order successfully!',
+            data: orders,
+        });
+    } catch (err) {
+        console.error('Filter order failed...', err);
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
+// Get orders base on customerId
+const getByCustomerId = async (req, res) => {
+    try {
+        const { customerId } = req.query;
+
+        if (!customerId)
+            return res.status(400).json({
+                message: 'Customer ID is required!',
+            });
+
+        if (!mongoose.Types.ObjectId.isValid(customerId))
+            return res.status(400).json({
+                message: 'Invalid customer ID!',
+                data: customerId,
+            });
+
+        const orders = await Order.find({
+            customerId,
+        });
+
+        if (orders.length <= 0)
+            return res.status(204).json({
+                message: 'Order not found!',
+            });
+
+        // Add field image each item of order items
+        for (const order of orders) {
+            for (const item of order.items) {
+                const product = await Product.findById(item._id).select('image');
+
+                item._doc.image = product.image;
+            }
+        }
+
+        console.log('Order: ', orders);
+        return res.status(200).json({
+            message: ' Get orders base on customer ID successfully!',
+            data: orders,
+        });
+    } catch (err) {
+        console.error('Get orders by customer Id failed...', err);
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
 // Create
 const create = async (req, res) => {
     try {
@@ -85,18 +176,17 @@ const create = async (req, res) => {
                 message: 'Empty body',
             });
 
-        const { profile, contactInfo, items, discount, payment, shipping } = req.body;
+        const { profile, items, discount, payment, shipping } = req.body;
 
-        // console.log('contactInfo: ', contactInfo);
+        // console.log('profile: ', profile);
         // console.log('items: ', items);
         // console.log('discount: ', discount);
         // console.log('payment: ', payment);
         // console.log('shipping: ', shipping);
-        // console.log('profile: ', profile);
 
-        if (!items || !contactInfo || !shipping || !payment)
+        if (!items || !profile || !shipping || !payment)
             return res.status(400).json({
-                message: 'Items, contact info, shipping and payment are required!',
+                message: 'Items, profile, shipping and payment are required!',
             });
 
         let customer;
@@ -104,7 +194,7 @@ const create = async (req, res) => {
         let isExistCustomer = false;
 
         // Check is exist profile -> find customer corresponding
-        if (profile) {
+        if (profile?._id) {
             customer = await Customer.findById(profile._id);
 
             if (customer) {
@@ -116,16 +206,16 @@ const create = async (req, res) => {
         if (!isExistCustomer) {
             customer = new Customer({
                 fullName: {
-                    firstName: contactInfo?.fullName?.firstName,
-                    lastName: contactInfo?.fullName?.lastName,
+                    firstName: profile?.fullName?.firstName,
+                    lastName: profile?.fullName?.lastName,
                 },
-                phone: contactInfo?.phone,
-                email: contactInfo?.email,
+                phone: profile?.phone,
+                email: profile?.email,
                 address: {
-                    city: contactInfo?.address?.city,
-                    district: contactInfo?.address?.district,
-                    ward: contactInfo?.address?.ward,
-                    houseNumber: contactInfo?.address?.houseNumber,
+                    city: profile?.address?.city,
+                    district: profile?.address?.district,
+                    ward: profile?.address?.ward,
+                    houseNumber: profile?.address?.houseNumber,
                 },
                 lastOrderDate: Date.now(),
             });
@@ -159,8 +249,8 @@ const create = async (req, res) => {
                 voucherId: discount?._id,
                 total,
             },
-            address: { ...contactInfo.address },
-            message: contactInfo?.message,
+            address: { ...profile.address },
+            message: profile?.message,
             statusDate: {
                 shipping: '',
                 delivered: '',
@@ -190,10 +280,10 @@ const create = async (req, res) => {
         customer.lastOrderDate = newOrder.createdAt;
         await customer.save();
 
-        console.log('item add: ', itemsAdd);
-        console.log('Subtotal: ', subTotal);
-        console.log('total: ', total);
-        console.log('newOrder: ', newOrder);
+        // console.log('item add: ', itemsAdd);
+        // console.log('Subtotal: ', subTotal);
+        // console.log('total: ', total);
+        // console.log('newOrder: ', newOrder);
 
         return res.status(201).json({
             message: 'Create order successfully!',
@@ -319,6 +409,8 @@ const updateById = async (req, res) => {
 export default {
     getAll,
     getById,
+    filterByPhone,
+    getByCustomerId,
     create,
     deleteById,
     updateById,

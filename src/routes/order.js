@@ -4,6 +4,10 @@ import verifyToken from '../middlewares/verifyToken.js';
 
 const router = express.Router();
 
+router.get('/tracking', orderController.filterByPhone);
+
+router.get('/history', orderController.getByCustomerId);
+
 router.get('/', orderController.getAll);
 
 router.get('/:id', orderController.getById);

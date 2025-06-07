@@ -1,36 +1,44 @@
 import PropTypes from 'prop-types';
 
-import styles from './ItemCart.module.scss';
+import { IMG_PRODUCT_PATH } from '~/constants';
+import { formatCurrencyVN, upperCaseFirstLetter } from '~/utils';
 import Image from '../Image';
-import images from '~/assets/images';
 
-function ItemCart() {
+import styles from './ItemCart.module.scss';
+
+function ItemCart({ item }) {
+    const subTotal = (item) => item.quantity * item.price;
+
     return (
         <div className={styles['wrapper']}>
-            <Image src={images.nikeProduct} className={styles['img']} />
+            <Image src={IMG_PRODUCT_PATH + item?.image} className={styles['img']} />
 
             <div className={styles['detail']}>
-                <h4 className={styles['name']}>Converse Chuck Taylor 70</h4>
+                <h4 className={styles['name']}>{item.name}</h4>
                 <p>
-                    <span className={styles['price']}>Price: $89</span>
-                    <span className={styles['quantity']}>Quantity: 2</span>
+                    <span className={styles['price']}>
+                        Price: {formatCurrencyVN(item?.price)}
+                    </span>
+                    <span className={styles['quantity']}>Quantity: {item?.quantity}</span>
                 </p>
                 <p>
-                    <span className={styles['size']}>Size: UK5</span>
-                    <span className={styles['color']}>Color: Black</span>
+                    <span className={styles['size']}>
+                        Size: {upperCaseFirstLetter(item?.size)}
+                    </span>
+                    <span className={styles['color']}>
+                        Color: {upperCaseFirstLetter(item?.color)}
+                    </span>
                 </p>
             </div>
-            <span className={styles['subtotal']}>
-                <strong>$178</strong>
+            <span>
+                <strong>{formatCurrencyVN(subTotal(item))}</strong>
             </span>
         </div>
     );
 }
 
 ItemCart.propTypes = {
-    // numPages: PropTypes.number.isRequired,
-    // currentPage: PropTypes.number,
-    // viewPages: PropTypes.number,
+    item: PropTypes.object.isRequired,
 };
 
 export default ItemCart;

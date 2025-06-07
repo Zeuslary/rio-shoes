@@ -1,53 +1,42 @@
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import styles from './OrderCart.module.scss';
-import Button from '../Button';
-import ItemCart from '../ItemCart';
+import { formatCurrencyVN, styleStatus, upperCaseFirstLetter } from '~/utils';
 import routes from '~/config/routes';
 
-const statuses = ['delivered', 'in-transit', 'processing', 'completed'];
-const defaultItem = {
-    id: 101,
-    status: 'delivered',
-    createdAt: '2025-05-01',
-    items: [
-        {
-            name: 'Nike Air Max 90',
-            image: '/src/assets/images/product/nike-1.png',
-            size: 41,
-            color: 'White',
-            price: 120,
-            quantity: 1,
-        },
-    ],
-    summary: {
-        subTotal: 120,
-        shipping: 19.99,
-        discount: 0,
-        total: 139.99,
-    },
-};
+import { Button, ItemCart } from '~/components';
 
-function OrderCart({ item }) {
-    const status = statuses.find((status) => status === item.status) || statuses[0];
+import styles from './OrderCart.module.scss';
 
+function OrderCart({ order }) {
     return (
         <div className={styles['wrapper']}>
-            <h3 className={styles['id']}>Order #{item.id}</h3>
-            <span className={styles['date']}>Order date: {item.createdAt}</span>
+            <div className="space-between">
+                <div>
+                    <h3 className={styles['id']}>Order #{order?._id}</h3>
+                    <span className={styles['date']}>
+                        Order date: {order?.createdAt?.slice(0, 10)}
+                    </span>
+                </div>
 
-            <span className={clsx(styles['status'], styles[status])}>
-                {status.slice(0, 1).toUpperCase() + status.slice(1)}
-            </span>
+                <span className={clsx(styleStatus(order?.status), styles['status'])}>
+                    {upperCaseFirstLetter(order?.status)}
+                </span>
+            </div>
 
-            <ItemCart />
+            {order.items?.map((item) => (
+                <ItemCart key={item._id} item={item} />
+            ))}
 
             <div className={styles['summary']}>
                 <span>
-                    Total: <strong>${item.summary.total}</strong>
+                    Total: <strong>{formatCurrencyVN(order?.summary?.total)}</strong>
                 </span>
-                <Button to={routes.orderDetail} deepBlack customStyle={styles['detail-btn']}>
+                <Button
+                    to={`${routes.orderDetail}/${order._id}`}
+                    deepBlack
+                    customStyle={styles['detail-btn']}
+                >
                     View detail
                 </Button>
             </div>
@@ -56,7 +45,7 @@ function OrderCart({ item }) {
 }
 
 OrderCart.propTypes = {
-    item: PropTypes.object.isRequired,
+    order: PropTypes.object.isRequired,
 };
 
 export default OrderCart;

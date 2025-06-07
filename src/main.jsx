@@ -13,7 +13,7 @@ createRoot(document.getElementById('root')).render(
         <Provider>
             <GlobalStyle>
                 <App />
-                <ToastContainer position="top-right" />
+                <ToastContainer position="top-right" autoClose={2000} />
             </GlobalStyle>
         </Provider>
     </StrictMode>,

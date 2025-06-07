@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import { Link, NavLink, useNavigate } from 'react-router';
 import Tippy from '@tippyjs/react/headless';
-import { useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 
 import routes from '~/config/routes';
-import { formatCurrencyVN, storage, toastSuccess } from '~/utils';
+import { formatCurrencyVN, storage, toastInfo, toastSuccess } from '~/utils';
 
 import { ProviderContext } from '~/components/Provider';
 import { IMG_CUSTOMER_PATH, keyCustomerProfile, keyCustomerToken } from '~/constants';
@@ -27,6 +27,9 @@ function Header() {
         useContext(ProviderContext);
     const navigate = useNavigate();
 
+    const [search, setSearch] = useState('');
+
+    // Load customerProfile
     useEffect(() => {
         if (customerProfile) return;
 
@@ -47,6 +50,18 @@ function Header() {
         toastSuccess('Logout successfully!');
         navigate(routes.home);
     };
+
+    const handleSearch = useCallback(() => {
+        console.log('Search: ', search);
+        if (!search) {
+            toastInfo('Please enter search first!');
+            return;
+        }
+
+        // Navigate to search page
+        setSearch('');
+        navigate(`${routes.search}?name=${encodeURIComponent(search)}`);
+    }, [search]);
 
     return (
         <div className={clsx(styles['wrapper'])}>
@@ -85,11 +100,17 @@ function Header() {
                             <input
                                 className={styles['search-input']}
                                 type="text"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
                                 placeholder="Search products..."
                             />
-                            <Link to={routes.search} className={styles['search-icon']}>
+
+                            <button
+                                className={styles['search-icon']}
+                                onClick={handleSearch}
+                            >
                                 <SearchIcon />
-                            </Link>
+                            </button>
                         </div>
 
                         {/* Cart */}
@@ -221,7 +242,7 @@ function Header() {
                                             Tài khoản của tôi
                                         </Button>
                                         <Button
-                                            to={routes.accountProfile}
+                                            to={routes.orderHistory}
                                             className={styles['profile-sub-nav__item']}
                                         >
                                             Lịch sử đơn hàng

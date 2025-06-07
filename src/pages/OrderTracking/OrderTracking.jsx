@@ -1,46 +1,44 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
-import { CheckCircleIcon, CloseCircleIcon } from '~/assets/icons';
-import Button from '~/components/Button';
-import OrderCart from '~/components/OrderCart';
+import { api, backEndApi, patternValidate, toastError, toastSuccess } from '~/utils';
+
+import { Button, OrderCart } from '~/components';
 import styles from './OrderTracking.module.scss';
-import { patternValidate, toastError } from '~/utils';
-
-const item = {
-    id: 101,
-    status: 'delivered',
-    createdAt: '2025-05-01',
-    items: [
-        {
-            name: 'Nike Air Max 90',
-            image: '/src/assets/images/product/nike-1.png',
-            size: 41,
-            color: 'White',
-            price: 120,
-            quantity: 1,
-        },
-    ],
-    summary: {
-        subTotal: 120,
-        shipping: 19.99,
-        discount: 0,
-        total: 139.99,
-    },
-};
 
 function OrderTracking() {
-    const [order, setOrder] = useState(true);
+    const [orders, setOrders] = useState([]);
     const [phone, setPhone] = useState('');
 
-    const handleFind = () => {
+    const handleFind = useCallback(async () => {
         console.log('Phone: ', phone);
+
+        setOrders([]);
+
+        if (!phone) {
+            toastError('Please enter your phone order!');
+            return;
+        }
 
         const isPhone = patternValidate.phone.value.test(phone);
 
-        if (!isPhone) toastError(patternValidate.phone.message + '!');
+        if (!isPhone) {
+            toastError(patternValidate.phone.message + '!');
+            return;
+        }
 
-        console.log('Valid: ', isPhone);
-    };
+        try {
+            const result = await api.getAll(`${backEndApi.orderTracking}?phone=${phone}`);
+
+            toastSuccess(result.message);
+            setPhone('');
+            setOrders(result.data);
+        } catch (err) {
+            console.log('Filter order failed...', err);
+            toastError(err?.response?.data?.message);
+        }
+    }, [phone]);
+
+    console.log('Orders: ', orders);
 
     return (
         <div className={styles['wrapper']}>
@@ -52,6 +50,7 @@ function OrderTracking() {
                         className={styles['input']}
                         type="text"
                         placeholder="Enter your phone order"
+                        autoFocus
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                     />
@@ -67,27 +66,12 @@ function OrderTracking() {
                 </div>
             </div>
 
-            {/* Can't find order */}
-            {!order && (
-                <div className={styles['not-found']}>
-                    <CloseCircleIcon />
-                    <h3>Can't find your order</h3>.
-                    <p>
-                        The order number doesn't match any orders in our system. Please
-                        check the number and try again.
-                    </p>
-                </div>
-            )}
-
             {/* Find order  */}
-            {order && (
+            {orders.length > 0 && (
                 <>
-                    {/* <div className={styles['found-success']}>
-                        <CheckCircleIcon />
-                        <h3>Find your order success</h3>
-                    </div> */}
-
-                    <OrderCart item={item} />
+                    {orders.map((order) => (
+                        <OrderCart key={order._id} order={order} />
+                    ))}
                 </>
             )}
         </div>

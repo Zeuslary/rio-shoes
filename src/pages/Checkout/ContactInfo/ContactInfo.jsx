@@ -10,21 +10,21 @@ import { ProviderContext } from '~/components/Provider';
 import styles from './ContactInfo.module.scss';
 
 const ContactInfo = forwardRef((props, ref) => {
-    const { contactInfo, setContactInfo } = useContext(ProviderContext);
+    const { customerProfile, setCustomerProfile } = useContext(ProviderContext);
 
     const methods = useForm({
         defaultValues: {
             fullName: {
-                firstName: contactInfo?.fullName?.firstName || '',
-                lastName: contactInfo?.fullName?.lastName || '',
+                firstName: customerProfile?.fullName?.firstName || '',
+                lastName: customerProfile?.fullName?.lastName || '',
             },
-            phone: contactInfo?.phone || '',
-            email: contactInfo?.email || '',
+            phone: customerProfile?.phone || '',
+            email: customerProfile?.email || '',
             address: {
-                city: contactInfo?.address?.city || 'default',
-                district: contactInfo?.address?.district || 'default',
-                ward: contactInfo?.address?.ward || 'default',
-                houseNumber: contactInfo?.address?.houseNumber || '',
+                city: customerProfile?.address?.city || 'default',
+                district: customerProfile?.address?.district || 'default',
+                ward: customerProfile?.address?.ward || 'default',
+                houseNumber: customerProfile?.address?.houseNumber || '',
             },
             message: '',
         },
@@ -42,7 +42,7 @@ const ContactInfo = forwardRef((props, ref) => {
     const formRef = useRef();
 
     const onSubmit = useCallback((data) => {
-        setContactInfo(data);
+        setCustomerProfile({ ...customerProfile, ...data });
 
         navigate(routes.confirmOrder);
     }, []);

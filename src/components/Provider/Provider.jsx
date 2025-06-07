@@ -12,80 +12,115 @@ import {
 import ProviderContext from './ProviderContext';
 
 function Provider({ children }) {
+    // Profile
     const [adminProfile, setAdminProfile] = useState(() => storage.get(keyAdminProfile));
-
     const [customerProfile, setCustomerProfile] = useState(() =>
         storage.get(keyCustomerProfile),
     );
 
+    // Cart
     const [cartList, setCartList] = useState(
         () => storage.get(keyLocalStorageCart) || [],
     );
 
-    const [contactInfo, setContactInfo] = useState();
+    // Shipping
+    const [shipping, setShipping] = useState();
+    const [shippingMethods, setShippingMethods] = useState([]);
 
+    // Payment
+    const [payment, setPayment] = useState();
+    const [paymentMethods, setPaymentMethods] = useState([]);
+
+    // Discount
+    const [discount, setDiscount] = useState();
+
+    // Calculate subTotal and total
     const subTotal = useMemo(
         () =>
             cartList.reduce((total, item) => (total += item.quantity * item.newPrice), 0),
         [cartList],
     );
 
-    const [shipping, setShipping] = useState();
-    const [shippingMethods, setShippingMethods] = useState([]);
-    const [payment, setPayment] = useState();
-    const [paymentMethods, setPaymentMethods] = useState([]);
-
-    const [discount, setDiscount] = useState();
-
     const total = useMemo(
-        () => subTotal + shipping?.price - (discount?.discountValue || 0) || 0,
+        () => subTotal + (shipping?.price || 0) - (discount?.discountValue || 0) || 0,
         [subTotal, shipping, discount],
     );
 
+    // Loading shipping methods
     useEffect(() => {
-        // Get default shipping and method
-        const fetchingData = async () => {
+        const loadShipping = async () => {
             try {
+                const cached = storage.get(keyShippingMethods);
+
+                if (cached && cached?.length >= 1) {
+                    setShippingMethods(cached);
+                    setShipping(cached[0]);
+                    return;
+                }
+
                 const resShipping = await api.getAll(backEndApi.shipping);
-                const resPayment = await api.getAll(backEndApi.payment);
 
-                // Save data to localStorage
                 storage.save(keyShippingMethods, resShipping || []);
-                storage.save(keyPaymentMethods, resPayment || []);
-
-                // Save shipping into provider
                 setShippingMethods(resShipping);
                 setShipping(resShipping[0]);
-
-                // Save payment into provider
-                setPaymentMethods(resPayment);
-                setPayment(resPayment.find((payment) => payment.code === 'cod'));
             } catch (err) {
-                console.error('Fetching shipping failed...', err);
-                toastError(err.response?.data?.message || 'Fetching shipping error!');
+                console.error('Failed to fetch shipping methods:', err);
+                toastError(err.response?.data?.message || 'Shipping fetch failed!');
             }
         };
 
-        // Save shippings and payments into provider
-        const shippingsFromStorage = storage.get(keyShippingMethods);
-        const paymentsFromStorage = storage.get(keyShippingMethods);
+        loadShipping();
+    }, []);
 
-        if (shippingsFromStorage && paymentsFromStorage) {
-            setShippingMethods(shippingsFromStorage);
-            setShipping(shippingsFromStorage[0]);
+    // Auto save into localStorage when shipping methods change
+    useEffect(() => {
+        storage.save(keyShippingMethods, shippingMethods || []);
+    }, [shippingMethods]);
 
-            setPaymentMethods(paymentsFromStorage);
-            setPayment(paymentsFromStorage.find((method) => method.code === 'cod'));
-        } else {
-            fetchingData();
-        }
+    // Loading payment methods
+    useEffect(() => {
+        const loadPayment = async () => {
+            try {
+                const cached = storage.get(keyPaymentMethods);
 
-        // Save customer into provider
+                if (cached && cached?.length >= 1) {
+                    setPaymentMethods(cached);
+                    setPayment(cached.find((p) => p.code === 'cod'));
+                    return;
+                }
+
+                const resPayment = await api.getAll(backEndApi.payment);
+
+                storage.save(keyPaymentMethods, resPayment || []);
+                setPaymentMethods(resPayment);
+                setPayment(resPayment.find((p) => p.code === 'cod'));
+            } catch (err) {
+                console.error('Failed to fetch payment methods:', err);
+                toastError(err.response?.data?.message || 'Payment fetch failed!');
+            }
+        };
+
+        loadPayment();
+    }, []);
+
+    // Auto save into localStorage when payment methods change
+    useEffect(() => {
+        storage.save(keyPaymentMethods, paymentMethods || []);
+    }, [paymentMethods]);
+
+    // Get customer profile from localStorage
+    useEffect(() => {
         const customerFromStorage = storage.get(keyCustomerProfile);
-        if (customerProfile) {
+
+        if (customerFromStorage) {
             setCustomerProfile(customerFromStorage);
         }
     }, []);
+
+    // Auto save into localStorage customer profile
+    useEffect(() => {
+        storage.save(keyCustomerProfile, customerProfile);
+    }, [customerProfile]);
 
     return (
         <ProviderContext.Provider
@@ -99,13 +134,15 @@ function Provider({ children }) {
                 cartList,
                 setCartList,
 
-                contactInfo,
-                setContactInfo,
-
                 shippingMethods,
+                setShippingMethods,
+
                 shipping,
                 setShipping,
+
                 paymentMethods,
+                setPaymentMethods,
+
                 payment,
                 setPayment,
 

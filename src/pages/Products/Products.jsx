@@ -51,7 +51,7 @@ function Products() {
             console.log('Brand filter: ', brand);
 
             const res = await api.getAll(
-                `${backEndApi.filterProducts}?brandId=${brand._id}`,
+                `${backEndApi.productFilter}?brandId=${brand._id}`,
             );
 
             setProducts(res.data);

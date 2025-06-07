@@ -13,7 +13,7 @@
 }
 
 .filter-group {
-    max-height: 150px;
+    max-height: 94px;
     overflow-y: scroll;
 }
 
@@ -63,6 +63,7 @@
     flex: 1;
     font-size: 1.5rem;
     margin-left: 8px;
+    text-transform: capitalize;
     cursor: pointer;
 
     &:hover {

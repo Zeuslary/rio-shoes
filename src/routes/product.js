@@ -6,22 +6,24 @@ import { productController } from '../controllers/index.js';
 
 const router = express.Router();
 
-router.get('/', productController.getAll);
-
-router.get('/minimal', productController.getAllMinimal);
-
 // Use for client
+router.get('/search', productController.getBaseOnName);
+
 router.get('/new', productController.getNewProducts);
 
 router.get('/part', productController.getPart);
 
-router.get('/filter', productController.filterProducts);
+router.get('/filter', productController.productFilter);
 
 router.get('/:id', productController.getById);
 
 router.get('/:id/suggestion', productController.getSuggestion);
 
 router.get('/detail/:id', productController.getDetail);
+
+router.get('/', productController.getAll);
+
+router.get('/minimal', productController.getAllMinimal);
 
 // Private api
 router.use(verifyToken);

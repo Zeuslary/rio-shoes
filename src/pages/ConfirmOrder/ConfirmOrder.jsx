@@ -20,10 +20,11 @@ import { useNavigate } from 'react-router';
 
 function ConfirmOrder() {
     const {
-        adminProfile,
         cartList,
         setCartList,
-        contactInfo,
+
+        customerProfile,
+
         subTotal,
         shipping,
         payment,
@@ -35,8 +36,7 @@ function ConfirmOrder() {
 
     const handleOrder = async () => {
         const dataSend = {
-            profile: adminProfile,
-            contactInfo,
+            profile: customerProfile,
             items: cartList,
             shipping,
             payment,
@@ -67,6 +67,8 @@ function ConfirmOrder() {
         }
     };
 
+    console.log('Customer: ', customerProfile);
+
     return (
         <div className={styles['wrapper']}>
             <div className={styles['body']}>
@@ -90,27 +92,27 @@ function ConfirmOrder() {
                                 <span className={styles['info-title']}>Name</span>
                                 <span>
                                     {(
-                                        contactInfo?.fullName?.firstName +
+                                        customerProfile?.fullName?.firstName +
                                         ' ' +
-                                        contactInfo?.fullName?.lastName
+                                        customerProfile?.fullName?.lastName
                                     ).trim()}
                                 </span>
                             </p>
                             <p className={styles['info-item']}>
                                 <span className={styles['info-title']}>Phone number</span>
-                                <span>{contactInfo?.phone}</span>
+                                <span>{customerProfile?.phone}</span>
                             </p>
                             <p className={styles['info-item']}>
                                 <span className={styles['info-title']}>Email</span>
-                                <span>{contactInfo?.email}</span>
+                                <span>{customerProfile?.email}</span>
                             </p>
                             <p className={styles['info-item']}>
                                 <span className={styles['info-title']}>Address</span>
-                                <span>{displayAddress(contactInfo?.address)}</span>
+                                <span>{displayAddress(customerProfile?.address)}</span>
                             </p>
                             <p className={styles['info-item']}>
                                 <span className={styles['info-title']}>Message</span>
-                                <span>{contactInfo?.message}</span>
+                                <span>{customerProfile?.message}</span>
                             </p>
                             <p className={styles['info-item']}>
                                 <span className={styles['info-title']}>Shipping</span>

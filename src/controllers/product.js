@@ -32,7 +32,45 @@ const getAllMinimal = async (req, res) => {
     }
 };
 
-// Get a part of products
+// Get products base on products name
+// GET /api/products/search?name=nike
+const getBaseOnName = async (req, res) => {
+    try {
+        const { name } = req.query;
+
+        if (!name) {
+            return res.status(400).json({
+                message: 'Missing search name!',
+            });
+        }
+
+        const products = await Product.find({
+            status: 'active',
+            stock: { $gt: 0 },
+            // Options 'i' make the search case insensitive
+            name: { $regex: name, $options: 'i' },
+        });
+
+        console.log('Products: ', products);
+
+        if (products.length === 0)
+            return res.status(204).json({
+                message: 'Product not found!',
+            });
+
+        return res.status(200).json({
+            message: 'Get products base on product name successfully!',
+            data: products,
+        });
+    } catch (err) {
+        console.error('Get products base on product name failed...', err);
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
+// Get a part of products (page 1 ....)
 const getPart = async (req, res) => {
     try {
         const { page = 1 } = req.query;
@@ -160,17 +198,28 @@ const getDetail = async (req, res) => {
     }
 };
 
-const filterProducts = async (req, res) => {
+const productFilter = async (req, res) => {
     try {
-        const { color, category, type, style, material, design, size, brandId } =
-            req.query;
+        const {
+            name,
+            color,
+            category,
+            type,
+            style,
+            material,
+            design,
+            size,
+            brandId,
+            brandName,
+        } = req.query;
 
         const filter = {
             status: 'active',
             stock: { $gt: 0 },
         };
 
-        // $in works like: field: { $in: ['red', 'blue'] } → it checks if any value exists in the array.
+        // $in works like: field: { $in: ['red', 'blue'] }
+        // $in: MongoDB operator to match any value in the array.
         if (color) filter.colors = { $in: color.split(',') };
         if (category) filter.category = { $in: category.split(',') };
         if (type) filter.type = { $in: type.split(',') };
@@ -180,10 +229,43 @@ const filterProducts = async (req, res) => {
         if (size) filter.sizes = { $in: size.split(',') };
         if (brandId) filter.brandId = brandId;
 
+        // Filter by name product (case-insensitive)
+        if (name) filter.name = { $regex: name, $options: 'i' };
+
         console.log('Filter: ', filter);
 
-        const products = await Product.find(filter).populate('brandId', 'name');
+        // Create aggregation pipeline
+        const pipeline = [
+            {
+                // Match with filter first
+                $match: filter,
+            },
+            // Lookup will return a array
+            // -> Need use $unwind to flat
+            {
+                // If exist brandName -> filter base on this
+                $lookup: {
+                    from: 'brands', // join with brands collections
+                    localField: 'brandId', //  the field in Product that holds the reference (brandId)
+                    foreignField: '_id', // the field in the brands collection you're matching with
+                    as: 'brand', // new field after match
+                },
+            },
+            {
+                $unwind: '$brand',
+            },
+        ];
 
+        if (brandName)
+            pipeline.push({
+                $match: {
+                    'brand.name': { $regex: brandName, $options: 'i' },
+                },
+            });
+
+        // const products = await Product.find(filter).populate('brandId', 'name');
+
+        const products = await Product.aggregate(pipeline);
         console.log('Filter products: ', products);
 
         return res.status(200).json({
@@ -514,10 +596,11 @@ const updateById = async (req, res) => {
 export default {
     getAll,
     getAllMinimal,
+    getBaseOnName,
     getNewProducts,
     getSuggestion,
     getDetail,
-    filterProducts,
+    productFilter,
     getById,
     getPart,
     create,

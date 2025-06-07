@@ -25,11 +25,11 @@ function OrderDetail({ orderDetail }) {
                         </p>
                         <p className={styles['info-item']}>
                             <span className={styles['info-title']}>Phone</span>
-                            <span>{orderDetail.phone}</span>
+                            <span>{orderDetail?.customerId?.phone}</span>
                         </p>
                         <p className={styles['info-item']}>
                             <span className={styles['info-title']}>Email</span>
-                            <span>{orderDetail?.email}</span>
+                            <span>{orderDetail?.customerId?.email}</span>
                         </p>
                         <p className={styles['info-item']}>
                             <span className={styles['info-title']}>Address</span>

@@ -2,34 +2,89 @@ import clsx from 'clsx';
 import { useContext, useEffect, useRef } from 'react';
 
 import { ProviderContext } from '~/components/Provider';
-import { formatCurrencyVN } from '~/utils';
+import { api, backEndApi, formatCurrencyVN, storage, toastError } from '~/utils';
 
 import ContactInfo from './ContactInfo';
 
 import { CartItemSummary, Button } from '~/components';
 import styles from './Checkout.module.scss';
+import { keyPaymentMethods, keyShippingMethods } from '~/constants';
 
 function Checkout() {
     const {
         cartList,
-        subTotal,
+
         shippingMethods,
+        setShippingMethods,
+
         shipping,
         setShipping,
+
         payment,
         setPayment,
+
         paymentMethods,
+        setPaymentMethods,
+
         discount,
+        subTotal,
         total,
     } = useContext(ProviderContext);
 
     // ref for form
     const contactFormRef = useRef();
 
+    // Loading shipping
     useEffect(() => {
-        if (!shipping) setShipping(shippingMethods[0]);
+        if (shippingMethods.length === 0) {
+            const cached = storage.get(keyShippingMethods);
 
-        if (!payment) setPayment(paymentMethods.find((method) => method.code === 'cod'));
+            if (cached) {
+                setShippingMethods(cached);
+                setShipping(cached[0]);
+            } else {
+                const fetchShippings = async () => {
+                    try {
+                        const res = await api.getAll(backEndApi.shipping);
+
+                        setShippingMethods(res);
+                        setShipping(res[0]);
+                    } catch (err) {
+                        toastError(
+                            err.response?.data?.message || 'Fetching shipping error!',
+                        );
+                    }
+                };
+
+                fetchShippings();
+            }
+        }
+    }, []);
+
+    // Load payment
+    useEffect(() => {
+        if (paymentMethods.length === 0) {
+            const cached = storage.get(keyPaymentMethods);
+
+            if (cached) {
+                setPaymentMethods(cached);
+                setPayment(cached.find((payment) => payment.code === 'cod'));
+            } else {
+                const fetchPayments = async () => {
+                    try {
+                        const res = await api.getAll(backEndApi.payment);
+
+                        setPaymentMethods(res);
+                        setPayment(res.find((payment) => payment.code === 'cod'));
+                    } catch (err) {
+                        toastError(
+                            err.response?.data?.message || 'Fetching payment error!',
+                        );
+                    }
+                };
+                fetchPayments();
+            }
+        }
     }, []);
 
     const handleShipping = (method) => {

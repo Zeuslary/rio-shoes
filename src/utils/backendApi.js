@@ -14,13 +14,19 @@ const backEndApi = {
     adminLogin: '/admin-login',
 
     flashSale: '/flash-sale',
+
     newProducts: '/product/new',
     brandMinimal: '/brand/minimal',
     partProducts: '/product/part',
-    filterProducts: '/product/filter',
+    productFilter: '/product/filter',
     productDetail: '/product/detail',
+    productSearch: '/product/search',
+
     uniqueUserName: '/customer/unique-username',
     customerLogin: '/customer/login',
+
+    orderTracking: '/order/tracking',
+    orderHistory: '/order/history',
 };
 
 export default backEndApi;

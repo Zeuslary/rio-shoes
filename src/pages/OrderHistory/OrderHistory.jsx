@@ -1,137 +1,80 @@
-import { useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 
-import { CheckCircleIcon, CloseCircleIcon } from '~/assets/icons';
-import CartItemSummary from '~/components/CartItemSummary';
-import Button from '~/components/Button';
-import OrderCart from '~/components/OrderCart';
+import { api, backEndApi, toastError, toastSuccess, upperCaseFirstLetter } from '~/utils';
+import { ORDER_STATUSES } from '~/constants';
+
+import { ProviderContext } from '~/components/Provider';
+
+import { Button, OrderCart } from '~/components';
+
+import { CloseCircleIcon } from '~/assets/icons';
 import styles from './OrderHistory.module.scss';
 
-// Fake order history
-const fakeOrderHistory = [
-    {
-        id: 101,
-        status: 'delivered',
-        createdAt: '2025-05-01',
-        items: [
-            {
-                name: 'Nike Air Max 90',
-                image: '/src/assets/images/product/nike-1.png',
-                size: 41,
-                color: 'White',
-                price: 120,
-                quantity: 1,
-            },
-        ],
-        summary: {
-            subTotal: 120,
-            shipping: 19.99,
-            discount: 0,
-            total: 139.99,
-        },
-    },
-    {
-        id: 102,
-        status: 'in-transit',
-        createdAt: '2025-05-03',
-        items: [
-            {
-                name: 'Adidas Samba',
-                image: '/src/assets/images/product/nike-1.png',
-                size: 42,
-                color: 'Black',
-                price: 100,
-                quantity: 1,
-            },
-            {
-                name: 'Vans Old Skool',
-                image: '/src/assets/images/product/nike-1.png',
-                size: 42,
-                color: 'Navy',
-                price: 85,
-                quantity: 1,
-            },
-        ],
-        summary: {
-            subTotal: 185,
-            shipping: 19.99,
-            discount: 0,
-            total: 204.99,
-        },
-    },
-    {
-        id: 103,
-        status: 'processing',
-        createdAt: '2025-05-06',
-        items: [
-            {
-                name: 'New Balance 574',
-                image: '/src/assets/images/product/nike-1.png',
-                size: 43,
-                color: 'Grey',
-                price: 110,
-                quantity: 1,
-            },
-            {
-                name: 'Puma Suede Classic',
-                image: '/src/assets/images/product/nike-1.png',
-                size: 42,
-                color: 'Green',
-                price: 90,
-                quantity: 1,
-            },
-            {
-                name: 'Converse Chuck 70',
-                image: '/src/assets/images/product/nike-1.png',
-                size: 41,
-                color: 'Black',
-                price: 95,
-                quantity: 1,
-            },
-        ],
-        summary: {
-            subTotal: 295,
-            shipping: 19.99,
-            discount: 0,
-            total: 314.99,
-        },
-    },
-    {
-        id: 104,
-        status: 'completed',
-        createdAt: '2025-05-03',
-        items: [
-            {
-                name: 'Adidas Samba',
-                image: '/src/assets/images/product/nike-1.png',
-                size: 42,
-                color: 'Black',
-                price: 100,
-                quantity: 1,
-            },
-            {
-                name: 'Vans Old Skool',
-                image: '/src/assets/images/product/nike-1.png',
-                size: 42,
-                color: 'Navy',
-                price: 85,
-                quantity: 1,
-            },
-        ],
-        summary: {
-            subTotal: 185,
-            shipping: 19.99,
-            discount: 0,
-            total: 204.99,
-        },
-    },
-];
-
-const item = fakeOrderHistory[0];
-
-// console.log(fakeOrderHistory);
-
 function OrderHistory() {
-    const [order, setOrder] = useState(true);
+    const { customerProfile } = useContext(ProviderContext);
+
+    const [filter, setFilter] = useState('all');
+    const [search, setSearch] = useState('');
+
+    const [isSearch, setIsSearch] = useState(false);
+
+    const [orders, setOrders] = useState([]);
+    const [ordersFilter, setOrderFilter] = useState([]);
+
+    // Loading history
+    useEffect(() => {
+        const loadingHistory = async () => {
+            try {
+                const result = await api.getAll(
+                    `${backEndApi.orderHistory}?customerId=${customerProfile._id}`,
+                );
+
+                setOrders(result.data || []);
+                setOrderFilter(result.data || []);
+            } catch (err) {
+                console.error('Get history failed...', err);
+
+                toastError(err?.response?.data?.message || 'Get history error!');
+            }
+        };
+
+        loadingHistory();
+    }, []);
+
+    // Filter
+    useEffect(() => {
+        if (isSearch) setIsSearch(false);
+
+        setOrderFilter(
+            orders.filter((order) =>
+                filter === 'all' ? order : order.status === filter,
+            ),
+        );
+    }, [filter, isSearch]);
+
+    const handleFind = useCallback(() => {
+        if (!search) {
+            toastError('Please enter your product name!');
+            return;
+        }
+
+        setIsSearch(true);
+
+        const result = [];
+
+        orders.map((order) => {
+            for (const item of order.items) {
+                if (item.name.toLowerCase().includes(search.toLowerCase())) {
+                    result.push(order);
+                    return;
+                }
+            }
+        });
+
+        setSearch('');
+        if (result.length >= 1) toastSuccess('Search successfully!');
+        setOrderFilter(result);
+    }, [search]);
 
     return (
         <div className={styles['wrapper']}>
@@ -142,37 +85,61 @@ function OrderHistory() {
                     <input
                         className={styles['input']}
                         type="text"
-                        placeholder="Enter your order number"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Search order by enter product name"
                     />
-                    <Button deepBlack customStyle={styles['find-btn']}>
+
+                    <Button
+                        deepBlack
+                        customStyle={styles['find-btn']}
+                        onClick={handleFind}
+                    >
                         Find order
                     </Button>
                 </div>
             </div>
+
+            {/* Filter */}
+            <div className={styles['filters']}>
+                <Button
+                    gray={filter !== 'all'}
+                    primary={filter === 'all'}
+                    customStyle={styles['filter-btn']}
+                    onClick={() => setFilter('all')}
+                >
+                    All
+                </Button>
+
+                {ORDER_STATUSES.map((status) => (
+                    <Button
+                        gray={filter !== status}
+                        primary={filter === status}
+                        key={status}
+                        customStyle={styles['filter-btn']}
+                        onClick={() => setFilter(status)}
+                    >
+                        {upperCaseFirstLetter(status)}
+                    </Button>
+                ))}
+            </div>
+
             {/* Not found */}
             {/* Can't find order */}
-            {!order && (
+            {isSearch && ordersFilter.length === 0 && (
                 <div className={styles['not-found']}>
                     <CloseCircleIcon />
                     <h3>Can't find your order.</h3>
                     <p>
-                        The order number doesn't match any orders in our system. Please check the
-                        number and try again.
+                        The product name doesn't match any orders in our history. Please
+                        check the product name and try again.
                     </p>
                 </div>
             )}
 
-            {/* Find order  */}
-            {order && (
-                <>
-                    <OrderCart item={item} />
-                </>
-            )}
-
             {/* Display list */}
-            {/* {fakeOrderHistory.map((item, index) => (
-                <OrderCart key={item.id || index} item={item} />
-            ))} */}
+            {ordersFilter.length >= 1 &&
+                ordersFilter.map((item) => <OrderCart key={item._id} order={item} />)}
         </div>
     );
 }

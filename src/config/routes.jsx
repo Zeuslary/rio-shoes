@@ -8,7 +8,7 @@ const routes = {
     puma: '/puma', //Done -> Switch into product
     orderTracking: '/order-tracking', //Done
     contact: '/contact', //Done
-    search: '/search', //Done
+    search: '/product/search', //Done -> Switch to search into /product/search
     cart: '/cart', //Done
     productDetail: '/product', //Done
     checkout: '/checkout', //Done
