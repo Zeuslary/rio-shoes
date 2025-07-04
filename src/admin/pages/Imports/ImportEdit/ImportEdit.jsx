@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     flatObject,
     patternValidate,
@@ -35,7 +35,7 @@ function ImportEdit({
 
     const handleEdit = async (data) => {
         try {
-            const result = await api.putById(
+            const result = await adminApi.putById(
                 backEndApi.productImports,
                 productImportEdit._id,
                 flatObject(data),

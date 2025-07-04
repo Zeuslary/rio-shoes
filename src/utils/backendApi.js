@@ -22,11 +22,16 @@ const backEndApi = {
     productDetail: '/product/detail',
     productSearch: '/product/search',
 
+    productFilterAdmin: '/product/filter-admin',
+
     uniqueUserName: '/customer/unique-username',
     customerLogin: '/customer/login',
 
     orderTracking: '/order/tracking',
     orderHistory: '/order/history',
+
+    // Report
+    report: '/report',
 };
 
 export default backEndApi;

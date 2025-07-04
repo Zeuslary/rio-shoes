@@ -100,7 +100,7 @@ function ProductCart({ item }) {
                         deepBlack
                         customStyle={styles['add-btn']}
                     >
-                        Add to cart
+                        Thêm vào giỏ hàng
                     </Button>
                 </div>
             </div>

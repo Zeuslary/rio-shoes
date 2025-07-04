@@ -1,5 +1,5 @@
 import {
-    api,
+    adminApi,
     backEndApi,
     styleStatus,
     toastSuccess,
@@ -14,7 +14,7 @@ import styles from './PaymentList.module.scss';
 function PaymentList({ payments, setPayments, setPaymentEdit, setMode }) {
     const handleDelete = async (id) => {
         try {
-            const deletePayment = await api.deleteById(backEndApi.payment, id);
+            const deletePayment = await adminApi.deleteById(backEndApi.payment, id);
 
             setPayments((prev) => prev.filter((payment) => payment._id !== id));
             toastSuccess(deletePayment.message);

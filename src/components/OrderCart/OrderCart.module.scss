@@ -1,3 +1,5 @@
+@use '/src/components/GlobalStyle/GlobalStyle.scss' as *;
+
 .wrapper {
     position: relative;
     width: 760px;
@@ -12,6 +14,7 @@
 
 .id {
     font-size: 1.8rem;
+    margin-right: 12px;
 }
 
 .date {
@@ -36,4 +39,43 @@
     height: 40px;
     font-size: 1.5rem;
     min-width: 120px;
+}
+
+// Responsive
+@media screen and (max-width: $max-mobile) {
+    .wrapper {
+        padding: 12px;
+    }
+
+    .header {
+        flex: 1;
+    }
+
+    .id {
+        font-size: 1.6rem;
+
+        & span {
+            font-size: 1.2rem;
+        }
+    }
+
+    .status {
+        margin-left: 12px;
+        font-size: 1.2rem;
+        min-width: 68px;
+        padding: 4px 8px;
+    }
+
+    .date {
+        font-size: 1.2rem;
+    }
+
+    .summary {
+        font-size: 1.4rem;
+    }
+
+    .detail-btn {
+        height: 38px;
+        font-size: 1.4rem;
+    }
 }

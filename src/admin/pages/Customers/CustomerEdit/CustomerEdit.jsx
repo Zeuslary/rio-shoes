@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     patternValidate,
     flatObject,
@@ -63,7 +63,7 @@ function CustomerEdit({ customerEdit, setCustomerEdit, setCustomers, setMode }) 
     useEffect(() => {
         let url = '';
 
-        if (avatarFile && avatarFile instanceof FileList) {
+        if (avatarFile && avatarFile instanceof FileList && avatarFile.length > 0) {
             url = URL.createObjectURL(avatarFile[0]);
 
             setPreview(url);
@@ -78,17 +78,18 @@ function CustomerEdit({ customerEdit, setCustomerEdit, setCustomers, setMode }) 
         const isModified = !isSameValueObject(flatObject(data), flatObject(customerEdit));
 
         // Handle not modified
-        if (!isModified) {
+        if (!isModified && !(data.avatar instanceof FileList)) {
             toastInfo('Nothing modified!');
             setCustomerEdit();
             setMode('view');
+            return;
         }
 
         // If not upload img -> delete
         if (!(data.avatar instanceof FileList)) delete data.avatar;
 
         try {
-            const result = await api.putMultipart(
+            const result = await adminApi.putMultipart(
                 backEndApi.customer,
                 customerEdit._id,
                 flatObject(data),
@@ -156,10 +157,7 @@ function CustomerEdit({ customerEdit, setCustomerEdit, setCustomers, setMode }) 
                                     type="text"
                                     placeholder="Eg: Lander"
                                     id="lastName"
-                                    {...register('fullName.lastName', {
-                                        required: patternValidate.required,
-                                        minLength: patternValidate.minLength3,
-                                    })}
+                                    {...register('fullName.lastName')}
                                 />
                                 <p className="form-msg-err">
                                     {errors.fullName?.lastName &&

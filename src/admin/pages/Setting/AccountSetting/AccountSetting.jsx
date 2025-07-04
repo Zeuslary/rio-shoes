@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useCallback, useEffect, useState, useContext } from 'react';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     flatObject,
     storage,
@@ -69,7 +69,7 @@ function AccountSetting() {
         }
 
         try {
-            const result = await api.putMultipart(
+            const result = await adminApi.putMultipart(
                 backEndApi.admin,
                 adminProfile._id,
                 flatObject(data),

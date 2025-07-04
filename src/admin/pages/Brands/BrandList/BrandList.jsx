@@ -1,5 +1,5 @@
 import {
-    api,
+    adminApi,
     backEndApi,
     styleStatus,
     toastError,
@@ -17,7 +17,7 @@ import styles from './BrandList.module.scss';
 function BrandList({ brands, setBrands, setMode, setBrandEdit }) {
     const handleDelete = async (brand) => {
         try {
-            const result = await api.deleteById(backEndApi.brand, brand._id);
+            const result = await adminApi.deleteById(backEndApi.brand, brand._id);
 
             toastSuccess(result.message);
             setBrands((prev) => prev.filter((brand) => brand._id !== result.data._id));
@@ -72,7 +72,9 @@ function BrandList({ brands, setBrands, setMode, setBrandEdit }) {
                                 </td>
 
                                 <td>
-                                    <span>{brand.description}</span>
+                                    <span className={styles['des']}>
+                                        {brand.description}
+                                    </span>
                                 </td>
 
                                 <td>

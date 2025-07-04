@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { ProviderContext } from '~/components/Provider';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     patternValidate,
     flatObject,
@@ -39,7 +39,7 @@ function ImportAdd({ setProductImports, setMode }) {
     useEffect(() => {
         const fetchingData = async () => {
             try {
-                const res = await api.getAll(backEndApi.productMinimal);
+                const res = await adminApi.getAll(backEndApi.productMinimal);
 
                 setProducts(res);
             } catch (err) {
@@ -52,7 +52,10 @@ function ImportAdd({ setProductImports, setMode }) {
 
     const handleAdd = async (data) => {
         try {
-            const result = await api.post(backEndApi.productImports, flatObject(data));
+            const result = await adminApi.post(
+                backEndApi.productImports,
+                flatObject(data),
+            );
 
             toastSuccess(result.message);
 

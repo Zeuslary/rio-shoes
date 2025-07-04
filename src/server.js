@@ -17,6 +17,7 @@ import {
     dashboardRouters,
     adminAccountRouters,
     flashSaleRouters,
+    reportRouters,
 } from './routes/index.js';
 
 // Get global variable from file .env
@@ -30,9 +31,20 @@ const app = express();
 
 // Allow requests from only React frontend
 // port 5173 is your vite app running
+const allowOrigins = ['https://249b-42-115-186-10.ngrok-free.app', FRONTEND_URL];
 app.use(
     cors({
-        origin: FRONTEND_URL,
+        origin: function (origin, callback) {
+            if (!origin) return callback(null, true);
+
+            if (allowOrigins.includes(origin)) {
+                return callback(null, true);
+            } else {
+                return new Error(
+                    `CORS policy does not allow access from origin: ${origin}`,
+                );
+            }
+        },
         credentials: true,
     }),
 );
@@ -87,6 +99,9 @@ app.use('/api/admin-login', adminAccountRouters);
 
 // Make router for flash-sale
 app.use('/api/flash-sale', flashSaleRouters);
+
+// Make router for report
+app.use('/api/report', reportRouters);
 
 // -------- END ROUTER ---------
 

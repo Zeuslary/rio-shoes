@@ -1,6 +1,7 @@
+import { formatCurrencyVN, upperCaseFirstLetter } from '~/utils';
 import styles from './OrderList.module.scss';
 
-function OrderList({ orders }) {
+function OrderList({ items }) {
     return (
         <div className={styles['wrapper']}>
             <table className={styles['table']}>
@@ -16,23 +17,21 @@ function OrderList({ orders }) {
 
                 {/* Body */}
                 <tbody>
-                    {orders.map((order) => (
-                        <tr key={order.id}>
+                    {items.map((item) => (
+                        <tr key={item.id}>
                             <td>
-                                <span>{order.customerName}</span>
+                                <span>{item.customerId?.getFullName}</span>
                             </td>
                             <td>
-                                <strong>${order.total}</strong>
-                            </td>
-
-                            <td>
-                                <span>
-                                    {order.status.slice(0, 1).toUpperCase() + order.status.slice(1)}
-                                </span>
+                                <strong>{formatCurrencyVN(item.summary?.total)}</strong>
                             </td>
 
                             <td>
-                                <span>{order.createdAt.slice(0, 10)}</span>
+                                <span>{upperCaseFirstLetter(item.status)}</span>
+                            </td>
+
+                            <td>
+                                <span>{item?.createdAt?.slice(0, 10)}</span>
                             </td>
                         </tr>
                     ))}

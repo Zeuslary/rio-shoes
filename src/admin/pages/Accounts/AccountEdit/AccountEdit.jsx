@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     flatObject,
     isSameValueObject,
@@ -74,7 +74,7 @@ function AccountEdit({ adminEdit, setAdminEdit, setAdmins, setMode }) {
         }
 
         try {
-            const result = await api.putMultipart(
+            const result = await adminApi.putMultipart(
                 backEndApi.admin,
                 adminEdit._id,
                 flatObject(data),

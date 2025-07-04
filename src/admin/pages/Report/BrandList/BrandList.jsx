@@ -1,31 +1,32 @@
-import styles from './CategoryList.module.scss';
+import { formatCurrencyVN } from '~/utils';
+import styles from './BrandList.module.scss';
 
-function CategoryList({ categories }) {
+function BrandList({ items }) {
     return (
         <div className={styles['wrapper']}>
             <table className={styles['table']}>
                 {/* Header */}
                 <thead>
                     <tr>
-                        <th>Category</th>
+                        <th>Brands</th>
                         <th>Sold</th>
-                        <th>Revenue</th>
+                        <th>Value</th>
                     </tr>
                 </thead>
 
                 {/* Body */}
                 <tbody>
-                    {categories.map((category) => (
-                        <tr key={category.id}>
+                    {items.map((item) => (
+                        <tr key={item._id}>
                             <td>
-                                <span>{category.name}</span>
+                                <span>{item._id}</span>
                             </td>
 
                             <td className="text-center">
-                                <span>{category.sold}</span>
+                                <span>{item.totalSold}</span>
                             </td>
                             <td className="text-center">
-                                <strong>${category.revenue}</strong>
+                                <strong>{formatCurrencyVN(item.totalValue)}</strong>
                             </td>
                         </tr>
                     ))}
@@ -35,4 +36,4 @@ function CategoryList({ categories }) {
     );
 }
 
-export default CategoryList;
+export default BrandList;

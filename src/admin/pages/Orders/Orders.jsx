@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { api, backEndApi, toastError, upperCaseFirstLetter } from '~/utils';
+import { userApi, backEndApi, toastError, upperCaseFirstLetter } from '~/utils';
 import { ORDER_STATUSES } from '~/constants';
 
 import OrderList from './OrderList';
@@ -25,7 +25,7 @@ function Orders() {
     useEffect(() => {
         const fetchingData = async () => {
             try {
-                let res = await api.getAll(backEndApi.order);
+                let res = await userApi.getAll(backEndApi.order);
 
                 setOrders(res);
             } catch (err) {
@@ -114,7 +114,7 @@ function Orders() {
                             </div>
 
                             {/* Search */}
-                            <div className={styles['search']}>
+                            {/* <div className={styles['search']}>
                                 <input
                                     className={styles['search-input']}
                                     type="text"
@@ -123,7 +123,7 @@ function Orders() {
                                 <Button deepBlack customStyle={styles['search-btn']}>
                                     Search
                                 </Button>
-                            </div>
+                            </div> */}
                         </div>
                     </CartBox>
 
@@ -138,6 +138,9 @@ function Orders() {
                             />
                         </CartBox>
                     </div>
+
+                    {/* Pagination */}
+                    {/* <Pagination numPages={4} currentPage={1} /> */}
                 </>
             )}
 
@@ -160,9 +163,6 @@ function Orders() {
                     setOrders={setOrders}
                 />
             )}
-
-            {/* Pagination */}
-            {/* <Pagination numPages={4} currentPage={1} /> */}
         </div>
     );
 }

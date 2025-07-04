@@ -1,12 +1,12 @@
 import express from 'express';
 
 import uploadStorage from '../multer/uploadStorage.js';
-import verifyToken from '../middlewares/verifyToken.js';
+import { verifyTokenAdmin } from '../middlewares/verifyToken.js';
 import { adminController } from '../controllers/index.js';
 
 const router = express.Router();
 
-router.use(verifyToken);
+router.use(verifyTokenAdmin);
 
 router.get('/', adminController.getAll);
 router.get('/:id', adminController.getById);

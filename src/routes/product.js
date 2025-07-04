@@ -1,7 +1,7 @@
 import express from 'express';
 
 import uploadStorage from '../multer/uploadStorage.js';
-import verifyToken from '../middlewares/verifyToken.js';
+import { verifyTokenAdmin } from '../middlewares/verifyToken.js';
 import { productController } from '../controllers/index.js';
 
 const router = express.Router();
@@ -13,20 +13,22 @@ router.get('/new', productController.getNewProducts);
 
 router.get('/part', productController.getPart);
 
+router.get('/filter-admin', productController.productFilterAdmin);
+
 router.get('/filter', productController.productFilter);
+
+router.get('/detail/:id', productController.getDetail);
+
+router.get('/minimal', productController.getAllMinimal);
 
 router.get('/:id', productController.getById);
 
 router.get('/:id/suggestion', productController.getSuggestion);
 
-router.get('/detail/:id', productController.getDetail);
-
 router.get('/', productController.getAll);
 
-router.get('/minimal', productController.getAllMinimal);
-
 // Private api
-router.use(verifyToken);
+router.use(verifyTokenAdmin);
 router.post(
     '/',
     uploadStorage.products.fields([

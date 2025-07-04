@@ -1,8 +1,7 @@
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
-import api from '~/utils/api';
-import backEndApi from '~/utils/backendApi';
+import { adminApi, backEndApi } from '~/utils';
 import routes from '~/config/routes';
 
 import formatCurrencyVN from '~/utils/formatCurrency';
@@ -19,7 +18,7 @@ function Dashboard() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await api.getAll(backEndApi.dashboard);
+                const data = await adminApi.getAll(backEndApi.dashboard);
 
                 console.log('Dashboard data fetched successfully!', data);
                 setDashboardData(data.data);
@@ -41,19 +40,25 @@ function Dashboard() {
                     <div className="col-3">
                         <CartBox>
                             <p className={styles['total-title']}>Total products</p>
-                            <p className={styles['cart-number']}>{dashboardData.totalProducts}</p>
+                            <p className={styles['cart-number']}>
+                                {dashboardData.totalProducts}
+                            </p>
                         </CartBox>
                     </div>
                     <div className="col-3">
                         <CartBox>
                             <p className={styles['total-title']}>Total order</p>
-                            <p className={styles['cart-number']}>{dashboardData.totalOrders}</p>
+                            <p className={styles['cart-number']}>
+                                {dashboardData.totalOrders}
+                            </p>
                         </CartBox>
                     </div>
                     <div className="col-3">
                         <CartBox>
                             <p className={styles['total-title']}>Total customers</p>
-                            <p className={styles['cart-number']}>{dashboardData.totalCustomers}</p>
+                            <p className={styles['cart-number']}>
+                                {dashboardData.totalCustomers}
+                            </p>
                         </CartBox>
                     </div>
                     <div className="col-3">
@@ -76,7 +81,10 @@ function Dashboard() {
                         <CartBox>
                             <div className="space-between">
                                 <p className={styles['cart-title']}>Top Products</p>
-                                <Button to={routes.adminProducts} customStyle={styles['view-btn']}>
+                                <Button
+                                    to={routes.adminProducts}
+                                    customStyle={styles['view-btn']}
+                                >
                                     View all
                                 </Button>
                             </div>
@@ -89,7 +97,9 @@ function Dashboard() {
                                             name={`${product.name}`}
                                             image={IMG_PRODUCT_PATH + product.image}
                                             description={`Sold: ${product.sold}`}
-                                            rightLabel={formatCurrencyVN(product.originalPrice)}
+                                            rightLabel={formatCurrencyVN(
+                                                product.originalPrice,
+                                            )}
                                         />
                                     ))}
                             </div>
@@ -101,7 +111,10 @@ function Dashboard() {
                         <CartBox>
                             <div className="space-between">
                                 <p className={styles['cart-title']}>Recent Orders</p>
-                                <Button to={routes.adminOrders} customStyle={styles['view-btn']}>
+                                <Button
+                                    to={routes.adminOrders}
+                                    customStyle={styles['view-btn']}
+                                >
                                     View all
                                 </Button>
                             </div>

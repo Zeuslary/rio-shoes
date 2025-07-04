@@ -1,3 +1,5 @@
+@use '/src/components/GlobalStyle/GlobalStyle.scss' as *;
+
 .sort-by {
     position: relative;
 }
@@ -46,5 +48,24 @@
         &:disabled::checkmark {
             color: transparent;
         }
+    }
+}
+
+// Responsive
+@media screen and (max-width: $max-tablet) {
+    .sort-group {
+        min-width: 146px;
+        height: 40px;
+        padding: 12px;
+
+        & option {
+            padding: 10px 12px;
+        }
+    }
+}
+
+@media screen and (max-width: $max-mobile) {
+    .sort-group {
+        height: 38px;
     }
 }

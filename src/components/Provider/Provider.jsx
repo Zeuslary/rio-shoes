@@ -1,12 +1,13 @@
 import { useState, useMemo, useEffect } from 'react';
 
-import { api, backEndApi, storage, toastError } from '~/utils';
+import { userApi, backEndApi, storage, toastError } from '~/utils';
 import {
     keyAdminProfile,
     keyCustomerProfile,
     keyLocalStorageCart,
     keyPaymentMethods,
     keyShippingMethods,
+    keyUserToken,
 } from '~/constants';
 
 import ProviderContext from './ProviderContext';
@@ -17,6 +18,7 @@ function Provider({ children }) {
     const [customerProfile, setCustomerProfile] = useState(() =>
         storage.get(keyCustomerProfile),
     );
+    const [isAccount, setIsAccount] = useState(false);
 
     // Cart
     const [cartList, setCartList] = useState(
@@ -58,7 +60,7 @@ function Provider({ children }) {
                     return;
                 }
 
-                const resShipping = await api.getAll(backEndApi.shipping);
+                const resShipping = await userApi.getAll(backEndApi.shipping);
 
                 storage.save(keyShippingMethods, resShipping || []);
                 setShippingMethods(resShipping);
@@ -89,7 +91,7 @@ function Provider({ children }) {
                     return;
                 }
 
-                const resPayment = await api.getAll(backEndApi.payment);
+                const resPayment = await userApi.getAll(backEndApi.payment);
 
                 storage.save(keyPaymentMethods, resPayment || []);
                 setPaymentMethods(resPayment);
@@ -120,7 +122,15 @@ function Provider({ children }) {
     // Auto save into localStorage customer profile
     useEffect(() => {
         storage.save(keyCustomerProfile, customerProfile);
+
+        if (customerProfile && storage.get(keyUserToken)?.length > 10) {
+            setIsAccount(true);
+        } else {
+            setIsAccount(false);
+        }
     }, [customerProfile]);
+
+    // Handle isAccount
 
     return (
         <ProviderContext.Provider
@@ -130,6 +140,8 @@ function Provider({ children }) {
 
                 customerProfile,
                 setCustomerProfile,
+                isAccount,
+                setIsAccount,
 
                 cartList,
                 setCartList,

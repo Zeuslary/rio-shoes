@@ -7,59 +7,59 @@ import routes from '~/config/routes';
 import { formatCurrencyVN, storage, toastInfo, toastSuccess } from '~/utils';
 
 import { ProviderContext } from '~/components/Provider';
-import { IMG_CUSTOMER_PATH, keyCustomerProfile, keyCustomerToken } from '~/constants';
+import { IMG_CUSTOMER_PATH, keyCustomerProfile, keyUserToken } from '~/constants';
 
 import { Image, Button } from '~/components';
-import { CartIcon, SearchIcon } from '~/assets/icons';
+import { CartIcon, MenuIcon, SearchIcon } from '~/assets/icons';
 import images from '~/assets/images';
 import CartItem from './CartItem';
 import styles from './Header.module.scss';
 
-const navItems = [
-    { label: 'Home', path: routes.home },
-    { label: 'Products', path: routes.product, exact: true },
-    { label: 'Order Tracking', path: routes.orderTracking },
-    { label: 'Contact', path: routes.contact },
-];
-
 function Header() {
-    const { cartList, total, customerProfile, setCustomerProfile } =
-        useContext(ProviderContext);
+    const {
+        cartList,
+        total,
+        customerProfile,
+        setCustomerProfile,
+        isAccount,
+        setIsAccount,
+    } = useContext(ProviderContext);
     const navigate = useNavigate();
 
     const [search, setSearch] = useState('');
 
     // Load customerProfile
     useEffect(() => {
-        if (customerProfile) return;
-
-        console.log('Running');
+        if (customerProfile && storage.get(keyCustomerProfile)?.length >= 10) {
+            return;
+        }
 
         if (!customerProfile) {
             const data = storage.get(keyCustomerProfile);
 
-            if (data) setCustomerProfile(data);
+            if (data) {
+                setCustomerProfile(data);
+            }
         }
-    }, []);
+    }, [customerProfile]);
 
     const handleLogout = () => {
-        storage.remove(keyCustomerProfile);
-        storage.remove(keyCustomerToken);
         setCustomerProfile();
+        storage.remove(keyCustomerProfile);
+        storage.remove(keyUserToken);
 
         toastSuccess('Logout successfully!');
         navigate(routes.home);
     };
 
     const handleSearch = useCallback(() => {
-        console.log('Search: ', search);
+        // console.log('Search: ', search);
         if (!search) {
             toastInfo('Please enter search first!');
             return;
         }
 
         // Navigate to search page
-        setSearch('');
         navigate(`${routes.search}?name=${encodeURIComponent(search)}`);
     }, [search]);
 
@@ -74,24 +74,54 @@ function Header() {
                             src={images.logo}
                             alt="RioShoes"
                         />
+                        {/* <Image
+                            className={styles['logo-minimal']}
+                            src={images.logoMinimal}
+                            alt="RioShoes"
+                        /> */}
                     </Link>
 
-                    <nav className={styles['nav-list']}>
-                        {navItems.map((item) => (
-                            <NavLink
-                                key={item.path}
-                                to={item.path}
-                                end={item.exact} // Fix error highline products when at product detail
-                                className={({ isActive }) =>
-                                    clsx([
-                                        styles['nav-item'],
-                                        isActive && styles['active'],
-                                    ])
-                                }
-                            >
-                                {item.label}
-                            </NavLink>
-                        ))}
+                    <nav className={clsx('s-hidden', styles['nav-list'])}>
+                        <NavLink
+                            to={routes.home}
+                            className={({ isActive }) =>
+                                clsx(styles['nav-item'], isActive && styles['active'])
+                            }
+                        >
+                            Trang chủ
+                        </NavLink>
+
+                        <NavLink
+                            to={`${routes.product}?page=1`}
+                            end={true} // Fix error highlight products when at product detail
+                            className={({ isActive }) =>
+                                clsx(styles['nav-item'], isActive && styles['active'])
+                            }
+                        >
+                            Sản phẩm
+                        </NavLink>
+
+                        <NavLink
+                            to={routes.orderTracking}
+                            className={({ isActive }) =>
+                                clsx(styles['nav-item'], isActive && styles['active'])
+                            }
+                        >
+                            Theo dõi đơn hàng
+                        </NavLink>
+
+                        <NavLink
+                            to={routes.contact}
+                            className={({ isActive }) =>
+                                clsx(
+                                    's-m-hidden',
+                                    styles['nav-item'],
+                                    isActive && styles['active'],
+                                )
+                            }
+                        >
+                            Liên hệ
+                        </NavLink>
                     </nav>
 
                     <div className={styles['nav-right']}>
@@ -102,7 +132,8 @@ function Header() {
                                 type="text"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                placeholder="Search products..."
+                                onKeyUp={(e) => e.keyCode === 13 && handleSearch()}
+                                placeholder="Tìm kiếm sản phẩm..."
                             />
 
                             <button
@@ -133,7 +164,7 @@ function Header() {
                                                         width="140"
                                                         height="140"
                                                     />
-                                                    <span>Your cart is empty</span>
+                                                    <span>Giỏ hàng đang trống</span>
                                                 </div>
                                             )}
 
@@ -141,7 +172,7 @@ function Header() {
                                             {cartList.length > 0 && (
                                                 <div className={styles['cart-products']}>
                                                     <h6 className={styles['cart-title']}>
-                                                        Cart
+                                                        Giỏ hàng
                                                     </h6>
 
                                                     {/* List product */}
@@ -163,7 +194,7 @@ function Header() {
                                                                 styles['cart-total']
                                                             }
                                                         >
-                                                            <strong>Total:</strong>
+                                                            <strong>Tổng:</strong>
                                                             <strong>
                                                                 {formatCurrencyVN(total)}
                                                             </strong>
@@ -183,7 +214,7 @@ function Header() {
                                                                     ]
                                                                 }
                                                             >
-                                                                View cart
+                                                                Xem giỏ hàng
                                                             </Button>
 
                                                             <Button
@@ -194,7 +225,7 @@ function Header() {
                                                                     styles['checkout-btn']
                                                                 }
                                                             >
-                                                                Checkout
+                                                                Thanh toán
                                                             </Button>
                                                         </p>
                                                     </div>
@@ -216,14 +247,23 @@ function Header() {
                         </div>
 
                         {/* Button login */}
-                        {!customerProfile && (
-                            <Button to={routes.login} customStyle={styles['login-btn']}>
-                                Login
-                            </Button>
+                        {!isAccount && (
+                            <NavLink
+                                to={routes.login}
+                                className={({ isActive }) =>
+                                    clsx(
+                                        's-hidden',
+                                        styles['nav-item'],
+                                        isActive && styles['active'],
+                                    )
+                                }
+                            >
+                                Đăng nhập
+                            </NavLink>
                         )}
 
                         {/* Customer profile */}
-                        {customerProfile && (
+                        {isAccount && (
                             <Tippy
                                 // visible
                                 interactive
@@ -231,24 +271,24 @@ function Header() {
                                 placement="bottom-end"
                                 render={(attrs) => (
                                     <div
-                                        className={styles['profile-sub-nav']}
+                                        className={styles['sub-nav']}
                                         tabIndex="-1"
                                         {...attrs}
                                     >
                                         <Button
                                             to={routes.accountProfile}
-                                            className={styles['profile-sub-nav__item']}
+                                            className={styles['sub-nav__item']}
                                         >
                                             Tài khoản của tôi
                                         </Button>
                                         <Button
                                             to={routes.orderHistory}
-                                            className={styles['profile-sub-nav__item']}
+                                            className={styles['sub-nav__item']}
                                         >
                                             Lịch sử đơn hàng
                                         </Button>
                                         <Button
-                                            className={styles['profile-sub-nav__item']}
+                                            className={styles['sub-nav__item']}
                                             onClick={handleLogout}
                                         >
                                             Đăng xuất
@@ -262,6 +302,62 @@ function Header() {
                                 />
                             </Tippy>
                         )}
+
+                        {/* Button Menu for Mobile and table */}
+                        <div className={styles['menu-wrapper']}>
+                            <Tippy
+                                // visible
+                                offset={[-10, 14]}
+                                placement="bottom"
+                                interactive
+                                render={(attrs) => (
+                                    <div
+                                        className={styles['sub-nav']}
+                                        tabIndex="-1"
+                                        {...attrs}
+                                    >
+                                        <Button
+                                            to={routes.home}
+                                            className={styles['sub-nav__item']}
+                                        >
+                                            Trang chủ
+                                        </Button>
+
+                                        <Button
+                                            to={`${routes.product}?page=1`}
+                                            className={styles['sub-nav__item']}
+                                        >
+                                            Sản phẩm
+                                        </Button>
+
+                                        <Button
+                                            to={routes.orderTracking}
+                                            className={styles['sub-nav__item']}
+                                        >
+                                            Theo dõi đơn hàng
+                                        </Button>
+
+                                        <Button
+                                            to={routes.contact}
+                                            className={styles['sub-nav__item']}
+                                        >
+                                            Liên hệ
+                                        </Button>
+
+                                        <Button
+                                            to={routes.login}
+                                            className={styles['sub-nav__item']}
+                                        >
+                                            Đăng nhập
+                                        </Button>
+                                    </div>
+                                )}
+                            >
+                                <div className={styles['menu-icon']}>
+                                    <MenuIcon />
+                                </div>
+                            </Tippy>
+                        </div>
                     </div>
                 </header>
             </div>

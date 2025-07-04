@@ -12,10 +12,12 @@ function OrderCart({ order }) {
     return (
         <div className={styles['wrapper']}>
             <div className="space-between">
-                <div>
-                    <h3 className={styles['id']}>Order #{order?._id}</h3>
+                <div className={styles['header']}>
+                    <h3 className={styles['id']}>
+                        Order #<span>{order?._id}</span>
+                    </h3>
                     <span className={styles['date']}>
-                        Order date: {order?.createdAt?.slice(0, 10)}
+                        Ngày đặt: {order?.createdAt?.slice(0, 10)}
                     </span>
                 </div>
 
@@ -30,14 +32,14 @@ function OrderCart({ order }) {
 
             <div className={styles['summary']}>
                 <span>
-                    Total: <strong>{formatCurrencyVN(order?.summary?.total)}</strong>
+                    Tổng: <strong>{formatCurrencyVN(order?.summary?.total)}</strong>
                 </span>
                 <Button
                     to={`${routes.orderDetail}/${order._id}`}
                     deepBlack
                     customStyle={styles['detail-btn']}
                 >
-                    View detail
+                    Xem chi tiết
                 </Button>
             </div>
         </div>

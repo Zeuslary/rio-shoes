@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     flatObject,
     patternValidate,
@@ -54,7 +54,10 @@ function BrandAdd({ setBrands, setMode }) {
 
     const handleAdd = async (data) => {
         try {
-            const result = await api.postMultipart(backEndApi.brand, flatObject(data));
+            const result = await adminApi.postMultipart(
+                backEndApi.brand,
+                flatObject(data),
+            );
 
             // Add success -> delete temporary img
             if (preview && preview.startsWith('blob:')) {

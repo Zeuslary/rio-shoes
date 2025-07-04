@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     patternValidate,
     toastError,
@@ -137,7 +137,7 @@ function ProductEdit({ setProducts, brands, productEdit, setProductEdit, setMode
         if (!data.releaseYear) delete data.releaseYear;
 
         try {
-            const result = await api.putMultipart(
+            const result = await adminApi.putMultipart(
                 backEndApi.product,
                 productEdit._id,
                 data,

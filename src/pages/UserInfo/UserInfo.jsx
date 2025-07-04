@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import {
-    api,
+    userApi,
     backEndApi,
     flatObject,
     patternValidate,
@@ -12,7 +12,7 @@ import {
     toastError,
     toastSuccess,
 } from '~/utils';
-import { keyCustomerProfile } from '~/constants';
+import { keyCustomerProfile, keyUserToken } from '~/constants';
 import routes from '~/config/routes';
 
 import { ProviderContext } from '~/components/Provider';
@@ -27,7 +27,7 @@ function UserInfo() {
 
     // Navigate and Provider Context
     const navigate = useNavigate();
-    const { setCustomerProfile } = useContext(ProviderContext);
+    const { setCustomerProfile, setIsAccount } = useContext(ProviderContext);
 
     const methods = useForm({
         defaultValues: {
@@ -81,13 +81,18 @@ function UserInfo() {
         console.log('Data: ', data);
 
         try {
-            const result = await api.postMultipart(backEndApi.customer, flatObject(data));
+            const result = await userApi.postMultipart(
+                backEndApi.customer,
+                flatObject(data),
+            );
 
             toastSuccess('Register successfully!');
 
             // Save
             storage.save(keyCustomerProfile, result.data);
             setCustomerProfile(result.data);
+            storage.save(keyUserToken, result.token);
+            setIsAccount(true);
 
             // After save, switch to Home
             navigate(routes.home);
@@ -101,7 +106,7 @@ function UserInfo() {
         <div className={styles['wrapper']}>
             <div className={styles['content']}>
                 <CartBox>
-                    <h1 className={styles['header']}>Information</h1>
+                    <h1 className={styles['header']}>Thông tin cá nhân</h1>
 
                     <FormProvider {...methods}>
                         <form
@@ -111,9 +116,9 @@ function UserInfo() {
                             {/* Fullname */}
                             <div className="row">
                                 {/* First name */}
-                                <div className="col-4">
+                                <div className="col-4 col-m-6 col-s-12">
                                     <label className="form-label" htmlFor="firstName">
-                                        First name
+                                        Tên
                                     </label>
                                     <input
                                         className="form-input"
@@ -132,9 +137,9 @@ function UserInfo() {
                                 </div>
 
                                 {/* Last name */}
-                                <div className="col-4">
+                                <div className="col-4 col-m-6 col-s-12">
                                     <label className="form-label" htmlFor="lastName">
-                                        Last name
+                                        Họ
                                     </label>
                                     <input
                                         className="form-input"
@@ -153,9 +158,9 @@ function UserInfo() {
                                 </div>
 
                                 {/* Date of Birth */}
-                                <div className="col-4">
+                                <div className="col-4 col-m-6 col-s-12">
                                     <label className="form-label" htmlFor="dateOfBirth">
-                                        Date of Birth
+                                        Ngày sinh
                                     </label>
                                     <input
                                         className="form-input"
@@ -167,13 +172,11 @@ function UserInfo() {
                                         {errors.dateOfBirth && errors.dateOfBirth.message}
                                     </p>
                                 </div>
-                            </div>
 
-                            {/* Phone and Email */}
-                            <div className="row">
+                                {/* Phone and Email */}
                                 <div className="col-6">
                                     <label className="form-label" htmlFor="phone">
-                                        Phone
+                                        Số điện thoại
                                     </label>
                                     <input
                                         className="form-input"
@@ -233,9 +236,10 @@ function UserInfo() {
                                 <Button
                                     type="button"
                                     gray
+                                    to={routes.register}
                                     customStyle={styles['cancel-btn']}
                                 >
-                                    Back
+                                    Quay lại
                                 </Button>
 
                                 <Button
@@ -243,7 +247,7 @@ function UserInfo() {
                                     customStyle={styles['submit-btn']}
                                     type="submit"
                                 >
-                                    Register
+                                    Đăng ký
                                 </Button>
                             </div>
                         </form>

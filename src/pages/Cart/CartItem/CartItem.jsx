@@ -1,7 +1,13 @@
 import { useContext } from 'react';
 import { Link } from 'react-router';
 
-import { formatCurrencyVN, storage, upperCaseFirstLetter, toastError } from '~/utils';
+import {
+    formatCurrencyVN,
+    storage,
+    upperCaseFirstLetter,
+    toastError,
+    toastSuccess,
+} from '~/utils';
 import { IMG_PRODUCT_PATH, keyLocalStorageCart } from '~/constants';
 
 import routes from '~/config/routes';
@@ -32,7 +38,12 @@ function CartItem({ item }) {
                     else cart.quantity--;
                 }
 
-                return isDelete ? null : cart;
+                if (isDelete) {
+                    toastSuccess('Delete product successfully!');
+                    return null;
+                }
+
+                return cart;
             })
             // Handle cartList = [null] -> error when map
             .filter(Boolean);
@@ -61,6 +72,7 @@ function CartItem({ item }) {
             .map((cart) => (cart._id === item._id ? null : cart))
             .filter(Boolean);
 
+        toastSuccess('Delete product successfully!');
         saveCartList(newCartList);
     };
 
@@ -69,19 +81,19 @@ function CartItem({ item }) {
             <Image src={IMG_PRODUCT_PATH + item.image} className={styles['img']} />
 
             <div className={styles['body']}>
-                <Link to={routes.productDetail} className={styles['name']}>
+                <Link to={`${routes.product}/${item._id}`} className={styles['name']}>
                     {item.name}
                 </Link>
 
                 <div className={styles['style']}>
                     <span className={styles['size']}>Size: {item.size}</span>
                     <span className={styles['color']}>
-                        Color: {upperCaseFirstLetter(item.color)}
+                        Màu sắc: {upperCaseFirstLetter(item.color)}
                     </span>
                 </div>
 
                 <span className={styles['price']}>
-                    Price: <strong>{formatCurrencyVN(item.newPrice)}</strong>
+                    Giá: <strong>{formatCurrencyVN(item.newPrice)}</strong>
                 </span>
 
                 <div className={styles['quantity']}>

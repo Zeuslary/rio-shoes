@@ -103,6 +103,9 @@ const login = async (req, res) => {
         const username = req.body?.username;
         const password = req.body?.password;
 
+        // console.log('Username: ', username);
+        // console.log('Password: ', password);
+
         if (!username || !password)
             return res.status(400).json({
                 message: 'Username and password are required!',
@@ -114,9 +117,11 @@ const login = async (req, res) => {
             password,
         });
 
-        console.log('Customer: ', customer);
+        // console.log('Customer: ', customer);
 
         if (customer) {
+            customer.password = '';
+
             const customerToken = jwt.sign(
                 {
                     ...customer,
@@ -127,7 +132,8 @@ const login = async (req, res) => {
                 },
             );
 
-            console.log('Customer token: ', customerToken);
+            // console.log('Customer token: ', customerToken);
+
             // Delete password
             delete customer._doc.password;
 
@@ -138,7 +144,7 @@ const login = async (req, res) => {
             });
         }
 
-        return res.status(404).json({
+        return res.status(400).json({
             message: 'Username or password invalid!',
         });
     } catch (err) {
@@ -286,7 +292,7 @@ const create = async (req, res) => {
             return res.status(201).json({
                 message: 'Create customer successfully!',
                 data: newCustomer,
-                customerToken,
+                token: customerToken,
             });
 
         deleteFileJustUpload(file);

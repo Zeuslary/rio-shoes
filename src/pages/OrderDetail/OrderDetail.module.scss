@@ -1,3 +1,5 @@
+@use '/src/components/GlobalStyle/GlobalStyle.scss' as *;
+
 .wrapper {
     background-color: var(--background-color);
     padding: 12px 0 48px;
@@ -81,4 +83,17 @@ div.custom-col-6 {
 .continue-btn {
     text-align: center;
     margin-top: 24px;
+}
+
+// Responsive
+@media screen and (max-width: $max-tablet) {
+    .section-group {
+        font-size: 1.4rem;
+    }
+    .section-label {
+        width: 90px;
+    }
+}
+
+@media screen and (max-width: $max-mobile) {
 }

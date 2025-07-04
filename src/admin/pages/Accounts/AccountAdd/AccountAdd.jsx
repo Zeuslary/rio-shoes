@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     flatObject,
     patternValidate,
@@ -62,7 +62,10 @@ function AccountAdd({ setAdmins, setMode }) {
 
     const handleAdd = async (data) => {
         try {
-            const result = await api.postMultipart(backEndApi.admin, flatObject(data));
+            const result = await adminApi.postMultipart(
+                backEndApi.admin,
+                flatObject(data),
+            );
 
             // Handle exist username
             if (result.message.includes('already exist')) {

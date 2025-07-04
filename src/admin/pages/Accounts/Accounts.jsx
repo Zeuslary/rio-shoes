@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { api, backEndApi, upperCaseFirstLetter, toastError } from '~/utils';
+import { adminApi, backEndApi, upperCaseFirstLetter, toastError } from '~/utils';
 
 import { ROLES } from '~/constants';
 
@@ -26,7 +26,7 @@ function Accounts() {
     useEffect(() => {
         const fetchingData = async () => {
             try {
-                const data = await api.getAll(backEndApi.admin);
+                const data = await adminApi.getAll(backEndApi.admin);
                 setAdmins(data);
             } catch (err) {
                 console.error('Fetching admins errors...', err);
@@ -53,8 +53,13 @@ function Accounts() {
     // Filter accounts
     const accounts = admins
         .sort((accA, accB) => {
-            const dateA = new Date(accA.lastLogin);
-            const dateB = new Date(accB.lastLogin);
+            const dateA = accA.lastLogin ? new Date(accA.lastLogin) : null;
+            const dateB = accB.lastLogin ? new Date(accB.lastLogin) : null;
+
+            if (!dateA && !dateB) return 0;
+            if (!dateA) return 1;
+            if (!dateB) return -1;
+
             if (filterLastLogin) {
                 return filterLastLogin === 'asc' ? dateA - dateB : dateB - dateA;
             }

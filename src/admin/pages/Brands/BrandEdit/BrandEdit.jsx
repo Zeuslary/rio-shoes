@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     flatObject,
     isSameValueObject,
@@ -69,7 +69,7 @@ function BrandEdit({ brandEdit, setBrandEdit, setBrands, setMode }) {
         }
 
         try {
-            const result = await api.putMultipart(
+            const result = await adminApi.putMultipart(
                 backEndApi.brand,
                 brandEdit._id,
                 flatObject(data),

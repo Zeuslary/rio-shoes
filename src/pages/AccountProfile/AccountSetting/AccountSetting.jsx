@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useCallback, useEffect, useState, useContext } from 'react';
 
 import {
-    api,
+    userApi,
     backEndApi,
     flatObject,
     storage,
@@ -12,6 +12,7 @@ import {
     isSameValueObject,
     toastInfo,
     patternValidate,
+    handleTokenExpiredCustomer,
 } from '~/utils';
 import { ProviderContext } from '~/components/Provider';
 import { IMG_CUSTOMER_PATH } from '~/constants';
@@ -71,7 +72,7 @@ function AccountSetting() {
         }
 
         try {
-            const result = await api.putMultipart(
+            const result = await userApi.putMultipart(
                 `${backEndApi.customer}`,
                 customerProfile._id,
                 flatObject(data),
@@ -84,6 +85,7 @@ function AccountSetting() {
             toastSuccess(result.message);
         } catch (err) {
             toastError(err.response?.data?.message || 'Update customer error!');
+            handleTokenExpiredCustomer(err);
         }
     }, []);
 

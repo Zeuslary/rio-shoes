@@ -4,12 +4,44 @@ import mongoose from 'mongoose';
 import { UPLOAD_FOLDERS } from '../constants/index.js';
 import deleteFileDiskStorage from '../utils/deleteFileDiskStorage.js';
 import Product from '../models/Product.js';
+import Brand from '../models/Brand.js';
 
+// Pagination
+// pagination: {
+//     currentPage: page,
+//     lastPage,
+//     totalDocuments,
+// },
+
+// Make page for this
 const getAll = async (req, res) => {
     try {
-        const products = await Product.find().populate('brandId', 'name');
+        const { page = 1 } = req.params;
+        const limit = 8;
+        const skip = (limit - 1) * page;
 
-        return res.status(200).json(products);
+        const totalDocuments = await Product.countDocuments();
+
+        const lastPage = Math.ceil(totalDocuments / limit);
+
+        console.log('totalDocuments: ', totalDocuments);
+        console.log('limit: ', limit);
+        console.log('skip: ', skip);
+        console.log('lastPage: ', lastPage);
+
+        const products = await Product.find()
+            .populate('brandId', 'name')
+            .limit(limit)
+            .skip(skip);
+
+        return res.status(200).json({
+            data: products,
+            pagination: {
+                currentPage: page,
+                lastPage,
+                totalDocuments,
+            },
+        });
     } catch (err) {
         console.error(`Error fetching products: ${err}`);
         return res.status(500).json({
@@ -202,6 +234,7 @@ const productFilter = async (req, res) => {
     try {
         const {
             name,
+            gender,
             color,
             category,
             type,
@@ -211,6 +244,7 @@ const productFilter = async (req, res) => {
             size,
             brandId,
             brandName,
+            page = 1,
         } = req.query;
 
         const filter = {
@@ -218,21 +252,23 @@ const productFilter = async (req, res) => {
             stock: { $gt: 0 },
         };
 
-        // $in works like: field: { $in: ['red', 'blue'] }
-        // $in: MongoDB operator to match any value in the array.
-        if (color) filter.colors = { $in: color.split(',') };
-        if (category) filter.category = { $in: category.split(',') };
-        if (type) filter.type = { $in: type.split(',') };
-        if (style) filter.style = { $in: style.split(',') };
-        if (material) filter.material = { $in: material.split(',') };
-        if (design) filter.design = { $in: design.split(',') };
-        if (size) filter.sizes = { $in: size.split(',') };
-        if (brandId) filter.brandId = brandId;
+        console.log('Query: ', req.query);
 
-        // Filter by name product (case-insensitive)
+        // Filter field is string with option (case-insensitive)
+        if (brandId) filter.brandId = brandId;
         if (name) filter.name = { $regex: name, $options: 'i' };
 
-        console.log('Filter: ', filter);
+        // Handle for price range
+        const { minPrice, maxPrice } = req.query;
+
+        const priceFilter = {};
+
+        if (minPrice) priceFilter.$gt = parseInt(minPrice) || 0;
+        if (maxPrice) priceFilter.$lt = parseInt(maxPrice);
+
+        if (minPrice || maxPrice) {
+            filter.newPrice = priceFilter;
+        }
 
         // Create aggregation pipeline
         const pipeline = [
@@ -256,24 +292,192 @@ const productFilter = async (req, res) => {
             },
         ];
 
-        if (brandName)
-            pipeline.push({
-                $match: {
-                    'brand.name': { $regex: brandName, $options: 'i' },
-                },
-            });
+        const makeFilter = ({ field, fieldName, regexOptions = 'i', pipeline = [] }) => {
+            if (!field) return;
 
-        // const products = await Product.find(filter).populate('brandId', 'name');
+            if (Array.isArray(field) && field.length > 1) {
+                pipeline.push({
+                    $match: {
+                        $or: field.map((item) => ({
+                            [fieldName]: {
+                                $regex: item,
+                                $options: regexOptions,
+                            },
+                        })),
+                    },
+                });
+            } else {
+                pipeline.push({
+                    $match: {
+                        [fieldName]: {
+                            $regex: field,
+                            $options: regexOptions,
+                        },
+                    },
+                });
+            }
+
+            // To debug the pipeline
+            // console.log('Pipeline after make filter: ', pipeline);
+        };
+
+        // Filter for fields that can be a string or an array
+        makeFilter({
+            field: brandName,
+            fieldName: 'brand.name',
+            pipeline,
+        });
+        makeFilter({
+            field: gender,
+            fieldName: 'gender',
+            pipeline,
+        });
+        makeFilter({
+            field: color,
+            fieldName: 'colors',
+            pipeline,
+        });
+        makeFilter({
+            field: category,
+            fieldName: 'category',
+            pipeline,
+        });
+        makeFilter({
+            field: type,
+            fieldName: 'type',
+            pipeline,
+        });
+        makeFilter({
+            field: style,
+            fieldName: 'style',
+            pipeline,
+        });
+        makeFilter({
+            field: material,
+            fieldName: 'material',
+            pipeline,
+        });
+        makeFilter({
+            field: design,
+            fieldName: 'design',
+            pipeline,
+        });
+        makeFilter({
+            field: size,
+            fieldName: 'sizes',
+            pipeline,
+        });
+
+        // Pagination
+        const limit = 16;
+        const skip = (page - 1) * limit;
+
+        const countDocuments = await Product.aggregate([
+            ...pipeline,
+            {
+                $count: 'total',
+            },
+        ]);
+
+        const totalDocuments = countDocuments[0]?.total || 0;
+        const lastPage = Math.ceil(totalDocuments / limit);
+
+        pipeline.push(
+            {
+                $skip: skip,
+            },
+            {
+                $limit: limit,
+            },
+        );
 
         const products = await Product.aggregate(pipeline);
         console.log('Filter products: ', products);
 
         return res.status(200).json({
             message: 'Filter products successfully!',
+            pagination: {
+                currentPage: Number(page) || 1,
+                lastPage,
+                totalDocuments,
+            },
             data: products,
         });
     } catch (err) {
         console.error('Filter products failed...', err);
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
+const productFilterAdmin = async (req, res) => {
+    try {
+        const { page = 1, brandName, name } = req.query;
+        const limit = 8;
+        const skip = (page - 1) * limit;
+
+        const pipeline = [
+            {
+                $lookup: {
+                    from: 'brands',
+                    localField: 'brandId',
+                    foreignField: '_id',
+                    as: 'brandId',
+                },
+            },
+            {
+                $unwind: '$brandId',
+            },
+        ];
+
+        if (brandName)
+            pipeline.push({
+                $match: {
+                    'brandId.name': { $regex: brandName, $options: 'i' },
+                },
+            });
+
+        if (name)
+            pipeline.push({
+                $match: {
+                    name: { $regex: name, $options: 'i' },
+                },
+            });
+
+        // Make pagination
+
+        const countPipeline = await Product.aggregate([...pipeline, { $count: 'total' }]);
+
+        const totalDocuments = countPipeline?.[0]?.total || 0;
+
+        const lastPage = Math.ceil(totalDocuments / limit);
+
+        pipeline.push(
+            {
+                $skip: skip,
+            },
+            {
+                $limit: limit,
+            },
+        );
+
+        console.log('Pipeline: ', pipeline);
+
+        const products = await Product.aggregate(pipeline);
+
+        console.log('Product: ', products);
+
+        return res.status(200).json({
+            data: products,
+            pagination: {
+                currentPage: Number(page) || 1,
+                lastPage,
+                totalDocuments,
+            },
+        });
+    } catch (err) {
+        console.error('Filter product for admin failed...', err);
         return res.status(500).json({
             message: 'Internal Server Error!',
         });
@@ -426,6 +630,9 @@ const create = async (req, res) => {
         console.log('Body: ', req.body);
 
         const newProduct = await new Product(req.body).save();
+
+        // Get brandName
+        await newProduct.populate('brandId', 'name');
 
         console.log('New product: ', newProduct);
 
@@ -601,6 +808,7 @@ export default {
     getSuggestion,
     getDetail,
     productFilter,
+    productFilterAdmin,
     getById,
     getPart,
     create,

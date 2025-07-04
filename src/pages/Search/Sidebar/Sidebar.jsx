@@ -1,123 +1,140 @@
-import { productOption } from '~/constants';
-import styles from './Sidebar.module.scss';
+import { useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { useCallback } from 'react';
 
-const filters = [
+import { productOption } from '~/constants';
+import { Button } from '~/components';
+import { toastError } from '~/utils';
+import FieldCheckbox from '../FieldCheckbox';
+import styles from './Sidebar.module.scss';
+import { CloseIcon } from '~/assets/icons';
+import clsx from 'clsx';
+
+const filterCheckbox = [
     {
-        title: 'Brand',
+        title: 'Thương hiệu',
         key: 'brandName',
         choices: ['Adidas', 'Nike', 'Puma'],
     },
     {
-        title: 'Gender',
+        title: 'Giới tính',
         key: 'gender',
         choices: productOption.genders,
     },
     {
-        title: 'Color',
+        title: 'Màu sắc',
         key: 'color',
         choices: productOption.colors,
     },
     {
-        title: 'Discount',
-        key: 'discount',
-        choices: [
-            '10% Off or More',
-            '20% Off or More',
-            '30% Off or More',
-            '50% Off or More',
-        ],
-    },
-    {
-        title: 'Price',
-        key: 'price',
-        choices: ['Under $50', '$50 – $100', '$100 – $150', '$150 – $200', 'Above $200'],
-    },
-    {
-        title: 'Type',
+        title: 'Loại',
         key: 'type',
         choices: productOption.types,
     },
     {
-        title: 'Size',
+        title: 'Kích cỡ',
         key: 'size',
         choices: productOption.sizes,
     },
     {
-        title: 'Design',
+        title: 'Thiết kế',
         key: 'design',
         choices: productOption.designs,
     },
     {
-        title: 'Material',
+        title: 'Chất liệu',
         key: 'material',
         choices: productOption.materials,
     },
 ];
 
-function Sidebar() {
+function Sidebar({ isOpenMenuMobile, setIsOpenMenuMobile }) {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    // Just change searchParams, will handle call api in Search
-    const handleChange = useCallback(
-        async (e, key) => {
-            const value = e.target.value;
-            const checked = e.target.checked;
+    const [minPrice, setMinPrice] = useState(() => searchParams.get('minPrice') || '');
+    const [maxPrice, setMaxPrice] = useState(() => searchParams.get('maxPrice') || '');
 
-            // Get value of key corresponding
-            const searchValues = searchParams.getAll(key);
+    const handleSetValue = useCallback((value, setValue) => {
+        const isNumber = !!parseInt(value);
 
-            let newSearchValues;
+        if (isNumber || value === '') setValue(parseInt(value) || '');
+    }, []);
 
-            // Add of remove value base on checked
-            if (checked) {
-                newSearchValues = [...new Set([...searchValues, value])];
-            } else {
-                newSearchValues = searchValues.filter((i) => i !== value);
-            }
-            console.log('Key: ', key);
-            console.log('newSearchValues: ', newSearchValues);
+    const handleApply = useCallback(() => {
+        if (maxPrice && maxPrice < minPrice) {
+            toastError('Max price must be greater than min price!');
+            return;
+        }
 
-            // Update search params
-            const newParams = new URLSearchParams(searchParams);
-            // Delete old key and update new Url
-            newParams.delete(key);
-            newSearchValues.forEach((i) => newParams.append(key, i));
-            setSearchParams(newParams);
+        const newSearchParams = new URLSearchParams(searchParams);
 
-            // ✅ Log cleanly
-            console.log(`Updated ${key}:`, newSearchValues);
-            console.log('Full Query:', newParams.toString());
-        },
-        [searchParams],
-    );
+        // Delete old price params
+        newSearchParams.delete('minPrice');
+        newSearchParams.delete('maxPrice');
+
+        // Add min price
+        if (minPrice && !!parseInt(minPrice)) {
+            newSearchParams.set('minPrice', minPrice);
+        }
+        // Add max price
+
+        if (maxPrice && !!parseInt(maxPrice)) {
+            newSearchParams.set('maxPrice', maxPrice);
+        }
+
+        setSearchParams(newSearchParams);
+
+        // console.log('New search params: ', newSearchParams.toString());
+    }, [minPrice, maxPrice]);
 
     return (
-        <div className={styles['wrapper']}>
-            {filters.map((filter) => (
-                <div key={filter.key} className={styles['option']}>
-                    <h3 className={styles['title']}>{filter.title}</h3>
+        <div className={clsx(isOpenMenuMobile ? '' : 's-hidden', styles['wrapper'])}>
+            {/* Close btn */}
+            <span
+                className={clsx('col-s-m-0', styles['close-btn'])}
+                onClick={() => setIsOpenMenuMobile((pre) => !pre)}
+            >
+                <CloseIcon />
+            </span>
 
-                    <div className={styles['filter-group']}>
-                        {filter.choices.map((choice) => (
-                            <div key={choice} className={styles['filter-item']}>
-                                <input
-                                    className={styles['input']}
-                                    type="checkbox"
-                                    name={filter.key}
-                                    value={choice}
-                                    id={choice}
-                                    onChange={(e) => handleChange(e, filter.key)}
-                                />
+            {/* Display 2 filter first */}
+            {filterCheckbox.slice(0, 2).map((field, index) => (
+                <FieldCheckbox field={field} key={index} />
+            ))}
 
-                                <label className={styles['label']} htmlFor={choice}>
-                                    {choice}
-                                </label>
-                            </div>
-                        ))}
-                    </div>
+            {/* Filter base on price */}
+            <div>
+                <h3 className={styles['filter-label']}>Giá</h3>
+
+                <div className="df">
+                    <input
+                        type="text"
+                        className={styles['input-text']}
+                        placeholder="TỪ"
+                        value={minPrice}
+                        onChange={(e) => handleSetValue(e.target.value, setMinPrice)}
+                    />
+                    <span className={styles['input-separate']}></span>
+                    <input
+                        type="text"
+                        className={styles['input-text']}
+                        placeholder="ĐẾN"
+                        value={maxPrice}
+                        onChange={(e) => handleSetValue(e.target.value, setMaxPrice)}
+                    />
                 </div>
+                <Button
+                    primary
+                    small
+                    customStyle={styles['btn-apply']}
+                    onClick={handleApply}
+                >
+                    Áp dụng
+                </Button>
+            </div>
+
+            {/* Display rest of filter */}
+            {filterCheckbox.slice(2).map((field, index) => (
+                <FieldCheckbox field={field} key={index} />
             ))}
         </div>
     );

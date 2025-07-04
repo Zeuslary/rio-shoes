@@ -1,27 +1,24 @@
-import styles from './SortBy.module.scss';
-import Button from '~/components/Button';
-import { CloseCircleIcon } from '~/assets/icons';
-import OrderCart from '~/components/OrderCart';
 import { SORT_OPTIONS } from '~/constants';
+import styles from './SortBy.module.scss';
 
-function SortBy({ products, setSortedProducts, setSort }) {
+function SortBy({ setSortType }) {
     return (
         <div className={styles['wrapper']}>
             <div className={styles['sort-by']}>
                 <select defaultValue="default-value" className={styles['sort-group']}>
                     <option value="default-value" disabled>
-                        Sort by
+                        Sắp xếp
                     </option>
 
-                    {SORT_OPTIONS.map((sort) => {
+                    {SORT_OPTIONS.map((option) => (
                         <option
-                            key={sort.value}
-                            value={sort.value}
-                            onClick={() => setSort(sort.value)}
+                            key={option.value}
+                            value={option.value}
+                            onClick={() => setSortType(option.value)}
                         >
-                            {sort.label}
-                        </option>;
-                    })}
+                            {option.label}
+                        </option>
+                    ))}
                 </select>
             </div>
         </div>

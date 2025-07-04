@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { api, backEndApi, toastError, upperCaseFirstLetter } from '~/utils';
+import { adminApi, backEndApi, toastError, upperCaseFirstLetter } from '~/utils';
 import { ARRANGE_TYPES, DISCOUNT_TYPES, STATUSES_VOUCHER } from '~/constants';
 
 import VoucherList from './VoucherList';
@@ -26,7 +26,7 @@ function Vouchers() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await api.getAll(backEndApi.voucher);
+                const data = await adminApi.getAll(backEndApi.voucher);
                 setVouchers(data);
             } catch (err) {
                 console.error('Fetching vouchers failed...', err);
@@ -47,7 +47,15 @@ function Vouchers() {
         console.log('viewDetail: ', viewDetail);
         console.log('voucherEdit: ', voucherEdit);
         console.groupEnd();
-    }, [filterStatus, filterDiscountType, sortQuantity, vouchers, mode, viewDetail, voucherEdit]);
+    }, [
+        filterStatus,
+        filterDiscountType,
+        sortQuantity,
+        vouchers,
+        mode,
+        viewDetail,
+        voucherEdit,
+    ]);
 
     // Filter vouchers
     const vouchersFilter = vouchers
@@ -58,8 +66,10 @@ function Vouchers() {
             filterDiscountType ? voucher.discountType === filterDiscountType : true,
         )
         .sort((voucherA, voucherB) => {
-            if (sortQuantity === 'ascending') return voucherA.quantity - voucherB.quantity;
-            if (sortQuantity === 'descending') return voucherB.quantity - voucherA.quantity;
+            if (sortQuantity === 'ascending')
+                return voucherA.quantity - voucherB.quantity;
+            if (sortQuantity === 'descending')
+                return voucherB.quantity - voucherA.quantity;
             return 0; // No sorting if nothing is selected
         });
 
@@ -109,7 +119,9 @@ function Vouchers() {
                                 <select
                                     className={styles['filter-select']}
                                     value={filterDiscountType}
-                                    onChange={(e) => setFilterDiscountType(e.target.value)}
+                                    onChange={(e) =>
+                                        setFilterDiscountType(e.target.value)
+                                    }
                                 >
                                     <option value="">All Discount type</option>
                                     {DISCOUNT_TYPES.map((type) => (
@@ -133,7 +145,9 @@ function Vouchers() {
                                         <option
                                             key={type}
                                             value={type}
-                                        >{`Quantity: ${upperCaseFirstLetter(type)}`}</option>
+                                        >{`Quantity: ${upperCaseFirstLetter(
+                                            type,
+                                        )}`}</option>
                                     ))}
                                 </select>
                             </div>

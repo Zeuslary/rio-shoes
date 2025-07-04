@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import {
-    api,
+    userApi,
     backEndApi,
     displayAddress,
     formatCurrencyVN,
@@ -43,8 +43,10 @@ function ConfirmOrder() {
             discount,
         };
 
+        // console.log('Data send: ', dataSend);
+
         try {
-            const result = await api.post(backEndApi.order, dataSend);
+            const result = await userApi.post(backEndApi.order, dataSend);
 
             const shortData = {
                 _id: result.data._id,
@@ -72,24 +74,24 @@ function ConfirmOrder() {
     return (
         <div className={styles['wrapper']}>
             <div className={styles['body']}>
-                <h1 className={styles['header']}>Confirm Your Order</h1>
+                <h1 className={styles['header']}>Xác nhận đơn hàng</h1>
 
                 <Button
                     to={routes.checkout}
                     leftIcon={<ReturnIcon />}
                     customStyle={styles['back-btn']}
                 >
-                    Back
+                    Quay lại
                 </Button>
 
                 <div className={styles['content']}>
                     <div className={styles['section']}>
                         {/* Shipping info */}
-                        <h2 className={styles['section-title']}>Shipping Information</h2>
+                        <h2 className={styles['section-title']}>Thông tin vận chuyển</h2>
 
                         <div className={styles['info']}>
                             <p className={styles['info-item']}>
-                                <span className={styles['info-title']}>Name</span>
+                                <span className={styles['info-title']}>Họ và tên:</span>
                                 <span>
                                     {(
                                         customerProfile?.fullName?.firstName +
@@ -99,7 +101,9 @@ function ConfirmOrder() {
                                 </span>
                             </p>
                             <p className={styles['info-item']}>
-                                <span className={styles['info-title']}>Phone number</span>
+                                <span className={styles['info-title']}>
+                                    Số điện thoại
+                                </span>
                                 <span>{customerProfile?.phone}</span>
                             </p>
                             <p className={styles['info-item']}>
@@ -107,15 +111,15 @@ function ConfirmOrder() {
                                 <span>{customerProfile?.email}</span>
                             </p>
                             <p className={styles['info-item']}>
-                                <span className={styles['info-title']}>Address</span>
+                                <span className={styles['info-title']}>Địa chỉ</span>
                                 <span>{displayAddress(customerProfile?.address)}</span>
                             </p>
                             <p className={styles['info-item']}>
-                                <span className={styles['info-title']}>Message</span>
+                                <span className={styles['info-title']}>Tin nhắn</span>
                                 <span>{customerProfile?.message}</span>
                             </p>
                             <p className={styles['info-item']}>
-                                <span className={styles['info-title']}>Shipping</span>
+                                <span className={styles['info-title']}>Vận chuyển</span>
                                 <span>
                                     {shipping?.name +
                                         ' - ' +
@@ -123,7 +127,7 @@ function ConfirmOrder() {
                                 </span>
                             </p>
                             <p className={styles['info-item']}>
-                                <span className={styles['info-title']}>Payment</span>
+                                <span className={styles['info-title']}>Thanh toán</span>
                                 <span>{payment?.name}</span>
                             </p>
                         </div>
@@ -131,7 +135,7 @@ function ConfirmOrder() {
 
                     {/* Order detail */}
                     <div className={styles['section']}>
-                        <h2 className={styles['section-title']}>Order detail</h2>
+                        <h2 className={styles['section-title']}>Chi tiết đơn hàng</h2>
 
                         {/* List items */}
                         <div className={styles['list-items']}>
@@ -144,21 +148,21 @@ function ConfirmOrder() {
                         {/* Summary */}
                         <div className={styles['summary']}>
                             <p>
-                                <span>Subtotal</span>
+                                <span>Tạm tính</span>
                                 <span>{formatCurrencyVN(subTotal)}</span>
                             </p>
                             <p>
-                                <span>Shipping</span>
+                                <span>Phí vận chuyển</span>
                                 <span>{formatCurrencyVN(shipping?.price)}</span>
                             </p>
                             <p>
-                                <span>Discount</span>
+                                <span>Giảm giá</span>
                                 <span>
                                     -{formatCurrencyVN(discount?.discountValue || 0)}
                                 </span>
                             </p>
                             <p className={styles['total']}>
-                                <strong>Total</strong>
+                                <strong>Tổng</strong>
                                 <strong>{formatCurrencyVN(total)}</strong>
                             </p>
                         </div>
@@ -166,7 +170,7 @@ function ConfirmOrder() {
                 </div>
 
                 <div className={styles['confirm']}>
-                    <p>Please review all information before confirming your order</p>
+                    <p>Vui lòng kiểm tra tất cả thông tin trước khi xác nhận đơn hàng</p>
 
                     <Button
                         // to={routes.orderDetail}
@@ -174,7 +178,24 @@ function ConfirmOrder() {
                         customStyle={styles['order-btn']}
                         onClick={handleOrder}
                     >
-                        Place Order
+                        Xác nhận
+                    </Button>
+                </div>
+
+                {/* Confirm mobile */}
+                <div className={styles['confirm-mobile']}>
+                    <p className={styles['total']}>
+                        <span>Tổng: </span>
+                        <strong>{formatCurrencyVN(total)}</strong>
+                    </p>
+
+                    <Button
+                        // to={routes.orderDetail}
+                        deepBlack
+                        customStyle={styles['order-btn-mobile']}
+                        onClick={handleOrder}
+                    >
+                        Xác nhận
                     </Button>
                 </div>
             </div>

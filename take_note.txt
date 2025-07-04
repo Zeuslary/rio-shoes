@@ -260,7 +260,8 @@ database:
 - Fix verify token for admin and client different.
 - Fix make api to call seperate admin and client.
 - 8/6: Feature search is error, you need to check this. Recomment not use new URLSearchParams, just convert it into query you can see
-
+- Sort by has z-index larger than cart list of header.
+- Order navigation.
 
 ------ Step you are doing ---------------
 - Change routes from /admin/products into products
@@ -277,7 +278,7 @@ database:
  + customer: add - customer add username need unique -> Done 
  + product: product add, view, list, delete -> Done -> BE: public: getAdd, getAllMinimal, getById
 
-
+ 30: 1197
 31/5 - 440
  + customer: view, edit, delete -> Done -> BE: public all api -> update, view detail done
  + order: done edit -> Be: just public getAll, getById, and create order.
@@ -294,7 +295,54 @@ page:
  + current < 6 -> display 0 -> current and display break
  + current > 6 -> display break and from current - 2 to curent + 5 and
 
+Dạ vâng em chào cô ạ. 
+Em là Đào Thị Ngọc Chiêm
+- Mã sinh viên: 72DCTT20082 
+- Lớp: 72DCTT22
+- Tiểu ban: 4
+- Giáo viên hướng dẫn: ThS.Đoàn Thị Thanh Hằng
+- Đề tài: Xây dựng website bán giày cho cửa hàng Rio.
+Em đã gửi bản pdf Đồ án tốt nghiệp và bản tóm tắt Đồ án rồi vào gmail [gmail] của [cô/ thầy] rồi ạ. 
+Hôm nào [cô/ thầy] có mặt ở trường cho em xin phép nộp bản tóm tắt Đồ án tốt nghiệp với ạ.
+
+-------------- Info ------------
+Cô - Nguyễn Thị Kim Huệ - huentk@utt.edu.vn - 0988425736 - Xong - 3/7/2025 - 14h - 406H1
+Thầy - Lê Chí Luận - luanlc@utt.edu.vn - 0982080380
+Thầy - Lương Hoàng Anh - Phản biện - Xong - 2/7 10h30 - 2/7/2025 - 10h30 - 405H1
+Thầy - Lê Trung Kiên - Hongminh20062005@gmail.com - 0946771280
+
+
+---------- 
+
 ---------------------
 red: #FF4D4D
 green: #4CAF50
 
+--------- Pagination -----------
+pagination: {
+ currentPage: Number(page) || 1,
+ lastPage,
+ totalDocuments,
+},
+data: products,
+
+
+--------------------------------
+29/06: continue make feature search for product admin
+
+	
+------------------------------
+1. Đã đầy đủ mục chưa?
+2. Font chữ 13 ???
+3. Check đặc tả usecase, biểu đồ hoạt động, biểu đồ trình tự đăng ký (41)
+4. Ảnh có quá to?
+5. Check biểu đồ hoạt động thêm sp (59)
+6. Kiểm tra biểu đồ lớp. (94)
+7. Chương 4 có thiếu ko?
+8. Tài liệu tham khảo ....
+9. Cần kế hoạch thực hiện ?
+
+
+
+
+https://zeuslary.github.io/rio-shoes

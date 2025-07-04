@@ -27,17 +27,17 @@ const promotions = [
     {
         key: 'shipping',
         icon: <TruckIcon />,
-        desc: 'Free shipping for orders over 699,000.',
+        desc: 'Miễn phí vận chuyển cho đơn hàng từ 5.000.000₫.',
     },
     {
         key: 'return',
         icon: <ReturnIcon />,
-        desc: 'Free returns within 30 days.',
+        desc: 'Đổi trả miễn phí trong vòng 30 ngày.',
     },
     {
         key: 'authentic',
         icon: <CheckCircleIcon />,
-        desc: '100% authentic products.',
+        desc: 'Sản phẩm chính hãng 100%.',
     },
 ];
 
@@ -158,7 +158,7 @@ function Detail({ item }) {
 
                 {/* Color */}
                 <div>
-                    <h2 className={styles['title']}>Color</h2>
+                    <h2 className={styles['title']}>Màu sắc</h2>
                     {item.colors.map((colorName, index) => (
                         <button
                             key={index}
@@ -175,7 +175,7 @@ function Detail({ item }) {
 
                 {/* Quantity */}
                 <div>
-                    <h2 className={styles['title']}>Quantity</h2>
+                    <h2 className={styles['title']}>Số lượng</h2>
                     <div className={styles['quantity']}>
                         <button
                             className={styles['decrease-btn']}
@@ -197,16 +197,16 @@ function Detail({ item }) {
 
                 {/* Group Buttons */}
                 <div className={styles['group-btns']}>
-                    <Button
+                    {/* <Button
                         customStyle={styles['buy-btn']}
                         primary
                         onClick={handleBuyNow}
                     >
                         Buy Now
-                    </Button>
+                    </Button> */}
 
                     <Button customStyle={styles['add-btn']} deepBlack onClick={handleAdd}>
-                        Add to cart
+                        Thêm vào giỏ hàng
                     </Button>
                 </div>
             </div>

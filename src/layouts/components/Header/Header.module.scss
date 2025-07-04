@@ -1,3 +1,5 @@
+@use '/src/components/GlobalStyle/GlobalStyle' as *;
+
 .wrapper {
     height: var(--header-height);
     position: fixed;
@@ -14,10 +16,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: var(--header-height);
 }
 
 .logo {
     height: 100%;
+}
+
+.logo-minimal {
+    display: none;
 }
 
 // Nav
@@ -35,6 +42,7 @@
     text-decoration: none;
     text-align: center;
     color: var(--text-color);
+    white-space: nowrap;
 
     &:hover {
         color: var(--primary-color);
@@ -49,20 +57,11 @@
 .nav-right {
     display: flex;
     align-items: center;
-
-    & .login-btn {
-        color: var(--text-color);
-
-        &:hover {
-            color: var(--primary-color);
-        }
-    }
 }
 
 .search-wrapper {
     background-color: var(--flash-white-color);
     display: flex;
-    align-items: center;
 }
 
 .search-input {
@@ -70,11 +69,13 @@
     font-size: 1.4rem;
     border-radius: 4px;
     background-color: transparent;
+    width: 100%;
 }
 
 .search-icon {
     display: flex;
-    padding: 8px 12px;
+    padding-left: 8px;
+    padding-right: 8px;
     background-color: transparent;
     color: var(--text-color);
     cursor: pointer;
@@ -88,12 +89,12 @@
     }
 }
 
+.menu-icon,
 .cart-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 12px;
-    margin-left: 12px;
+    padding: 8px 12px 8px 20px;
     color: var(--text-color);
     cursor: pointer;
     position: relative;
@@ -188,14 +189,14 @@
 
 // Profile with sub nav
 
-.profile-sub-nav {
+.sub-nav {
     background-color: var(--white-color);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
     border-radius: 4px;
     overflow: hidden;
 }
 
-.profile-sub-nav__item {
+.sub-nav__item {
     display: block;
     min-width: 160px;
     padding: 12px 20px;
@@ -218,4 +219,33 @@
     border-radius: 50%;
 
     cursor: pointer;
+}
+
+.menu-wrapper {
+    display: none;
+}
+
+// Responsive
+@media screen and (max-width: $max-mobile) {
+    .logo-minimal {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .menu-wrapper {
+        display: block;
+    }
+
+    .sub-nav {
+        width: 100vw;
+        position: relative;
+        left: -6px;
+    }
+}
+
+@media screen and (max-width: $max-tablet) {
+    .nav-item {
+        padding: 0 8px;
+    }
 }

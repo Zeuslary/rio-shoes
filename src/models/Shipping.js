@@ -8,7 +8,11 @@ const shippingSchema = new Schema(
         description: String,
         price: { type: Number, required: true, default: 0 },
         estimateTime: String,
-        status: { type: String, enum: ['active', 'inactive', 'banned'], default: 'active' },
+        status: {
+            type: String,
+            enum: ['active', 'inactive', 'banned'],
+            default: 'active',
+        },
     },
     { timestamps: true },
 );

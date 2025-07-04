@@ -26,6 +26,10 @@
     --admin-sidebar: 224px;
 }
 
+// Responsive use variable of scss
+$max-mobile: 46.25rem; // 740px
+$max-tablet: 64rem; // 1024px
+
 * {
     margin: 0;
     padding: 0;
@@ -159,6 +163,11 @@ div.swiper-button-prev {
     max-width: 58.33333%;
 }
 
+.col-8 {
+    flex: 0 0 66.66667%;
+    max-width: 66.66667%;
+}
+
 .col-9 {
     flex: 0 0 75%;
     max-width: 75%;
@@ -178,6 +187,11 @@ div.swiper-button-prev {
 .space-between {
     display: flex;
     justify-content: space-between;
+}
+
+.df {
+    display: flex;
+    align-items: center;
 }
 
 .dif {
@@ -356,4 +370,84 @@ div.swiper-button-prev {
     flex-shrink: 0;
     font-weight: 500;
     align-self: flex-end;
+}
+
+// Responsive for grid system and some global style
+
+// ----- Mobile - s
+@media screen and (max-width: $max-mobile) {
+    .col-s-0 {
+        display: none;
+    }
+
+    .col-s-4 {
+        flex: 0 0 33.33333%;
+        max-width: 33.33333%;
+    }
+
+    .col-s-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    .col-s-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .s-hidden {
+        display: none !important;
+    }
+
+    .s-mt-18 {
+        margin-top: 18px;
+    }
+
+    .form-label {
+        margin-top: 0;
+    }
+}
+
+// ---- Tablet - m
+@media screen and (min-width: $max-mobile) and (max-width: $max-tablet) {
+    .col-m-0 {
+        display: none;
+    }
+
+    .col-m-3 {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+
+    .col-m-4 {
+        flex: 0 0 33.33333%;
+        max-width: 33.33333%;
+    }
+
+    .col-m-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    .col-m-8 {
+        flex: 0 0 66.66667%;
+        max-width: 66.66667%;
+    }
+
+    .col-m-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+// ---- Tablet and mobile
+@media screen and (max-width: $max-tablet) {
+    .grid.wide {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .s-m-hidden {
+        display: none !important;
+    }
 }

@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { api, backEndApi, patternValidate, toastError, toastSuccess } from '~/utils';
+import { userApi, backEndApi, patternValidate, toastError, toastSuccess } from '~/utils';
 
 import { Button, OrderCart } from '~/components';
 import styles from './OrderTracking.module.scss';
@@ -27,7 +27,9 @@ function OrderTracking() {
         }
 
         try {
-            const result = await api.getAll(`${backEndApi.orderTracking}?phone=${phone}`);
+            const result = await userApi.getAll(
+                `${backEndApi.orderTracking}?phone=${phone}`,
+            );
 
             toastSuccess(result.message);
             setPhone('');
@@ -38,21 +40,22 @@ function OrderTracking() {
         }
     }, [phone]);
 
-    console.log('Orders: ', orders);
+    // console.log('Orders: ', orders);
 
     return (
         <div className={styles['wrapper']}>
             <div className={styles['content']}>
-                <h1 className={styles['header']}>Order Tracking</h1>
+                <h1 className={styles['header']}>Tra cứu đơn hàng</h1>
 
                 <div className={styles['find-wrap']}>
                     <input
                         className={styles['input']}
                         type="text"
-                        placeholder="Enter your phone order"
+                        placeholder="Nhập số điện thoại đặt hàng"
                         autoFocus
                         value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
+                        onChange={(e) => setPhone(e.target.value?.trim())}
+                        onKeyUp={(e) => e.keyCode === 13 && handleFind()}
                     />
 
                     <Button
@@ -61,7 +64,7 @@ function OrderTracking() {
                         onClick={handleFind}
                         type="submit"
                     >
-                        Find order
+                        Tra cứu
                     </Button>
                 </div>
             </div>

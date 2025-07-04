@@ -1,7 +1,7 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     patternValidate,
     toastSuccess,
@@ -42,7 +42,11 @@ function PaymentEdit({ paymentEdit, setPaymentEdit, setPayments, setMode }) {
         }
 
         try {
-            const result = await api.putById(backEndApi.payment, paymentEdit._id, data);
+            const result = await adminApi.putById(
+                backEndApi.payment,
+                paymentEdit._id,
+                data,
+            );
 
             toastSuccess(result.message);
 

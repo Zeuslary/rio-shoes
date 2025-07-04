@@ -60,7 +60,7 @@ const ContactInfo = forwardRef((props, ref) => {
 
     return (
         <div className={styles['wrapper']} {...props}>
-            <h2 className={styles['title']}>Contact Information</h2>
+            <h2 className={styles['title']}>Thông tin liên hệ</h2>
 
             <FormProvider {...methods}>
                 <form ref={formRef}>
@@ -69,7 +69,7 @@ const ContactInfo = forwardRef((props, ref) => {
                         {/* First Name */}
                         <div className="col-6">
                             <label className="form-label" htmlFor="firstName">
-                                First Name
+                                Tên
                             </label>
                             <input
                                 className={
@@ -94,7 +94,7 @@ const ContactInfo = forwardRef((props, ref) => {
                         {/* Last Name */}
                         <div className="col-6">
                             <label className="form-label" htmlFor="lastName">
-                                Last Name
+                                Họ
                             </label>
                             <input
                                 className="form-input"
@@ -110,7 +110,7 @@ const ContactInfo = forwardRef((props, ref) => {
                     <div className="row">
                         <div className="col-6">
                             <label className={styles['label']} htmlFor="phone">
-                                Phone Number
+                                Số điện thoại
                             </label>
                             <input
                                 className={
@@ -160,7 +160,7 @@ const ContactInfo = forwardRef((props, ref) => {
                     {/* Message */}
                     <div>
                         <label className={styles['label']} htmlFor="message">
-                            Message
+                            Tin nhắn
                         </label>
                         <textarea
                             rows={8}

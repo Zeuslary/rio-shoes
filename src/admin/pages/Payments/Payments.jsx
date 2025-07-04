@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { api, backEndApi, toastError } from '~/utils';
+import { adminApi, backEndApi, toastError } from '~/utils';
 
 import PaymentAdd from './PaymentAdd';
 import PaymentEdit from './PaymentEdit';
@@ -20,7 +20,7 @@ function Payments() {
     useEffect(() => {
         const fetchingData = async () => {
             try {
-                const data = await api.getAll(backEndApi.payment);
+                const data = await adminApi.getAll(backEndApi.payment);
                 setPayments(data);
             } catch (err) {
                 console.error('Error fetching data!', err);

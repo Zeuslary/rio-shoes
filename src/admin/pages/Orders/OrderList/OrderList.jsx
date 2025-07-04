@@ -1,5 +1,5 @@
 import {
-    api,
+    adminApi,
     backEndApi,
     upperCaseFirstLetter,
     toastError,
@@ -18,7 +18,7 @@ function OrderList({ orders, setOrders, setOrderDetail, setOrderEdit, setMode })
 
     const handleDelete = async (order) => {
         try {
-            const deleteOrder = await api.deleteById(backEndApi.order, order._id);
+            const deleteOrder = await adminApi.deleteById(backEndApi.order, order._id);
 
             if (deleteOrder) {
                 toastSuccess(deleteOrder.message);
@@ -65,24 +65,16 @@ function OrderList({ orders, setOrders, setOrderDetail, setOrderEdit, setMode })
                                 <span className={styles['cell-value']}>{index + 1}</span>
                             </td>
                             <td>
-                                <span className={styles['cell-value']}>
-                                    {order.customerName}
-                                </span>
+                                <span>{order.customerName}</span>
                             </td>
                             <td>
-                                <span className={styles['cell-value']}>
-                                    {order.createdAt?.slice(0, 10)}
-                                </span>
+                                <span>{order.createdAt?.slice(0, 10)}</span>
                             </td>
                             <td>
-                                <span className={styles['cell-value']}>
-                                    {order.paymentId?.name}
-                                </span>
+                                <span>{order.paymentId?.name}</span>
                             </td>
                             <td>
-                                <span className={styles['cell-value']}>
-                                    {order.items.length}
-                                </span>
+                                <span>{order.items.length}</span>
                             </td>
                             <td>
                                 <span className={styles['cell-value']}>

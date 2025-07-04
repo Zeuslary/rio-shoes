@@ -1,3 +1,5 @@
+@use '/src/components/GlobalStyle/GlobalStyle.scss' as *;
+
 .address {
     display: block;
     margin: 24px 0 -8px;
@@ -12,4 +14,11 @@ label.house-number {
 
 .cancel-btn {
     margin-right: 12px;
+}
+
+// Responsive
+@media screen and (max-width: $max-mobile) {
+    .address {
+        margin-bottom: 8px;
+    }
 }

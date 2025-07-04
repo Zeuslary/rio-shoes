@@ -3,7 +3,7 @@ import { useCallback, useContext } from 'react';
 
 import { ProviderContext } from '~/components/Provider';
 
-import { api, backEndApi, patternValidate, toastError, toastSuccess } from '~/utils';
+import { adminApi, backEndApi, patternValidate, toastError, toastSuccess } from '~/utils';
 
 import Button from '~/components/Button';
 import CartBox from '~/admin/components/CartBox';
@@ -26,10 +26,14 @@ function AccountSecurity() {
         }
 
         try {
-            const result = await api.updatePassword(backEndApi.admin, adminProfile._id, {
-                password: data.password,
-                newPassword: data.newPassword,
-            });
+            const result = await adminApi.updatePassword(
+                backEndApi.admin,
+                adminProfile._id,
+                {
+                    password: data.password,
+                    newPassword: data.newPassword,
+                },
+            );
 
             toastSuccess(result.message);
         } catch (err) {

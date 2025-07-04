@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { ProviderContext } from '~/components/Provider';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     flatObject,
     toastError,
@@ -47,7 +47,7 @@ function VoucherAdd({ setVouchers, setMode }) {
     const handleAdd = async (data) => {
         console.log('Data: ', flatObject(data));
         try {
-            const result = await api.post(backEndApi.voucher, flatObject(data));
+            const result = await adminApi.post(backEndApi.voucher, flatObject(data));
 
             toastSuccess(result.message);
             setVouchers((prev) => [...prev, result.data]);

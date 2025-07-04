@@ -25,7 +25,7 @@ const getByCode = async (req, res) => {
     try {
         const { code } = req.query;
 
-        if (!code) return res.status(400).json({ message: 'Missing voucher code' });
+        if (!code) return res.status(400).json({ message: 'Missing voucher code!' });
 
         const now = new Date();
 
@@ -36,9 +36,11 @@ const getByCode = async (req, res) => {
             $expr: { $lt: ['$usedCount', '$quantity'] },
         });
 
+        // console.log('Voucher: ', voucher);
+
         if (!voucher)
             return res.status(404).json({
-                message: 'Voucher not found or expired',
+                message: 'Voucher not found or expired!',
             });
 
         return res.status(200).json({

@@ -1,20 +1,23 @@
 .wrapper {
     background-color: var(--background-color);
-    padding: 32px 0;
+    padding: 32px 12px;
+}
+
+.body {
+    width: 760px;
+    max-width: 100%;
+    margin: 0 auto;
 }
 
 .content,
 .filters,
 .not-found,
 .found-success {
-    width: 760px;
-    max-width: 100%;
     padding: 32px;
     border-radius: 12px;
     color: var(--text-color);
     background-color: var(--white-color);
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
-    margin: 0 auto;
 }
 
 .header {
@@ -30,6 +33,7 @@
 
 .input {
     flex: 1;
+    width: 100%;
     padding: 12px 16px;
     border-radius: 4px;
     font-size: 1.6rem;
@@ -51,15 +55,20 @@
 }
 
 .filter-btn {
-    margin-right: 12px;
     min-width: 68px;
+    margin-right: 12px;
+    margin-bottom: 12px;
+
+    & + .filter-btn {
+        margin-left: 0;
+    }
 }
 
 // Find and not-found order
 .not-found,
 .found-success {
     width: 460px;
-    margin-top: 24px;
+    margin: 24px auto;
     text-align: center;
     padding: 32px;
 

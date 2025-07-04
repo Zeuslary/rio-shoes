@@ -1,6 +1,6 @@
 import styles from './StatusList.module.scss';
 
-function StatusList({ orders }) {
+function StatusList({ items }) {
     return (
         <div className={styles['wrapper']}>
             <table className={styles['table']}>
@@ -14,13 +14,13 @@ function StatusList({ orders }) {
 
                 {/* Body */}
                 <tbody>
-                    {orders.map((order) => (
-                        <tr key={order.status}>
+                    {items.map((item) => (
+                        <tr key={item._id}>
                             <td>
-                                <span>{order.status}</span>
+                                <span>{item._id}</span>
                             </td>
                             <td>
-                                <span>{order.quantity}</span>
+                                <span>{item.total}</span>
                             </td>
                         </tr>
                     ))}

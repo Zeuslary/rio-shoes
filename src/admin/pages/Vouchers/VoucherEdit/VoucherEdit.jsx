@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useForm, FormProvider } from 'react-hook-form';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     patternValidate,
     toastSuccess,
@@ -42,7 +42,7 @@ function VoucherEdit({ voucherEdit, setVoucherEdit, setVouchers, setMode }) {
 
     const handleEdit = async (data) => {
         try {
-            const result = await api.putById(
+            const result = await adminApi.putById(
                 backEndApi.voucher,
                 voucherEdit._id,
                 flatObject(data),

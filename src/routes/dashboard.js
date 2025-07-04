@@ -1,15 +1,15 @@
 import express from 'express';
 
-import verifyToken from '../middlewares/verifyToken.js';
+import { verifyTokenAdmin } from '../middlewares/verifyToken.js';
 import { dashboardController } from '../controllers/index.js';
 
 const router = express.Router();
 
 // Verify if the user is authenticated in all route
-router.use(verifyToken);
+router.use(verifyTokenAdmin);
 
-// Use can add verifyToken to specific route if you want something like:
-//  router.get('/', verifyToken, dashboardController.getDashboardData)
+// Use can add verifyTokenAdmin to specific route if you want something like:
+//  router.get('/', verifyTokenAdmin, dashboardController.getDashboardData)
 router.get('/', dashboardController.getDashboardData);
 
 export default router;

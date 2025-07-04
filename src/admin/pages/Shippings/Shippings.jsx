@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { api, backEndApi, toastError } from '~/utils';
+import { adminApi, backEndApi, toastError } from '~/utils';
 
 import ShippingAdd from './ShippingAdd';
 import ShippingEdit from './ShippingEdit';
@@ -20,7 +20,7 @@ function Shippings() {
     useEffect(() => {
         const fetchingData = async () => {
             try {
-                const data = await api.getAll(backEndApi.shipping);
+                const data = await adminApi.getAll(backEndApi.shipping);
                 setShippings(data);
             } catch (err) {
                 console.error('Fetching data is error, please check again...', err);

@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
 import {
-    api,
     backEndApi,
     patternValidate,
     toastError,
     toastSuccess,
     upperCaseFirstLetter,
+    adminApi,
 } from '~/utils';
 
 import { productOption } from '~/constants';
@@ -97,7 +97,7 @@ function ProductAdd({ brands, setProducts, setMode }) {
     // Handle add customer into db
     const handleAdd = async (data) => {
         try {
-            const result = await api.postMultipart(backEndApi.product, data);
+            const result = await adminApi.postMultipart(backEndApi.product, data);
 
             toastSuccess(result.message);
             setProducts((prev) => [...prev, result.data]);

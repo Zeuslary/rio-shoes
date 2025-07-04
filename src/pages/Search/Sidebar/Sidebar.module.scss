@@ -1,3 +1,5 @@
+@use '/src/components/GlobalStyle/GlobalStyle.scss' as *;
+
 .wrapper {
     flex: 0 0 200px;
     padding: 16px;
@@ -6,67 +8,94 @@
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
-.option {
-    & + .option {
-        margin-top: 12px;
-    }
+.close-btn {
+    display: none;
 }
 
-.filter-group {
-    max-height: 94px;
-    overflow-y: scroll;
-}
-
-.title {
+.filter-label {
     font-size: 1.6rem;
+    margin-top: 12px;
 }
 
-.filter-item {
-    display: flex;
-    align-items: center;
-    margin: 6px 0;
-}
-
-.input {
-    --edge: 16px;
-    width: var(--edge);
-    height: var(--edge);
-    position: relative;
-    cursor: pointer;
-
-    // Custom check style
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
+.input-text {
+    flex: 1;
+    line-height: 1;
+    width: 70px;
+    margin: 10px 0;
+    font-size: 1.2rem;
+    padding: 6px 6px;
     border-radius: 4px;
     border: 1px solid #ccc;
+}
 
-    &:checked {
-        background-color: var(--primary-color);
-        border-color: var(--primary-color);
+.input-separate {
+    margin: 0px 8px;
+    width: 6px;
+    height: 0.8px;
+    background: #ccc;
+}
+
+.btn-apply {
+    width: 100%;
+    margin: 6px 0 18px;
+}
+
+// Responsive
+@media screen and (min-width: $max-mobile) and (max-width: $max-tablet) {
+    .wrapper {
+        flex: 0 0 180px;
     }
 
-    &:checked::before {
-        content: '';
-        position: absolute;
-        left: 4px;
-        top: 1px;
-        width: 4px;
-        height: 8px;
-        border: solid var(--white-color);
-        border-width: 0 2.5px 2.5px 0;
-        transform: rotate(45deg);
+    .filter-label {
+        font-size: 1.5rem;
+    }
+
+    .input-text {
+        font-size: 1.2rem;
     }
 }
 
-.label {
-    flex: 1;
-    font-size: 1.5rem;
-    margin-left: 8px;
-    text-transform: capitalize;
-    cursor: pointer;
-
-    &:hover {
-        color: var(--primary-color);
+@media screen and (max-width: $max-mobile) {
+    .wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 10;
+        overflow-y: scroll;
     }
+
+    .close-btn {
+        position: absolute;
+        z-index: 2;
+        top: 12px;
+        right: 12px;
+        padding: 10px;
+        background: var(--flash-white-color);
+        border-radius: 50%;
+        color: var(--text-color);
+        display: flex;
+        cursor: pointer;
+        transition: background-color linear 0.3s;
+
+        &:hover {
+            color: var(--white-color);
+            background-color: var(--primary-color);
+        }
+    }
+
+    // .filter-label {
+    //     font-size: 1.4rem;
+    // }
+
+    // .input-text {
+    //     font-size: 1rem;
+    //     flex: 0;
+    //     width: 62px;
+    // }
+
+    // .btn-apply {
+    //     font-size: 1.3rem;
+    // }
 }

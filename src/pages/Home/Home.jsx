@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { api, backEndApi, toastError } from '~/utils';
+import { userApi, backEndApi, toastError } from '~/utils';
 import { FILTER_PRODUCTS } from '~/constants';
 
 import { Banner, Button, ProductCart, CategoryFilters } from '~/components';
@@ -20,7 +20,7 @@ function Home() {
 
     const getMoreProduct = useCallback(async (page) => {
         try {
-            const result = await api.getAll(`${backEndApi.newProducts}?page=${page}`);
+            const result = await userApi.getAll(`${backEndApi.newProducts}?page=${page}`);
 
             setProducts((prev) =>
                 page === 1 ? [...result.data] : [...prev, ...result.data],
@@ -51,14 +51,16 @@ function Home() {
                 <div className={styles['wrapper']}>
                     <h3 className={styles['title']}>⚡Flash sales</h3>
                     <p className={styles['description']}>
-                        Don't miss out on these amazing deals!
+                        Đừng bỏ lỡ những ưu đãi cực sốc này nhé!
                     </p>
                     <FlashSale />
                 </div>
 
                 <div className={styles['wrapper']}>
-                    <h3 className={styles['title']}>New products</h3>
-                    <p className={styles['description']}>Discover our latest arrivals</p>
+                    <h3 className={styles['title']}>Sản phẩm mới</h3>
+                    <p className={styles['description']}>
+                        Khám phá những mẫu hàng mới nhất!
+                    </p>
 
                     <CategoryFilters
                         filters={FILTER_PRODUCTS}
@@ -70,7 +72,10 @@ function Home() {
                         {/* List products */}
                         <div className="row">
                             {productsAfterFilter.map((item, index) => (
-                                <div key={(item._id, index)} className="col-3">
+                                <div
+                                    key={(item._id, index)}
+                                    className="col-3 col-m-4 col-s-6"
+                                >
                                     <ProductCart item={item} />
                                 </div>
                             ))}
@@ -84,7 +89,7 @@ function Home() {
                                     customStyle={styles['more-btn']}
                                     onClick={handleMoreProduct}
                                 >
-                                    See more
+                                    Xem thêm
                                 </Button>
                             </div>
                         )}

@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { api, backEndApi, patternValidate, toastSuccess, toastError } from '~/utils';
+import { adminApi, backEndApi, patternValidate, toastSuccess, toastError } from '~/utils';
 import { STATUSES } from '~/constants';
 
 import { SelectGroup, CartBox } from '~/admin/components';
@@ -25,7 +25,7 @@ function PaymentAdd({ setPayments, setMode }) {
 
     const handleAddPayment = async (data) => {
         try {
-            const result = await api.post(backEndApi.payment, data);
+            const result = await adminApi.post(backEndApi.payment, data);
 
             toastSuccess(result.message);
             setPayments((prev) => [...prev, result.data]);

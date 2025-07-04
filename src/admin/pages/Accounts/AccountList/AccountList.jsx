@@ -1,5 +1,5 @@
 import {
-    api,
+    adminApi,
     backEndApi,
     styleStatus,
     toastError,
@@ -15,7 +15,7 @@ function AccountList({ accounts, setAdmins, setViewDetail, setAdminEdit, setMode
 
     const handleDelete = async (account) => {
         try {
-            const result = await api.deleteById(backEndApi.admin, account._id);
+            const result = await adminApi.deleteById(backEndApi.admin, account._id);
             console.log('Delete result: ', result);
             toastSuccess(result.message);
             setAdmins((prev) => prev.filter((acc) => acc._id !== result.data._id));

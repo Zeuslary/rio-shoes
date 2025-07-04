@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useContext, useEffect, useRef } from 'react';
 
 import { ProviderContext } from '~/components/Provider';
-import { api, backEndApi, formatCurrencyVN, storage, toastError } from '~/utils';
+import { userApi, backEndApi, formatCurrencyVN, storage, toastError } from '~/utils';
 
 import ContactInfo from './ContactInfo';
 
@@ -45,7 +45,7 @@ function Checkout() {
             } else {
                 const fetchShippings = async () => {
                     try {
-                        const res = await api.getAll(backEndApi.shipping);
+                        const res = await userApi.getAll(backEndApi.shipping);
 
                         setShippingMethods(res);
                         setShipping(res[0]);
@@ -72,7 +72,7 @@ function Checkout() {
             } else {
                 const fetchPayments = async () => {
                     try {
-                        const res = await api.getAll(backEndApi.payment);
+                        const res = await userApi.getAll(backEndApi.payment);
 
                         setPaymentMethods(res);
                         setPayment(res.find((payment) => payment.code === 'cod'));
@@ -98,7 +98,7 @@ function Checkout() {
     return (
         <div className={styles['wrapper']}>
             <div className="grid wide">
-                <h1 className={styles['heading']}>Checkout</h1>
+                <h1 className={styles['heading']}>Thanh toán</h1>
 
                 <div className={styles['content']}>
                     <div className={styles['container']}>
@@ -107,12 +107,12 @@ function Checkout() {
 
                         {/* Shipping method */}
                         <div className={styles['shipping']}>
-                            <h3>Shipping method</h3>
+                            <h3>Phương thức vận chuyển</h3>
 
                             <div className="row">
                                 {shippingMethods &&
                                     shippingMethods.map((method) => (
-                                        <div key={method?._id} className="col-6">
+                                        <div key={method?._id} className="col-6 col-s-12">
                                             <div
                                                 className={clsx(
                                                     styles['option'],
@@ -143,7 +143,7 @@ function Checkout() {
 
                         {/* Payment method */}
                         <div className={styles['payment']}>
-                            <h3>Payment method</h3>
+                            <h3>Phương thức thanh toán</h3>
 
                             <div
                                 className={clsx(
@@ -167,7 +167,7 @@ function Checkout() {
 
                     {/* Order-detail */}
                     <div className={styles['order-detail']}>
-                        <h3>Order detail</h3>
+                        <h3>Chi tiết đơn hàng</h3>
 
                         {/* List item */}
                         {cartList.map((item) => (
@@ -176,32 +176,48 @@ function Checkout() {
 
                         <div className={styles['summary']}>
                             <div className={styles['space-between']}>
-                                <span>Subtotal:</span>
+                                <span>Tạm tính:</span>
                                 <span>{formatCurrencyVN(subTotal)}</span>
                             </div>
                             <div className={styles['space-between']}>
-                                <span>Shipping:</span>
+                                <span>Phí vận chuyển:</span>
                                 <span>{formatCurrencyVN(shipping?.price)}</span>
                             </div>
 
                             <div className={styles['space-between']}>
-                                <span>Discount:</span>
+                                <span>Giảm giá:</span>
                                 <span>
                                     -{formatCurrencyVN(discount?.discountValue || 0)}
                                 </span>
                             </div>
 
                             <div className={styles['space-between']}>
-                                <span>Total:</span>
+                                <span>Tổng: </span>
                                 <strong>{formatCurrencyVN(total)}</strong>
                             </div>
 
                             <Button
                                 deepBlack
-                                customStyle={styles['confirm-btn']}
+                                customStyle={clsx('s-m-hidden', styles['confirm-btn'])}
                                 onClick={handleConfirm}
                             >
-                                Confirm order
+                                Thanh toán
+                            </Button>
+                        </div>
+
+                        {/* Button Confirm for mobile */}
+                        <div className={styles['confirm-mobile']}>
+                            <div className={styles['space-between']}>
+                                <span>Tổng: </span>
+                                <strong>{formatCurrencyVN(total)}</strong>
+                            </div>
+
+                            <Button
+                                deepBlack
+                                customStyle={clsx(styles['confirm-btn'])}
+                                onClick={handleConfirm}
+                            >
+                                Thanh toán
                             </Button>
                         </div>
                     </div>

@@ -1,57 +1,7 @@
+@use '/src/components/GlobalStyle/GlobalStyle.scss' as *;
+
 .wrapper {
     margin: 48px 0;
-}
-
-// Sort
-.sort-by {
-    position: relative;
-}
-
-.sort-group {
-    padding: 10px 12px;
-    border-radius: 4px;
-    font-size: 1.4rem;
-    outline: none;
-    border: none;
-    cursor: pointer;
-
-    // Base-select make select can be css
-    appearance: base-select;
-    min-width: 200px;
-    background-color: #f5f5f5;
-
-    // Make option can be css, this css for dropdown box
-    &::picker(select) {
-        appearance: base-select;
-    }
-
-    // Icon dropdown
-    &::picker-icon {
-        padding-left: 4px;
-    }
-
-    // Css for option
-    & option {
-        padding: 10px 12px;
-        font-size: 1.4rem;
-
-        &:checked:not(:disabled) {
-            color: var(--primary-color);
-        }
-
-        &:hover:not(:disabled) {
-            color: var(--primary-color);
-        }
-
-        // Style for status of option disabled
-        &:disabled {
-            cursor: text;
-        }
-
-        &:disabled::checkmark {
-            color: transparent;
-        }
-    }
 }
 
 .navigation {
@@ -64,10 +14,37 @@
     margin: 32px 0;
 }
 
+.list-filter {
+    margin-left: -16px;
+    margin-right: 12px;
+}
+
 .filter-btn {
     min-width: 100px;
+    margin-left: 16px;
 
     & + .filter-btn {
         margin-left: 16px;
+    }
+}
+
+// Responsive
+@media screen and (max-width: $max-tablet) {
+    .filter-btn {
+        min-width: 80px;
+        height: 40px;
+
+        & + .filter-btn {
+            margin-left: 12px;
+        }
+    }
+}
+
+@media screen and (max-width: $max-mobile) {
+    .filter-btn {
+        min-width: 68px;
+        height: 38px;
+        font-size: 1.4rem;
+        margin-bottom: 12px;
     }
 }

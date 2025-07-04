@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { api, backEndApi, patternValidate, toastError, toastSuccess } from '~/utils';
+import { adminApi, backEndApi, patternValidate, toastError, toastSuccess } from '~/utils';
 import { STATUSES } from '~/constants';
 
 import { SelectGroup, CartBox } from '~/admin/components';
@@ -12,7 +12,8 @@ function ShippingAdd({ setShippings, setMode }) {
         defaultValues: {
             name: '',
             description: '',
-            price: 0,
+            price: '',
+            estimateTime: '',
             status: 'active',
         },
     });
@@ -25,7 +26,7 @@ function ShippingAdd({ setShippings, setMode }) {
 
     const handleAddPayment = async (data) => {
         try {
-            const result = await api.post(backEndApi.shipping, data);
+            const result = await adminApi.post(backEndApi.shipping, data);
 
             toastSuccess(result.message);
             setShippings((prev) => [...prev, result.data]);
@@ -97,10 +98,27 @@ function ShippingAdd({ setShippings, setMode }) {
                                         valueAsNumber: patternValidate.mustNumber,
                                         min: patternValidate.min0,
                                     })}
+                                    placeholder="Eg: 70000"
                                 />
                                 <p className="form-msg-err">
                                     {errors.price && errors.price.message}
                                 </p>
+                            </div>
+
+                            {/* EstimateTime */}
+                            <div>
+                                <label className="form-label" htmlFor="estimateTime">
+                                    Estimate time
+                                </label>
+                                <textarea
+                                    rows={3}
+                                    spellCheck={false}
+                                    className="form-input"
+                                    type="text"
+                                    placeholder="Eg: 1 business day."
+                                    id="estimateTime"
+                                    {...register('estimateTime')}
+                                />
                             </div>
 
                             {/* Status */}

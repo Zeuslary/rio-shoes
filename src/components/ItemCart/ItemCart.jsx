@@ -17,21 +17,23 @@ function ItemCart({ item }) {
                 <h4 className={styles['name']}>{item.name}</h4>
                 <p>
                     <span className={styles['price']}>
-                        Price: {formatCurrencyVN(item?.price)}
+                        Giá: {formatCurrencyVN(item?.price)}
                     </span>
-                    <span className={styles['quantity']}>Quantity: {item?.quantity}</span>
+                    <span className={styles['quantity']}>Số lượng: {item?.quantity}</span>
                 </p>
                 <p>
                     <span className={styles['size']}>
                         Size: {upperCaseFirstLetter(item?.size)}
                     </span>
                     <span className={styles['color']}>
-                        Color: {upperCaseFirstLetter(item?.color)}
+                        Màu sắc: {upperCaseFirstLetter(item?.color)}
                     </span>
                 </p>
             </div>
             <span>
-                <strong>{formatCurrencyVN(subTotal(item))}</strong>
+                <strong className={styles['sub-total']}>
+                    {formatCurrencyVN(subTotal(item))}
+                </strong>
             </span>
         </div>
     );

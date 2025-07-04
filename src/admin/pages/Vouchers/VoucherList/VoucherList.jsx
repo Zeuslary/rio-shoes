@@ -1,5 +1,5 @@
 import {
-    api,
+    adminApi,
     backEndApi,
     toastError,
     toastSuccess,
@@ -18,7 +18,10 @@ function VoucherList({ vouchers, setVouchers, setMode, setViewDetail, setVoucher
 
     const handleDelete = async (voucher) => {
         try {
-            const deleteVoucher = await api.deleteById(backEndApi.voucher, voucher._id);
+            const deleteVoucher = await adminApi.deleteById(
+                backEndApi.voucher,
+                voucher._id,
+            );
 
             toastSuccess(deleteVoucher.message);
             setVouchers((prev) =>

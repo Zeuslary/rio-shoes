@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 
 import {
-    api,
+    userApi,
     backEndApi,
     formatCurrencyVN,
     toastError,
@@ -26,7 +26,7 @@ function OrderDetail() {
                 return;
             }
             try {
-                const result = await api.getById(backEndApi.order, id);
+                const result = await userApi.getById(backEndApi.order, id);
 
                 setOrder(result.data);
             } catch (err) {
@@ -41,32 +41,30 @@ function OrderDetail() {
     return (
         <div className={styles['wrapper']}>
             <div className={clsx('grid wide', styles['custom-grid'])}>
-                <h1 className={styles['header']}>Order detail</h1>
+                <h1 className={styles['header']}>Chi tiết đơn hàng</h1>
 
                 <div className={clsx('row', styles['custom-row'])}>
-                    <div className={clsx('col-6', styles['custom-col-6'])}>
+                    <div className={clsx('col-6', 'col-s-12', styles['custom-col-6'])}>
                         {/* Order Info */}
                         <div className={styles['section-group']}>
                             <h2 className={styles['section-header']}>
-                                Order Information
+                                Thông tin đặt hàng
                             </h2>
 
                             <div className={styles['section-body']}>
                                 <p className={styles['section-item']}>
-                                    <span className={styles['section-label']}>
-                                        Order ID
-                                    </span>
+                                    <span className={styles['section-label']}>ID</span>
                                     <span>{order?._id}</span>
                                 </p>
                                 <p className={styles['section-item']}>
                                     <span className={styles['section-label']}>
-                                        Order date
+                                        Ngày đặt
                                     </span>
                                     <span>{order?.createdAt}</span>
                                 </p>
                                 <p className={styles['section-item']}>
                                     <span className={styles['section-label']}>
-                                        Status
+                                        Trạng thái
                                     </span>
                                     <span>{upperCaseFirstLetter(order?.status)}</span>
                                 </p>
@@ -76,16 +74,16 @@ function OrderDetail() {
                         {/* Shipping info */}
                         <div className={styles['section-group']}>
                             <h2 className={styles['section-header']}>
-                                Shipping Information
+                                Thông tin giao hàng
                             </h2>
 
                             <div className={styles['section-body']}>
                                 <p className={styles['section-item']}>
-                                    <span className={styles['section-label']}>Name</span>
+                                    <span className={styles['section-label']}>Tên</span>
                                     <span>{order?.customerId?.getFullName}</span>
                                 </p>
                                 <p className={styles['section-item']}>
-                                    <span className={styles['section-label']}>Phone</span>
+                                    <span className={styles['section-label']}>SĐT</span>
                                     <span>{order?.customerId?.phone}</span>
                                 </p>
                                 <p className={styles['section-item']}>
@@ -94,7 +92,7 @@ function OrderDetail() {
                                 </p>
                                 <p className={styles['section-item']}>
                                     <span className={styles['section-label']}>
-                                        Address
+                                        Địa chỉ
                                     </span>
                                     <span>
                                         {order?.address.houseNumber +
@@ -108,7 +106,7 @@ function OrderDetail() {
                                 </p>
                                 <p className={styles['section-item']}>
                                     <span className={styles['section-label']}>
-                                        Message
+                                        Lời nhắn
                                     </span>
                                     <span>{order?.message}</span>
                                 </p>
@@ -117,9 +115,16 @@ function OrderDetail() {
                     </div>
 
                     {/* Order detail */}
-                    <div className={clsx('col-6', styles['custom-col-6'])}>
+                    <div
+                        className={clsx(
+                            'col-6',
+                            'col-s-12',
+                            's-mt-18',
+                            styles['custom-col-6'],
+                        )}
+                    >
                         <div className={styles['section-group']}>
-                            <h2 className={styles['section-header']}>Order items</h2>
+                            <h2 className={styles['section-header']}>Sản phẩm</h2>
 
                             {/* List items */}
                             <div className={styles['list-items']}>
@@ -132,25 +137,25 @@ function OrderDetail() {
                             {/* Summary */}
                             <div className={styles['summary']}>
                                 <p className={clsx('space-between', 'mt-12')}>
-                                    <span>Subtotal</span>
+                                    <span>Tạm tính</span>
                                     <span>
                                         {formatCurrencyVN(order?.summary?.subTotal)}
                                     </span>
                                 </p>
                                 <p className={clsx('space-between', 'mt-12')}>
-                                    <span>Shipping</span>
+                                    <span>Phí vận chuyển</span>
                                     <span>
                                         {formatCurrencyVN(order?.summary?.shippingFee)}
                                     </span>
                                 </p>
                                 <p className={clsx('space-between', 'mt-12')}>
-                                    <span>Discount</span>
+                                    <span>Giảm giá</span>
                                     <span>
                                         -{formatCurrencyVN(order?.summary?.discount)}
                                     </span>
                                 </p>
                                 <h5 className={clsx('space-between', styles['total'])}>
-                                    <span>Total</span>
+                                    <span>Tổng</span>
                                     <span>{formatCurrencyVN(order?.summary?.total)}</span>
                                 </h5>
                             </div>
@@ -161,7 +166,7 @@ function OrderDetail() {
                 {/* Navigation */}
                 <div className={styles['continue-btn']}>
                     <Button deepBlack to={routes.home}>
-                        Continue Shopping
+                        Tiếp tục mua hàng
                     </Button>
                 </div>
             </div>

@@ -23,19 +23,19 @@ function OrderSuccess() {
                 {/* Info */}
                 <div className={styles['info']}>
                     <CheckCircleIcon className={styles['icon']} />
-                    <h1 className={styles['header']}>Order Successful</h1>
+                    <h1 className={styles['header']}>Đặt hàng thành công</h1>
                     <p>
-                        Thank you for your purchase. Your order has been placed and is now
-                        being processed.
+                        Cảm ơn bạn đã mua hàng. Đơn hàng của bạn đã được ghi nhận và đang
+                        được xử lý.
                     </p>
                     <h2 className={styles['order-id']}>Order #{shortData._id}</h2>
-                    <p>Estimated delivery: {shortData.estimateTime}</p>
+                    <p>Dự kiến giao hàng: {shortData.estimateTime}</p>
                 </div>
 
                 {/* Group button navigation */}
                 <div className={styles['actions']}>
                     <Button customStyle={styles['view-btn']} onClick={handleViewDetail}>
-                        View Your Order
+                        Xem đơn hàng
                     </Button>
 
                     <Button
@@ -43,7 +43,7 @@ function OrderSuccess() {
                         to={routes.home}
                         customStyle={styles['continue-btn']}
                     >
-                        Continue Shipping
+                        Tiếp tục mua sắm
                     </Button>
                 </div>
             </div>

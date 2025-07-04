@@ -6,7 +6,7 @@ import CartBox from '~/admin/components/CartBox';
 import styles from './ProductViewDetail.module.scss';
 
 function ProductViewDetail({ productViewDetail, brands }) {
-    console.log('View ', productViewDetail);
+    // console.log('View ', productViewDetail);
 
     return (
         <div className={styles['wrapper']}>

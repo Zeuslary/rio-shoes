@@ -6,7 +6,7 @@ import 'swiper/scss';
 import 'swiper/scss/navigation';
 import 'swiper/scss/pagination';
 
-import { api, backEndApi, toastError } from '~/utils';
+import { userApi, backEndApi, toastError } from '~/utils';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '~/assets/icons';
 import { ProductCart } from '~/components';
@@ -18,7 +18,7 @@ function FlashSale() {
     useEffect(() => {
         const fetchingData = async () => {
             try {
-                const res = await api.getAll(backEndApi.flashSale);
+                const res = await userApi.getAll(backEndApi.flashSale);
 
                 setProducts(res.data);
             } catch (err) {
@@ -46,7 +46,7 @@ function FlashSale() {
             <div className={styles['products-wrap']}>
                 <div className={styles['product-list']}>
                     <Swiper
-                        slidesPerView={5}
+                        // slidesPerView={5}
                         scrollbar={true}
                         navigation={{
                             nextEl: `.${styles['next-btn']}`,
@@ -54,6 +54,17 @@ function FlashSale() {
                         }}
                         loop={products.length > 0}
                         modules={[Navigation]}
+                        breakpoints={{
+                            0: {
+                                slidesPerView: 2,
+                            },
+                            740: {
+                                slidesPerView: 4,
+                            },
+                            1024: {
+                                slidesPerView: 5,
+                            },
+                        }}
                     >
                         {products.map((item, index) => (
                             <SwiperSlide

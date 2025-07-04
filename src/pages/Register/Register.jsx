@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 
-import { api, backEndApi, patternValidate, toastError } from '~/utils';
+import { userApi, backEndApi, patternValidate, toastError } from '~/utils';
 
 import { Button } from '~/components';
 import routes from '~/config/routes';
@@ -21,7 +21,7 @@ function Register() {
         console.log('data: ', data);
         try {
             // Just validate unique username
-            const res = await api.post(backEndApi.uniqueUserName, data);
+            const res = await userApi.post(backEndApi.uniqueUserName, data);
 
             console.log('Res: ', res);
 
@@ -38,19 +38,19 @@ function Register() {
     return (
         <div className={styles['wrapper']}>
             <div className={styles['content']}>
-                <h1 className={styles['header']}>Register</h1>
+                <h1 className={styles['header']}>Đăng kí</h1>
 
                 <form action="" onSubmit={handleSubmit(handleRegister)}>
                     {/* Username */}
                     <label className="form-label" htmlFor="username">
-                        Username
+                        Tên đăng nhập
                     </label>
                     <input
                         className={errors.username ? 'form-input-invalid' : 'form-input'}
                         type="text"
                         name="username"
                         id="username"
-                        placeholder="Enter your username"
+                        placeholder="Nhập tên đăng nhập của bạn"
                         {...register('username', {
                             required: patternValidate.required,
                             minLength: patternValidate.minLength3,
@@ -67,14 +67,14 @@ function Register() {
 
                     {/* Password */}
                     <label className="form-label" htmlFor="password">
-                        Password
+                        Mật khẩu
                     </label>
                     <input
                         className={errors.password ? 'form-input-invalid' : 'form-input'}
                         type="password"
                         name="password"
                         id="password"
-                        placeholder="Enter your password"
+                        placeholder="Nhập mật khẩu của bạn"
                         {...register('password', {
                             required: patternValidate.required,
                             minLength: patternValidate.password,
@@ -86,7 +86,7 @@ function Register() {
 
                     {/* Confirm password */}
                     <label className="form-label" htmlFor="confirm-password">
-                        Confirm password
+                        Xác nhận mật khẩu
                     </label>
                     <input
                         className={
@@ -95,7 +95,7 @@ function Register() {
                         type="password"
                         name="confirm-password"
                         id="confirm-password"
-                        placeholder="Confirm your password"
+                        placeholder="Nhập lại mật khẩu của bạn"
                         {...register('confirmPassword', {
                             required: patternValidate.required,
                             validate: (value) =>
@@ -109,14 +109,14 @@ function Register() {
 
                     {/* Button register */}
                     <Button deepBlack customStyle={styles['register-btn']} type="submit">
-                        Register
+                        Đăng ký
                     </Button>
 
                     {/* Other */}
                     <p className={styles['other']}>
-                        Already have an account?
+                        Đã có tài khoản?
                         <Link to={routes.login} className={styles['login-btn']}>
-                            Login
+                            Đăng nhập
                         </Link>
                     </p>
                 </form>

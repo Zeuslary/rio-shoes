@@ -4,7 +4,7 @@ import { useEffect, useContext, useCallback } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     patternValidate,
     storage,
@@ -12,7 +12,7 @@ import {
     toastSuccess,
     tokenUtils,
 } from '~/utils';
-import { keyAdminProfile } from '~/constants';
+import { keyAdminProfile, keyAdminToken } from '~/constants';
 
 import { ProviderContext } from '~/components/Provider';
 
@@ -35,7 +35,7 @@ function Login() {
 
     // Skip login if token valid
     useEffect(() => {
-        const token = storage.get('token');
+        const token = storage.get(keyAdminToken);
 
         if (token) {
             const tokenValue = jwtDecode(token);
@@ -49,11 +49,11 @@ function Login() {
     const handleLogin = useCallback(async (data) => {
         try {
             // Login request to the backend
-            const auth = await api.post(backEndApi.adminLogin, data);
+            const auth = await adminApi.post(backEndApi.adminLogin, data);
             toastSuccess(auth.message);
 
             // Save token to localStorage
-            storage.save('token', auth.token);
+            storage.save(keyAdminToken, auth.token);
 
             // Save info token into localStorage
             storage.save(keyAdminProfile, auth.data);

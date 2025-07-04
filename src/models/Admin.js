@@ -14,7 +14,11 @@ const adminSchema = new Schema(
         phone: String,
         email: String,
         avatar: String,
-        status: { type: String, enum: ['active', 'inactive', 'banned'], default: 'active' },
+        status: {
+            type: String,
+            enum: ['active', 'inactive', 'banned'],
+            default: 'active',
+        },
         lastLogin: Date,
     },
     { timestamps: true },

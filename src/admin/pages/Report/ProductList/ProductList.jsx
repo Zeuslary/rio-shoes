@@ -1,4 +1,6 @@
 import Image from '~/components/Image';
+import { IMG_PRODUCT_PATH } from '~/constants';
+import { formatCurrencyVN } from '~/utils';
 import styles from './ProductList.module.scss';
 
 function ProductList({ items }) {
@@ -10,20 +12,25 @@ function ProductList({ items }) {
                     <tr>
                         <th>Product</th>
                         <th>Sold</th>
-                        <th>Revenue</th>
+                        <th>Value</th>
                     </tr>
                 </thead>
 
                 {/* Body */}
                 <tbody>
                     {items.map((item) => (
-                        <tr key={item.id}>
+                        <tr key={item._id}>
                             <td>
                                 <div className={styles['item']}>
-                                    <Image src={item.image} className={styles['item-img']} />
+                                    <Image
+                                        src={IMG_PRODUCT_PATH + item.image}
+                                        className={styles['item-img']}
+                                    />
                                     <div className={styles['item-detail']}>
-                                        <h5 className={styles['item-name']}>{item.name}</h5>
-                                        <p>ID: {item.id}</p>
+                                        <h5 className={styles['item-name']}>
+                                            {item.name}
+                                        </h5>
+                                        <p>ID: {item._id}</p>
                                     </div>
                                 </div>
                             </td>
@@ -32,7 +39,7 @@ function ProductList({ items }) {
                                 <span>{item.sold}</span>
                             </td>
                             <td>
-                                <strong>${item.revenue}</strong>
+                                <strong>{formatCurrencyVN(item.totalValue)}</strong>
                             </td>
                         </tr>
                     ))}

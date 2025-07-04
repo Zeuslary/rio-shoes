@@ -1,10 +1,10 @@
 import express from 'express';
 import { productImportController } from '../controllers/index.js';
-import verifyToken from '../middlewares/verifyToken.js';
+import { verifyTokenAdmin } from '../middlewares/verifyToken.js';
 
 const router = express.Router();
 
-router.use(verifyToken);
+router.use(verifyTokenAdmin);
 
 router.get('/', productImportController.getAll);
 

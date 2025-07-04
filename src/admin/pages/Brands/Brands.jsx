@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { api, backEndApi, toastError } from '~/utils';
+import { adminApi, backEndApi, toastError } from '~/utils';
 
 import BrandAdd from './BrandAdd';
 import BrandList from './BrandList';
@@ -19,7 +19,7 @@ function Brands() {
     useEffect(() => {
         const fetchingData = async () => {
             try {
-                const data = await api.getAll(backEndApi.brand);
+                const data = await adminApi.getAll(backEndApi.brand);
 
                 setBrands(data);
             } catch (err) {

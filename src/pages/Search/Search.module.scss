@@ -1,3 +1,5 @@
+@use '/src/components/GlobalStyle/GlobalStyle.scss' as *;
+
 .wrapper {
     padding: 32px 0;
     background-color: var(--background-color);
@@ -30,4 +32,55 @@
 // List product
 .list-products {
     margin-top: 24px;
+}
+
+.filter-icon {
+    display: none;
+}
+
+// Responsive
+@media screen and (min-width: $max-mobile) and (max-width: $max-tablet) {
+    .top-search {
+        & span {
+            font-size: 1.5rem;
+        }
+    }
+}
+
+@media screen and (max-width: $max-mobile) {
+    .wrapper {
+        padding-top: 12px;
+    }
+
+    .body {
+        margin-left: 0;
+    }
+
+    .top-search {
+        padding: 8px 12px;
+
+        & span {
+            font-size: 1.4rem;
+        }
+    }
+
+    .filter-icon {
+        display: flex;
+        padding: 4px;
+        cursor: pointer;
+        margin-left: 8px;
+        align-items: center;
+
+        &:hover {
+            color: var(--primary-color);
+        }
+
+        & span {
+            margin-left: 6px;
+        }
+    }
+
+    .list-products {
+        margin-top: 12px;
+    }
 }

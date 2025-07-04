@@ -1,5 +1,5 @@
 import {
-    api,
+    adminApi,
     backEndApi,
     formatCurrencyVN,
     styleStatus,
@@ -14,7 +14,7 @@ import styles from './ShippingList.module.scss';
 function ShippingList({ shippings, setShippings, setMode, setShippingEdit }) {
     const handleDelete = async (id) => {
         try {
-            const result = await api.deleteById(backEndApi.shipping, id);
+            const result = await adminApi.deleteById(backEndApi.shipping, id);
 
             setShippings((prev) => prev.filter((shipping) => shipping._id !== id));
             toastSuccess(result.message);

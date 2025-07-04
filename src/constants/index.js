@@ -7,8 +7,9 @@ export const keyCustomerProfile = 'PROFILE_CUSTOMER';
 export const keyAdminProfile = 'PROFILE_ADMIN';
 export const keyShippingMethods = 'SHIPPING_METHODS';
 export const keyPaymentMethods = 'PAYMENT_METHODS';
-export const keyCustomerToken = 'token';
-export const keyAdminToken = 'token';
+
+export const keyUserToken = 'customerToken';
+export const keyAdminToken = 'adminToken';
 export const keyToken = 'token';
 
 // Folder to save img
@@ -39,10 +40,10 @@ export const ORDER_STATUSES = [
 ];
 
 export const SORT_OPTIONS = [
-    { label: 'Newest', value: 'newest' },
-    { label: 'Best Seller', value: 'bestSeller' },
-    { label: 'Price decreasing', value: 'priceDesc' },
-    { label: 'Price increasing', value: 'priceAsc' },
+    { label: 'Mới nhất', value: 'newest' },
+    { label: 'Bán chạy', value: 'bestSeller' },
+    { label: 'Giá giảm dần', value: 'priceDesc' },
+    { label: 'Giá tăng dần', value: 'priceAsc' },
     { label: 'A - Z', value: 'az' },
     { label: 'Z - A', value: 'za' },
 ];

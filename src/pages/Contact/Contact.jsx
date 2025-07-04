@@ -86,7 +86,9 @@ function Contact() {
                                 {/* Contact info */}
                                 <div className={clsx('col-12', styles['custom-col'])}>
                                     <div className={styles['section']}>
-                                        <h3 className={styles['title']}>Contact Information</h3>
+                                        <h3 className={styles['title']}>
+                                            Contact Information
+                                        </h3>
 
                                         <div className={styles['body']}>
                                             <div className={styles['item']}>
@@ -114,7 +116,9 @@ function Contact() {
                                                 <TimeIcon />
                                                 <div>
                                                     <h4>Business Hours</h4>
-                                                    <p>Monday-Sunday: 9:00 AM - 6:00 PM</p>
+                                                    <p>
+                                                        Monday-Sunday: 9:00 AM - 6:00 PM
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -124,19 +128,27 @@ function Contact() {
                                 {/* Connect */}
                                 <div className={clsx('col-12', styles['custom-col'])}>
                                     <div className={styles['section']}>
-                                        <h3 className={styles['title']}>Connect With Us</h3>
+                                        <h3 className={styles['title']}>
+                                            Connect With Us
+                                        </h3>
 
                                         <div className={styles['body']}>
                                             <div className={styles['item']}>
-                                                <FacebookIcon className={styles['icon-brand']} />
+                                                <FacebookIcon
+                                                    className={styles['icon-brand']}
+                                                />
                                                 <p>facebook.com/rioshoes</p>
                                             </div>
                                             <div className={styles['item']}>
-                                                <InstagramIcon className={styles['icon-brand']} />
-                                                <p>@rioshoes_official</p>
+                                                <InstagramIcon
+                                                    className={styles['icon-brand']}
+                                                />
+                                                <p>rioshoes_official</p>
                                             </div>
                                             <div className={styles['item']}>
-                                                <ShopeeIcon className={styles['icon-brand']} />
+                                                <ShopeeIcon
+                                                    className={styles['icon-brand']}
+                                                />
                                                 <p>shopee.com/rioshoes_workshop</p>
                                             </div>
                                         </div>

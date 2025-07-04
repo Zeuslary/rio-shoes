@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { api, backEndApi, toastError } from '~/utils';
+import { adminApi, backEndApi, toastError } from '~/utils';
 
 import ImportList from './ImportList';
 import ImportAdd from './ImportAdd';
@@ -22,7 +22,7 @@ function Imports() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await api.getAll(backEndApi.productImports);
+                const data = await adminApi.getAll(backEndApi.productImports);
 
                 setProductImports(data);
             } catch (err) {

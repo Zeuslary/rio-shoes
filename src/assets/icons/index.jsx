@@ -1,6 +1,6 @@
 export { default as ChevronLeftIcon } from './arrow-chevron-left.svg?react';
 export { default as ChevronRightIcon } from './arrow-chevron-right.svg?react';
-export { default as ChevronUpIcon } from './arrow-chevron-left.svg?react';
+export { default as ChevronUpIcon } from './arrow-chevron-up.svg?react';
 export { default as ChevronDownIcon } from './arrow-chevron-down.svg?react';
 export { default as CartIcon } from './cart.svg?react';
 export { default as FacebookIcon } from './facebook.svg?react';
@@ -25,3 +25,5 @@ export { default as BellIcon } from './bell.svg?react';
 export { default as DeleteIcon } from './delete.svg?react';
 export { default as EditIcon } from './edit.svg?react';
 export { default as EyeIcon } from './eye.svg?react';
+export { default as MenuIcon } from './menu.svg?react';
+export { default as FilterIcon } from './filter.svg?react';

@@ -1,10 +1,10 @@
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { useEffect, useContext, useCallback } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
 import {
-    api,
+    userApi,
     backEndApi,
     patternValidate,
     storage,
@@ -12,7 +12,7 @@ import {
     toastSuccess,
     tokenUtils,
 } from '~/utils';
-import { keyCustomerProfile, keyCustomerToken } from '~/constants';
+import { keyCustomerProfile, keyUserToken } from '~/constants';
 
 import { ProviderContext } from '~/components/Provider';
 
@@ -38,10 +38,12 @@ function Login() {
 
     // Skip login if token valid
     useEffect(() => {
-        const token = storage.get(keyCustomerToken);
+        const token = storage.get(keyUserToken);
 
         if (token) {
             const tokenValue = jwtDecode(token);
+
+            storage.save(keyCustomerProfile, tokenValue._doc);
 
             if (!tokenUtils.isExpired(tokenValue)) {
                 navigate(routes.home);
@@ -52,12 +54,12 @@ function Login() {
     const handleLogin = useCallback(async (data) => {
         try {
             // Login request to the backend
-            const result = await api.post(backEndApi.customerLogin, data);
+            const result = await userApi.post(backEndApi.customerLogin, data);
 
             toastSuccess(result.message);
 
             // Save token to localStorage
-            storage.save(keyCustomerToken, result.token);
+            storage.save(keyUserToken, result.token);
 
             // // Save info token into localStorage
             storage.save(keyCustomerProfile, result.data);
@@ -76,19 +78,19 @@ function Login() {
     return (
         <div className={styles['wrapper']}>
             <div className={styles['content']}>
-                <h1 className={styles['header']}>Login</h1>
+                <h1 className={styles['header']}>Đăng nhập</h1>
 
                 <form action="" onSubmit={handleSubmit(handleLogin)}>
                     {/* Username */}
                     <label className="form-label" htmlFor="username">
-                        Username
+                        Tên đăng nhập
                     </label>
                     <input
                         className={errors.username ? 'form-input-invalid' : 'form-input'}
                         type="text"
                         name="username"
                         id="username"
-                        placeholder="Enter your username"
+                        placeholder="Nhập tên đăng nhập của bạn"
                         {...register('username', {
                             required: patternValidate.required,
                             pattern: patternValidate.alphaNumUnderscoreOnly,
@@ -97,17 +99,16 @@ function Login() {
                     <p className="form-msg-err">
                         {errors.username && errors.username.message}
                     </p>
-
                     {/* Password */}
                     <label className="form-label" htmlFor="password">
-                        Password
+                        Mật khẩu
                     </label>
                     <input
                         className={errors.password ? 'form-input-invalid' : 'form-input'}
                         type="password"
                         name="password"
                         id="password"
-                        placeholder="Enter your password"
+                        placeholder="Nhập mật khẩu của bạn"
                         {...register('password', {
                             required: patternValidate.required,
                             minLength: patternValidate.password,
@@ -116,11 +117,18 @@ function Login() {
                     <p className="form-msg-err">
                         {errors.password && errors.password.message}
                     </p>
-
                     {/* Button Login */}
                     <Button deepBlack customStyle={styles['login-btn']} type="submit">
-                        Login
+                        Đăng nhập
                     </Button>
+
+                    {/* Other */}
+                    <p className={styles['other']}>
+                        Chưa có tài khoản?
+                        <Link to={routes.register} className={styles['register-btn']}>
+                            Đăng ký
+                        </Link>
+                    </p>
                 </form>
             </div>
         </div>

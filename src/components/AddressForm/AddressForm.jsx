@@ -101,7 +101,7 @@ function AddressForm() {
 
     return (
         <div className={styles['wrapper']}>
-            <label className={styles['address']}>Address</label>
+            <label className={styles['address']}>Địa chỉ</label>
 
             <div className="grid">
                 <div className="row">
@@ -117,9 +117,9 @@ function AddressForm() {
                         }}
                         // Render component as you want
                         render={({ field }) => (
-                            <div className="col-4">
+                            <div className="col-4 col-m-6 col-s-12">
                                 <label className="form-label" htmlFor="city">
-                                    City
+                                    Thành phố
                                 </label>
 
                                 {/* Spread field to say form know that this is field you register */}
@@ -133,7 +133,7 @@ function AddressForm() {
                                     }}
                                 >
                                     <option value="default" disabled hidden>
-                                        Select City
+                                        Chọn thành phố
                                     </option>
 
                                     {cities.map((city) => (
@@ -164,8 +164,8 @@ function AddressForm() {
                             validate: patternValidate.mustSelect,
                         }}
                         render={({ field }) => (
-                            <div className="col-4">
-                                <label className="form-label">District</label>
+                            <div className="col-4 col-m-6 col-s-12">
+                                <label className="form-label">Quận/ Huyện</label>
 
                                 <select
                                     {...field}
@@ -177,7 +177,7 @@ function AddressForm() {
                                     }}
                                 >
                                     <option value="default" disabled hidden>
-                                        Select District
+                                        Chọn Quận/ Huyện
                                     </option>
 
                                     {districts.map((district) => (
@@ -208,12 +208,12 @@ function AddressForm() {
                             validate: patternValidate.mustSelect,
                         }}
                         render={({ field }) => (
-                            <div className="col-4">
-                                <label className="form-label">Ward</label>
+                            <div className="col-4 col-m-6 col-s-12">
+                                <label className="form-label">Phường/ Xã</label>
 
                                 <select {...field} className="form-select" id="ward">
                                     <option value="default" disabled hidden>
-                                        Select Ward
+                                        Chọn Phường/ Xã
                                     </option>
 
                                     {wards.map((ward) => (
@@ -239,7 +239,7 @@ function AddressForm() {
                             className={clsx('form-label', styles['house-number'])}
                             htmlFor="houseNumber"
                         >
-                            House Number
+                            Số nhà
                         </label>
 
                         <input

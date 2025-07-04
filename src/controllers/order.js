@@ -219,6 +219,9 @@ const create = async (req, res) => {
                 },
                 lastOrderDate: Date.now(),
             });
+
+            delete customer.username;
+            delete customer.password;
         }
 
         const subTotal = items.reduce(
@@ -258,6 +261,8 @@ const create = async (req, res) => {
                 cancelled: '',
             },
         });
+
+        console.log('New customer: ', customer);
 
         // Save to db
         await customer.save();
@@ -377,7 +382,9 @@ const updateById = async (req, res) => {
         const updateOrder = await Order.findByIdAndUpdate(id, data, {
             new: true,
             runValidators: true,
-        }).populate('customerId', 'fullName email phone');
+        })
+            .populate('customerId', 'fullName email phone')
+            .populate('paymentId', 'name');
 
         if (updateOrder) {
             // Add field customerName and addressDetail for order
@@ -406,6 +413,45 @@ const updateById = async (req, res) => {
     }
 };
 
+// Search base on name and status
+// GET /api/orders?name=Nike&status=delivered,shipping
+const search = async (req, res) => {
+    try {
+        const { name, status } = req.query;
+
+        const keyword = name?.trim();
+        const statusList = status?.slit(',');
+
+        const query = {};
+
+        if (keyword) {
+            query.items = {
+                $elemMatch: {
+                    name: { $regex: keyword, $options: 'i' },
+                },
+            };
+        }
+
+        if (statusList?.length > 0) {
+            query.status = { $in: statusList };
+        }
+
+        const orders = await Order.find(query).sort({
+            createdAt: -1,
+        });
+
+        return res.status(200).json({
+            message: 'Search order successfully!',
+            data: orders,
+        });
+    } catch (err) {
+        console.error('Search order failed...', err);
+        return res.status(500).json({
+            message: 'Internal Server Error!',
+        });
+    }
+};
+
 export default {
     getAll,
     getById,
@@ -414,4 +460,5 @@ export default {
     create,
     deleteById,
     updateById,
+    search,
 };

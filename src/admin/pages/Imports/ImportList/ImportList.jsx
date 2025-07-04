@@ -1,4 +1,10 @@
-import { api, backEndApi, toastError, toastSuccess, formatCurrencyVN } from '~/utils';
+import {
+    adminApi,
+    backEndApi,
+    toastError,
+    toastSuccess,
+    formatCurrencyVN,
+} from '~/utils';
 
 import { DeleteIcon, EditIcon } from '~/assets/icons';
 import styles from './ImportList.module.scss';
@@ -11,7 +17,7 @@ function ImportList({
 }) {
     const handleDelete = async (productImport) => {
         try {
-            const productImportDelete = await api.deleteById(
+            const productImportDelete = await adminApi.deleteById(
                 backEndApi.productImports,
                 productImport._id,
             );

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     formatCurrencyVN,
     flatObject,
@@ -73,7 +73,7 @@ function OrderEdit({ orderEdit, setOrderEdit, setMode, setOrders }) {
 
     const handleEdit = async (data) => {
         try {
-            const result = await api.putById(
+            const result = await adminApi.putById(
                 backEndApi.order,
                 orderEdit._id,
                 flatObject(data),

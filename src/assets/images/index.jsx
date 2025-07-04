@@ -7,9 +7,14 @@ import bannerAdidas from './banner-adidas.jpg';
 import bannerPuma from './banner-puma.jpg';
 import nikeProduct from './product/nike-1.png';
 import adidasProduct from './product/adidas-1.png';
+import cartEmpty from './cart-empty.png';
+import logoMin from './logo-min.png';
+import logoMinimal from './logo-minimal.svg';
 
 const images = {
     logo,
+    logoMin,
+    logoMinimal,
     noImage,
     zuri,
     emptyCart,
@@ -18,6 +23,7 @@ const images = {
     bannerPuma,
     nikeProduct,
     adidasProduct,
+    cartEmpty,
 };
 
 export default images;

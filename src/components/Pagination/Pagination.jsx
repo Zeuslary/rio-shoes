@@ -13,7 +13,7 @@ function Pagination({
     handleClick = () => {},
 }) {
     const arrPages = Array.from({ length: numPages }).map((i, index) => index + 1);
-    const isShort = numPages < viewPages;
+    const isShort = numPages <= viewPages;
 
     const showPage = (page) => (
         <button

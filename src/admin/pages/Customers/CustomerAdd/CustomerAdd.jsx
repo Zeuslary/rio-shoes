@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     flatObject,
     patternValidate,
@@ -71,7 +71,10 @@ function CustomerAdd({ setCustomers, setMode }) {
     // Handle add customer into db
     const handleAdd = async (data) => {
         try {
-            const result = await api.postMultipart(backEndApi.customer, flatObject(data));
+            const result = await adminApi.postMultipart(
+                backEndApi.customer,
+                flatObject(data),
+            );
 
             toastSuccess(result.message);
             setCustomers((prev) => [...prev, result.data]);
@@ -125,10 +128,7 @@ function CustomerAdd({ setCustomers, setMode }) {
                                     type="text"
                                     placeholder="Eg: Lander"
                                     id="lastName"
-                                    {...register('fullName.lastName', {
-                                        required: patternValidate.required,
-                                        minLength: patternValidate.minLength3,
-                                    })}
+                                    {...register('fullName.lastName')}
                                 />
                                 <p className="form-msg-err">
                                     {errors.fullName?.lastName &&

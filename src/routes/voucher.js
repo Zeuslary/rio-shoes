@@ -1,6 +1,6 @@
 import express from 'express';
 import { voucherController } from '../controllers/index.js';
-import verifyToken from '../middlewares/verifyToken.js';
+import { verifyTokenAdmin } from '../middlewares/verifyToken.js';
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ router.get('/check', voucherController.getByCode);
 router.get('/:id', voucherController.getById);
 
 // Private router, required token for router below
-router.use(verifyToken);
+router.use(verifyTokenAdmin);
 
 router.get('/', voucherController.getAll);
 

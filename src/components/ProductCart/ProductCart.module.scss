@@ -66,6 +66,7 @@ button.label {
 .price {
     display: inline-flex;
     align-items: baseline;
+    flex-wrap: wrap;
 }
 
 .new-price {
@@ -84,4 +85,6 @@ button.label {
 .add-btn {
     width: 100%;
     margin: 14px 0 8px;
+
+    padding: 22px 12px;
 }

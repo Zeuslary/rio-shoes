@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { api, backEndApi, toastError, upperCaseFirstLetter } from '~/utils';
+import { adminApi, backEndApi, toastError, upperCaseFirstLetter } from '~/utils';
 
 import CustomerViewDetail from './CustomerViewDetail';
 import CustomerAdd from './CustomerAdd';
@@ -28,7 +28,7 @@ function Customers() {
     useEffect(() => {
         const fetchingData = async () => {
             try {
-                const data = await api.getAll(backEndApi.customer);
+                const data = await adminApi.getAll(backEndApi.customer);
 
                 setCustomers(data);
             } catch (err) {
@@ -80,17 +80,17 @@ function Customers() {
             const totalSpentB = customerB.totalSpent;
 
             // Sort by created date
-            if (arrangeCreatedDate) {
+            if (arrangeCreatedDate && arrangeCreatedDate != 'default') {
                 return arrangeCreatedDate === 'asc' ? dateA - dateB : dateB - dateA;
             }
 
             // Sort by order count
-            if (arrangeOrderCount) {
+            if (arrangeOrderCount && arrangeOrderCount != 'default') {
                 return arrangeOrderCount === 'asc' ? orderA - orderB : orderB - orderA;
             }
 
             // Sort by total spent
-            if (arrangeTotalSpent) {
+            if (arrangeTotalSpent && arrangeTotalSpent != 'default') {
                 return arrangeTotalSpent === 'asc'
                     ? totalSpentA - totalSpentB
                     : totalSpentB - totalSpentA;
@@ -132,6 +132,7 @@ function Customers() {
         setArrangeCreatedDate('default');
         setArrangeOrderCount('default');
         setArrangeTotalSpent(e.target.value);
+        console.log('Running...');
     };
 
     return (

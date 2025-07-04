@@ -1,8 +1,12 @@
 // Relate to api
-export { default as api } from './api.js';
+export * from './api.js';
+
 export { default as backEndApi } from './backendApi.js';
 export { default as tokenUtils } from './tokenUtils.js';
 export { default as provincesApi } from './provinces.js';
+
+// Relate to Token
+export * from './handleTokenExpired.js';
 
 // Relate normal JS
 export { default as flatObject } from './flatObject.js';

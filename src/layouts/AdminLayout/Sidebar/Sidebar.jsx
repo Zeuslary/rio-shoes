@@ -8,7 +8,7 @@ import { ProviderContext } from '~/components/Provider';
 import routes from '~/config/routes';
 import { storage, toastSuccess } from '~/utils';
 
-import { IMG_ADMIN_PATH, keyAdminProfile } from '~/constants';
+import { IMG_ADMIN_PATH, keyAdminProfile, keyAdminToken } from '~/constants';
 import { UserIcon } from '~/assets/icons';
 import Image from '~/components/Image';
 import styles from './Sidebar.module.scss';
@@ -35,7 +35,7 @@ function Sidebar() {
     const { adminProfile } = useContext(ProviderContext);
 
     const handleLogOut = () => {
-        storage.remove('token');
+        storage.remove(keyAdminToken);
         storage.remove(keyAdminProfile);
         toastSuccess('Log out successfully!');
         navigate(routes.adminLogin);

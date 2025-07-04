@@ -1,6 +1,9 @@
+@use '/src/components/GlobalStyle/GlobalStyle.scss' as *;
+
 .wrapper {
     background-color: var(--background-color);
-    padding: 48px 0;
+    padding: 48px 12px;
+    min-height: 55vh;
 }
 
 .content,
@@ -29,6 +32,7 @@
 
 .input {
     flex: 1;
+    width: 100%;
     padding: 12px 16px;
     border-radius: 4px;
     font-size: 1.6rem;
@@ -70,5 +74,30 @@
 .found-success {
     & svg {
         color: var(--primary-color);
+    }
+}
+
+// Responsive
+@media screen and (max-width: $max-mobile) {
+    .content {
+        padding: 12px;
+    }
+
+    .header {
+        font-size: 2rem;
+    }
+
+    .find-wrap {
+        margin: 16px 0;
+    }
+
+    .input {
+        font-size: 1.2rem;
+    }
+
+    .find-btn {
+        min-width: 80px;
+        height: 38px;
+        font-size: 1.4rem;
     }
 }

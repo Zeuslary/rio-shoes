@@ -1,7 +1,7 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
 import {
-    api,
+    adminApi,
     backEndApi,
     flatObject,
     isSameValueObject,
@@ -22,6 +22,7 @@ function ShippingEdit({ setShippings, shippingEdit, setShippingEdit, setMode }) 
             name: shippingEdit.name,
             description: shippingEdit.description,
             price: shippingEdit.price,
+            estimateTime: shippingEdit.estimateTime,
             status: shippingEdit.status,
         },
     });
@@ -43,7 +44,7 @@ function ShippingEdit({ setShippings, shippingEdit, setShippingEdit, setMode }) 
         }
 
         try {
-            const result = await api.putById(
+            const result = await adminApi.putById(
                 backEndApi.shipping,
                 shippingEdit._id,
                 flatObject(data),
@@ -135,6 +136,22 @@ function ShippingEdit({ setShippings, shippingEdit, setShippingEdit, setMode }) 
                                 <p className="form-msg-err">
                                     {errors.price && errors.price.message}
                                 </p>
+                            </div>
+
+                            {/* EstimateTime */}
+                            <div>
+                                <label className="form-label" htmlFor="estimateTime">
+                                    Estimate time
+                                </label>
+                                <textarea
+                                    rows={3}
+                                    spellCheck={false}
+                                    className="form-input"
+                                    type="text"
+                                    placeholder="Eg: 1 business day."
+                                    id="estimateTime"
+                                    {...register('estimateTime')}
+                                />
                             </div>
 
                             {/* Status */}
