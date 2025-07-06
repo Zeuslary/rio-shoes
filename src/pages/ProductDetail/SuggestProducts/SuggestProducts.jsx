@@ -32,7 +32,7 @@ function SuggestProducts({ title = 'Related Products', products = [] }) {
 
                 <div className={styles['product-list']}>
                     <Swiper
-                        slidesPerView={4}
+                        // slidesPerView={4}
                         scrollbar={true}
                         onBeforeInit={(swiper) => {
                             swiper.params.navigation.prevEl = prevButtonRef.current;
@@ -44,6 +44,17 @@ function SuggestProducts({ title = 'Related Products', products = [] }) {
                         }}
                         loop={true}
                         modules={[Navigation]}
+                        breakpoints={{
+                            0: {
+                                slidesPerView: 2,
+                            },
+                            740: {
+                                slidesPerView: 3,
+                            },
+                            1024: {
+                                slidesPerView: 4,
+                            },
+                        }}
                     >
                         {products.map((item, index) => (
                             <SwiperSlide

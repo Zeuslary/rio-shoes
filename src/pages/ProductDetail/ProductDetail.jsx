@@ -82,13 +82,13 @@ function ProductDetail() {
 
                     {/* Description and Specifications */}
                     <div className="row">
-                        <div className="col-6">
+                        <div className="col-6 col-s-12">
                             <h2 className={styles['title']}>Mô tả sản phẩm</h2>
                             <p className={styles['description']}>{product.description}</p>
                         </div>
 
                         {/* Specifications */}
-                        <div className="col-6">
+                        <div className="col-6 col-s-12">
                             <h2 className={styles['title']}>Thông số kỹ thuật</h2>
 
                             <table className={styles['specific-table']}>
