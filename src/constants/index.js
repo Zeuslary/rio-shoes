@@ -1,7 +1,7 @@
 // export const API_BASE_URL = 'http://localhost:5000/api';
 // export const FRONT_END_URL = 'http://localhost:5173';
-export const API_BASE_URL = import.meta.env.API_BASE_URL;
-export const FRONT_END_URL = import.meta.env.FRONTEND_URL;
+export const API_BASE_URL = process.env.API_BASE_URL;
+export const FRONT_END_URL = process.env.FRONTEND_URL;
 
 // Key of localStorage
 export const keyLocalStorageCart = 'LIST_PRODUCT_CART';
