@@ -8,9 +8,9 @@ let FRONT_END_URL = '';
 if (typeof process !== 'undefined' && process?.env) {
     API_BASE_URL = process.env.VITE_API_BASE_URL;
     FRONT_END_URL = process.env.VITE_FRONTEND_URL;
-} else (typeof import.meta !== 'undefined' && import.meta?.env) {
-    API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-    FRONT_END_URL = import.meta.env.VITE_FRONTEND_URL
+} else if (typeof import.meta !== 'undefined' && import.meta?.env) {
+    API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    FRONT_END_URL = import.meta.env.VITE_FRONTEND_URL;
 }
 
 // Key of localStorage
