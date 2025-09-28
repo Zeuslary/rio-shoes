@@ -2,8 +2,9 @@
 // export const FRONT_END_URL = 'http://localhost:5173';
 
 // This api use for axios -> server
-export const API_BASE_URL = process.env.API_BASE_URL;
-
+export const API_BASE_URL =
+    (typeof process !== 'undefined' ? process.env.API_BASE_URL : undefined) ??
+    (typeof import.meta !== 'undefined' ? import.meta.env.VITE_API_BASE_URL : undefined);
 // This api use for other path in fe -> fe
 export const FRONT_END_URL = import.meta.env.FRONTEND_URL;
 
