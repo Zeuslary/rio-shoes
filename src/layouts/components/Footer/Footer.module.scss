@@ -1,4 +1,4 @@
-@import '/src/components/GlobalStyle/GlobalStyle.scss';
+@use '/src/components/GlobalStyle/GlobalStyle.scss' as *;
 .wrapper {
 }
 
