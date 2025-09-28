@@ -1,12 +1,20 @@
 // export const API_BASE_URL = 'http://localhost:5000/api';
 // export const FRONT_END_URL = 'http://localhost:5173';
 
-// Frontend URL
-export const FRONT_END_URL =
-    process.env.FRONTEND_URL ?? import.meta.env.VITE_FRONTEND_URL;
+let API_BASE_URL = '';
+let FRONT_END_URL = '';
 
-// API URL
-export const API_BASE_URL = process.env.API_BASE_URL ?? import.meta.env.VITE_API_BASE_URL;
+// Node.js (backend)
+if (typeof process !== 'undefined' && process?.env) {
+    API_BASE_URL = process.env.API_BASE_URL ?? '';
+    FRONT_END_URL = process.env.FRONTEND_URL ?? '';
+}
+
+// Vite (frontend)
+if (typeof import.meta !== 'undefined' && import.meta?.env) {
+    API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? API_BASE_URL;
+    FRONT_END_URL = import.meta.env.VITE_FRONTEND_URL ?? FRONT_END_URL;
+}
 
 // Key of localStorage
 export const keyLocalStorageCart = 'LIST_PRODUCT_CART';
