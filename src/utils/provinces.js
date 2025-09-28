@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const PROVINCES_API_URL = 'https://provinces.open-api.vn/api';
+const PROVINCES_API_URL = import.meta.env.VITE_PROVINCE_API_URL;
 
 const getProvinces = async () => {
     try {
