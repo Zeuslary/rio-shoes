@@ -4,8 +4,8 @@
 // This api use for axios -> fe
 export const API_BASE_URL = import.meta.env.API_BASE_URL;
 
-// This api use for server -> server
-export const FRONT_END_URL = process.env.FRONTEND_URL;
+// This api use for other path in fe -> fe
+export const FRONT_END_URL = import.meta.env.FRONTEND_URL;
 
 // Key of localStorage
 export const keyLocalStorageCart = 'LIST_PRODUCT_CART';
