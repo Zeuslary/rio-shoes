@@ -1,12 +1,12 @@
 // export const API_BASE_URL = 'http://localhost:5000/api';
 // export const FRONT_END_URL = 'http://localhost:5173';
 
-// This api use for axios -> server
-export const API_BASE_URL =
-    (typeof process !== 'undefined' ? process.env.API_BASE_URL : undefined) ??
-    (typeof import.meta !== 'undefined' ? import.meta.env.VITE_API_BASE_URL : undefined);
-// This api use for other path in fe -> fe
-export const FRONT_END_URL = import.meta.env.FRONTEND_URL;
+// Frontend URL
+export const FRONT_END_URL =
+    process.env.FRONTEND_URL ?? import.meta.env.VITE_FRONTEND_URL;
+
+// API URL
+export const API_BASE_URL = process.env.API_BASE_URL ?? import.meta.env.VITE_API_BASE_URL;
 
 // Key of localStorage
 export const keyLocalStorageCart = 'LIST_PRODUCT_CART';
