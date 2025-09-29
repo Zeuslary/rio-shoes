@@ -17,4 +17,10 @@ export default defineConfig({
     port: process.env.PORT ? Number(process.env.PORT) : 5173, // <-- use Render port if available
     allowedHosts: 'all', // <-- allow external access
   },
+  preview: {
+    host: true,
+    port: process.env.PORT ? Number(process.env.PORT) : 4173,
+    allowedHosts: ['rio-shoes.onrender.com'], // <-- add your Render domain here
+  },
+
 });
