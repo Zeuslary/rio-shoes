@@ -12,7 +12,9 @@ export default defineConfig({
             '~': path.resolve(__dirname, 'src'),
         },
     },
-    server: {
-        allowedHosts: true,
-    },
+  server: {
+    host: true, // <-- listen on all network interfaces (0.0.0.0)
+    port: process.env.PORT ? Number(process.env.PORT) : 5173, // <-- use Render port if available
+    allowedHosts: 'all', // <-- allow external access
+  },
 });
